@@ -107,7 +107,7 @@ Node.js
 GitHub12345678910# cmd查看Windows版本 # 或 ver &amp;gt;&amp;gt; win7version.txt&amp;gt; verMicrosoft Windows [版本 6.1.7601]# 查看Git版本">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/hexo_git.jpg">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/git_setup.png">
-<meta property="og:updated_time" content="2017-03-21T03:06:43.000Z">
+<meta property="og:updated_time" content="2017-03-21T03:08:03.496Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo-GitHub搭建部署个人博客">
 <meta name="twitter:description" content="在搭建Hexo博客并部署到GitHub的过程中，将基本流程和遇到的问题记录下来。
@@ -441,7 +441,7 @@ GitHub12345678910# cmd查看Windows版本 # 或 ver &amp;gt;&amp;gt; win7version
 <h2 id="13、部署完成"><a href="#13、部署完成" class="headerlink" title="13、部署完成"></a>13、部署完成</h2><p>　　安装Git部署器：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure></p>
 <p>　　如果不安装相应的部署器，部署时可能提示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo d</div><div class="line">ERROR Deployer <span class="keyword">not</span> found: git</div></pre></td></tr></table></figure></p>
 <p>　　之后输入以下命令：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div><div class="line">$ hexo deploy</div></pre></td></tr></table></figure></p>
-<p>　　在<figure class="highlight plain"><figcaption><span>deploy```过程中，再补充遇到的一个小提示：Hexo的部署与对应的版本有很紧密的关系，往往在deploy的过程中会遇到报错，配置deploy时使用HTTPS或SSH均可成功配置。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">　　我在Git部署时提示错误，一行核心报错提示是：</div><div class="line">``` python</div><div class="line">fatal: could not read Username for &apos;https://github.com&apos;: Invalid argument</div></pre></td></tr></table></figure></p>
+<p>　　在”hexo deploy “过程中，再补充遇到的一个小提示：Hexo的部署与对应的版本有很紧密的关系，往往在deploy的过程中会遇到报错，配置deploy时使用HTTPS或SSH均可成功配置。<br>　　我在Git部署时提示错误，一行核心报错提示是：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fatal: could <span class="keyword">not</span> read Username <span class="keyword">for</span> <span class="string">'https://github.com'</span>: Invalid argument</div></pre></td></tr></table></figure></p>
 <p>当时” hexo deploy “一直出错，尝试网上的解决方案将”_config.yml”中repo仓库地址修改为SSH协议，部署成功。不过，之前按照HTTPS进行配置也是成功的，因此关键的原因可能不是这个问题。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Deployment    </span></div><div class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></div><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repository: ssh://git@github.com/Fujiador/Fujiador.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
 <hr>
 <p>至此，个人博客就已经成功搭建起来，在浏览器中输入对应的地址即可查看你的博客啦。</p>
