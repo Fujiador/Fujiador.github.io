@@ -370,7 +370,7 @@
         
           
             <p>K近邻算法（k-nearest neighbor，k-NN），在1968年由Cover和Hart提出。<br>k-NN的输入为实例的特征向量，即对应于特征空间的点；输出为实例的类别，可取多类。k-NN是在给定实例类别的训练数据集中，根据新的实例其k个最近邻的训练实例的类别，通过多数表决等方式进行预测新的实例的类别。<br>k-NN不具有显式的学习过程，利用训练数据集对特征向量空间进行划分，并作为其分类的“模型”。<br>k-NN是一种用于实现<strong>分类</strong>和<strong>回归</strong>的非参数方法。k-NN在分类中，输出结果是一个类别标签，在回归中，输出结果是对象的属性值(This value is the average of the values of its k nearest neighbors)。k-NN是一种基于实例的学习（lazy learning,in which generalization beyond the training data is delayed until a query is made to the system）。</p>
-<p><strong>K-NN三要素</strong>：k值得选择、举例度量、分类决策规则</p>
+<p><strong>K-NN三要素</strong>：k值得选择、距离度量、分类决策规则</p>
 <hr>
 <h3 id="k近邻算法"><a href="#k近邻算法" class="headerlink" title="k近邻算法"></a>k近邻算法</h3><p><strong>直观描述</strong>：针对一个给定的训练数据集，对新的输入实例，在训练数据集中找到与该实例对近邻的k个实例，这k个实例的多数属于某个类别，就把该输入实例分类为这个类。<br><strong>算法</strong>：</p>
 <ul>
