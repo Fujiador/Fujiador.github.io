@@ -95,7 +95,7 @@
 <meta property="og:description" content="K近邻算法（k-nearest neighbor，k-NN），在1968年由Cover和Hart提出。k-NN的输入为实例的特征向量，即对应于特征空间的点；输出为实例的类别，可取多类。k-NN是在给定实例类别的训练数据集中，根据新的实例其k个最近邻的训练实例的类别，通过多数表决等方式进行预测新的实例的类别。k-NN不具有显式的学习过程，利用训练数据集对特征向量空间进行划分，并作为其分类的“模型”。">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/knn%E6%A8%A1%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.jpg">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/KnnClassification.svg.png">
-<meta property="og:updated_time" content="2017-04-05T16:32:19.107Z">
+<meta property="og:updated_time" content="2017-04-05T16:36:31.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K近邻算法 - 原理">
 <meta name="twitter:description" content="K近邻算法（k-nearest neighbor，k-NN），在1968年由Cover和Hart提出。k-NN的输入为实例的特征向量，即对应于特征空间的点；输出为实例的类别，可取多类。k-NN是在给定实例类别的训练数据集中，根据新的实例其k个最近邻的训练实例的类别，通过多数表决等方式进行预测新的实例的类别。k-NN不具有显式的学习过程，利用训练数据集对特征向量空间进行划分，并作为其分类的“模型”。">
@@ -381,7 +381,7 @@
 <hr>
 <h3 id="k-nn模型"><a href="#k-NN模型" class="headerlink" title="k-NN模型"></a>k-NN模型</h3><p>k-NN模型实际上对应于对数据集特征空间的划分。<br><strong>模型</strong><br>当训练集、距离度量、k值和分类决策规则确定后，对任意新的输入实例，确定其唯一的所属类别。相当于将特征空间划分为一些子空间，确定子空间里的每个点所属的类别。<br><img src="http://on58f12qv.bkt.clouddn.com/knn%E6%A8%A1%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.jpg" alt="knn模型对应特征空间|center|300x0"></p>
 <hr>
-<p><strong>距离度量</strong><br>特征空间中两个实例点的举例是相似程度的反映。<br>设特征空间$X$是n维实数向量空间$R^n$，$x_i,x_j∈X$，$x_i=(x_i^{(1)},x_i^{(2)},…,x_i^{(n)})^{T}，x_j=(x_j^{(1)},x_j^{(2)},…,x_j^{(n)})^{T}$，$x_i,x_j$的$L_P$距离定义为：<br>$$<br>L_P(x_i,x_j)=(\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|^p)^{1/p}<br>$$</p>
+<p><strong>距离度量</strong><br>特征空间中两个实例点的距离是相似程度的反映。<br>设特征空间$X$是n维实数向量空间$R^n$，$x_i,x_j∈X$，$x_i=(x_i^{(1)},x_i^{(2)},…,x_i^{(n)})^{T}，x_j=(x_j^{(1)},x_j^{(2)},…,x_j^{(n)})^{T}$，$x_i,x_j$的$L_P$距离定义为：<br>$$<br>L_P(x_i,x_j)=(\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|^p)^{1/p}<br>$$</p>
 <blockquote>
 <p>当p=2时，称为欧式距离Euclidean Distance，即：<br>$$<br>L_2(x_i,x_j)=(\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|^2)^{1/2}<br>$$<br>当p=1时，称为曼哈顿距离，即：<br>$$<br>L_1(x_i,x_j)=\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|<br>$$<br>当p=∞时，是各个坐标距离的最大值，即：<br>$$<br>L_∞(x_i,x_j)=max_l|x_i^{(l)}-x_j^{(l)}|<br>$$</p>
 </blockquote>
