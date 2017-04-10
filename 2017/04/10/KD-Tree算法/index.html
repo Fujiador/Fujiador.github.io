@@ -1,0 +1,800 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,KD Tree,数据结构,算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="k-d树（K-dimensional树的简称），是一种分割k维数据空间的数据结构。主要应用于多维空间关键数据的搜索（如，范围搜索和最近邻搜索）。
+
+应用背景SIFT算法中特征点匹配的时候就会利用到k-d树。而特征点匹配实际上就是一个通过距离函数在高维矢量之间进行相似性检索的问题。针对如何快速而准确地找到查询点的近邻，现在提出了很多高位空间索引结构和近似查询的算法，kd树就是其中一种。索引结构中相似">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KD Tree算法">
+<meta property="og:url" content="https://fujiador.github.io/2017/04/10/KD-Tree算法/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="k-d树（K-dimensional树的简称），是一种分割k维数据空间的数据结构。主要应用于多维空间关键数据的搜索（如，范围搜索和最近邻搜索）。
+
+应用背景SIFT算法中特征点匹配的时候就会利用到k-d树。而特征点匹配实际上就是一个通过距离函数在高维矢量之间进行相似性检索的问题。针对如何快速而准确地找到查询点的近邻，现在提出了很多高位空间索引结构和近似查询的算法，kd树就是其中一种。索引结构中相似">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE1%20%E4%BA%8C%E7%BB%B4%E6%95%B0%E6%8D%AEkd%E6%A0%91%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/kd%E6%A0%91%E7%A7%8D%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E8%A1%A82%20%E6%9E%84%E5%BB%BAkd%E7%9A%84%E4%BC%AA%E4%BB%A3%E7%A0%81.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE2%20x=7%E5%B0%86%E6%95%B4%E4%B8%AA%E7%A9%BA%E9%97%B4%E5%88%86%E4%B8%BA%E4%B8%A4%E9%83%A8%E5%88%86.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE3%20%E4%B8%8A%E8%BF%B0%E5%AE%9E%E4%BE%8B%E7%94%9F%E6%88%90%E7%9A%84kd%E6%A0%91.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE4%20%E6%9F%A5%E6%89%BE%282.1,3.1%29%E7%82%B9%E7%9A%84%E4%B8%A4%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE5%20%E6%9F%A5%E6%89%BE%282,4.5%29%E7%82%B9%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE6%20%E6%9F%A5%E6%89%BE%282,4.5%29%E7%82%B9%E7%9A%84%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/WiKi%203D%20kd-tree%E5%AF%B9%E5%BA%94%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%86%E5%89%B2.jpg">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E8%A1%A83%20%E6%A0%87%E5%87%86kd%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%AE%97%E6%B3%95-1.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E8%A1%A83%20%E6%A0%87%E5%87%86kd%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%AE%97%E6%B3%95-2.png">
+<meta property="og:updated_time" content="2017-04-10T14:45:05.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KD Tree算法">
+<meta name="twitter:description" content="k-d树（K-dimensional树的简称），是一种分割k维数据空间的数据结构。主要应用于多维空间关键数据的搜索（如，范围搜索和最近邻搜索）。
+
+应用背景SIFT算法中特征点匹配的时候就会利用到k-d树。而特征点匹配实际上就是一个通过距离函数在高维矢量之间进行相似性检索的问题。针对如何快速而准确地找到查询点的近邻，现在提出了很多高位空间索引结构和近似查询的算法，kd树就是其中一种。索引结构中相似">
+<meta name="twitter:image" content="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE1%20%E4%BA%8C%E7%BB%B4%E6%95%B0%E6%8D%AEkd%E6%A0%91%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/04/10/KD-Tree算法/"/>
+
+
+
+
+
+  <title> KD Tree算法 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/10/KD-Tree算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                KD Tree算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-10T22:38:40+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python-算法/" itemprop="url" rel="index">
+                    <span itemprop="name">Python,算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>k-d树（K-dimensional树的简称），是一种分割k维数据空间的数据结构。主要应用于多维空间关键数据的搜索（如，范围搜索和最近邻搜索）。</p>
+<hr>
+<h3 id="应用背景"><a href="#应用背景" class="headerlink" title="应用背景"></a>应用背景</h3><p>SIFT算法中特征点匹配的时候就会利用到k-d树。而特征点匹配实际上就是一个通过距离函数在高维矢量之间进行相似性检索的问题。针对如何快速而准确地找到查询点的近邻，现在提出了很多高位空间索引结构和近似查询的算法，kd树就是其中一种。<br>索引结构中相似性查询有两种基本的方式：一种是范围查询（range searches），另一种是k近邻查询（k-nerighbor searches）。范围查询就是给定查询点和查询距离的阈值，从数据集中找出所有与查询点距离小于阈值的数据；k近邻查询是给定查询点及正整数k，从数据集中找到距离查询点最近的k个数据点，当k=1时，就是最近邻查询（nearest neighbor searches）。</p>
+<p>特征匹配算子大致可以分为两类。一类是线性扫描法，即将数据集中的点与查询点逐一进行距离比较，也就是穷举，缺点很明显，就是没有利用数据集本身蕴含的任何结构信息，搜索效率较低。第二类是建立数据索引，然后进行快速匹配。因为实际数据一般都会呈现出簇状的聚类形态，通过设计有效的索引结构可以大大加快检索的速度。</p>
+<p>索引树属于第二类，其基本思想就是对搜索空间进行层次划分。根据划分的空间是否有混叠可以分为Clipping和Overlapping两种。前者划分空间没有重叠，其代表就是kd树；后者划分空间相互有交叠，其代表为R树。</p>
+<hr>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>先以一个简单直观的实例来介绍kd树算法。</p>
+<p>假设有6个二维数据点$(2,3),(5,4),(9,6),(4,7),(8,1),(7,2)}$，数据点位于二维空间内（如图1中黑点所示）。kd树算法就是要确定图1中这些分割空间的分割线（多维空间即为分割平面，一般为超平面）。下面就要通过一步步展示kd树是如何确定这些分割线的。<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE1%20%E4%BA%8C%E7%BB%B4%E6%95%B0%E6%8D%AEkd%E6%A0%91%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="图1 二维数据kd树空间划分示意图|center"></p>
+<p>kd树宣发可以分为两大部分：一部分是有关kd树本身这种数据结构建立的算法，另一部分是在建立的kd树上如何进行最近邻查找的算法。</p>
+<hr>
+<h4 id="kd树构建算法"><a href="#kd树构建算法" class="headerlink" title="kd树构建算法"></a>kd树构建算法</h4><p>kd树是一个二叉树，每个节点表示一个空间范围。表1给出的是kd树每个节点主要包含的数据结构。<br><img src="http://on58f12qv.bkt.clouddn.com/kd%E6%A0%91%E7%A7%8D%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" alt="kd树种每个节点的数据结构|center|560x0"></p>
+<p>从上面对kd树节点的数据类型的描述可以看出构建kd树是一个逐级展开的递归过程。表2给出的是构建kd树的伪代码：<br><img src="http://on58f12qv.bkt.clouddn.com/%E8%A1%A82%20%E6%9E%84%E5%BB%BAkd%E7%9A%84%E4%BC%AA%E4%BB%A3%E7%A0%81.png" alt="表2 构建kd的伪代码"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">算法：构建kd树（createKDTree）</div><div class="line">输入：数据点集Data-set和其所在的空间Range</div><div class="line">输出：kd，类型为kd Tree</div><div class="line"></div><div class="line">1. IF Data-set为空，则返回空的kd tree</div><div class="line">2. 调用节点生成程序：</div><div class="line">	(1)确定split域：对于所有描述自数据）特征矢量），统计它们在每个维上的数据方差。以SURF特征为例，描述子为64维，可计算64分方差。挑选出最大值，对应的维就是split域的值。数据方差大，表明沿该坐标轴方向上的数据分散的比较开，在这个方向上进行数据分割有较好的分辨率；</div><div class="line">	(2)确定Node-data域：数据点集Data-set按其split域的值排序。位于正中间的那个数据点被选为Node-data。此时新的Data-set&apos;=Data-set/Node-data（除去其中Node-data这一点）。</div><div class="line">3. </div><div class="line">dataleft = &#123;d属于Data-set&apos;  &amp;&amp; d[split] ≤ Node-data[split]&#125;</div><div class="line">Left_Range = &#123;Range &amp;&amp; dataleft&#125;</div><div class="line">dataright = &#123;d属于Data-set&apos; &amp;&amp; d[split] &gt; Node-data[split]&#125;</div><div class="line">Right_Range = &#123;Range &amp;&amp; dataright&#125;</div><div class="line">4. </div><div class="line">left = 由()datalef,Left_Range)建立的kd tree，即递归调用createKDTree(dataleft,Left_Range)。并设置left的parent域为KD；</div><div class="line">right = 由（dataright，Right_Range）建立的k-d tree，即调用createKDTree（dataleft，Left_ange）。并设置right的parent域为Kd。</div></pre></td></tr></table></figure>
+<p>以上的实例来看，过程如下：</p>
+<blockquote>
+<p>由于此例简单，数据维度只有2维，所以可以简单地给x、y两个方向轴编号为0,1，即split={0,1}。</p>
+<p>(1) 确定split域的首先该取的值。分别计算x,y方向上数据的方差得知x方向上的方差最大，所以split阈值首先取0，也就是x轴方向；</p>
+<p>(2) 确定Node-data的阈值。根据x轴方向的值2,5,9,4,8,7排序选出中值为7，所以Node-data=(7,2)。这样，该节点的分割超平面就是通过(7,2)，并垂直于split=0（即x轴）的直线x=7；</p>
+<p>(3) 确定左子空间和右子空间。分割超平面x=7将整个空间分为两部分，如图2所示。x≤7的部分为左子空间，包含3个节点${(2,3),(5,4),(4,7)}$；另一部分为右子空间，包含两个节点${(9,6),(8,1)}$。<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE2%20x=7%E5%B0%86%E6%95%B4%E4%B8%AA%E7%A9%BA%E9%97%B4%E5%88%86%E4%B8%BA%E4%B8%A4%E9%83%A8%E5%88%86.png" alt="图2 x=7将整个空间分为两部分|center"></p>
+<p>(4) 在根节点对应的左子空间中，包含3个节点${(2,3),(5,4),(4,7)}$。确定split域的首先该取的值。分别计算x,y方向上数据的方差得知y方向上的方差大，所以split阈值先取1，也就是y轴方向；</p>
+<p>(5) 在左子空间中，确定Node-data的阈值。根据y轴方向的值3,4,7排序选出中值为4，所以Node-data=(5,4)。这样，该节点的分割超平面就是通过(5,4)，并垂直于split=1（即y轴）的直线y=4；</p>
+<p>(6) 确定左子空间和右子空间。分割超平面y=4将上述左子空间分为两部分，并且每个空间内只包含一个节点，因此停止超平面分割的动作。y≤4的部分为左子空间，包含一个节点${(2,3)}$，y&gt;4的部分为右子空间，包含一个节点${(4,7)}$。</p>
+<p>(7)在根节点对应的右子空间中，包含2个节点${(9,6),(8,1)}$。确定split域的首先该取的值。分别计算x,y方向上数据的方差得知y方向上的方差大，所以split阈值先取1，也就是y轴方向；</p>
+<p>(8) 在右子空间中，确定Node-data的阈值。根据y轴方向的值6,1排序选出中值为6，所以Node-data=(9,6)。这样，该节点的分割超平面就是通过(9,6)，并垂直于split=1（即y轴）的直线y=6；</p>
+<p>(9) 分割超平面y=6将上述右子空间分为两部分，并且每个空间内只包含一个节点，因此停止超平面分割的动作。至此，kd树的构建完成。</p>
+</blockquote>
+<p>如算法所述，kd树的构建是一个递归的过程。然后对左子空间和右子空间内的数据重复根节点的过程就可以得到下一级子节点(5,4)和(9,6)（也就是左右子空间的根节点），同时将空间和数据集进一步细分。如此反复知道空间中只包含一个数据点，如图1所示，最后生成的kd树如图3所示：<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE3%20%E4%B8%8A%E8%BF%B0%E5%AE%9E%E4%BE%8B%E7%94%9F%E6%88%90%E7%9A%84kd%E6%A0%91.png" alt="图3 上述实例生成的kd树|center"><br>注：每一级节点旁边的x和y表示以该节点分割左右子空间时split所取的值。</p>
+<hr>
+<h4 id="kd树上的最近邻查找算法"><a href="#kd树上的最近邻查找算法" class="headerlink" title="kd树上的最近邻查找算法"></a>kd树上的最近邻查找算法</h4><p>在kd树种进行数据的查找也是特征匹配的重要环节，其目的是检索在kd中与查询点距离最近的数据点。这里先以一个简单的实例来描述最近邻查找的基本思路。</p>
+<p>星号表示要查询的点(2.1,3.1)。通过二叉搜索，顺着搜索路径很快就能找到最近邻的近似点，也就是叶子节点(2,3)。而找到的叶子节点并不一定就是最近邻的，最近邻肯定距离查询点更近，应该位于以查询点为圆心且通过叶子节点的圆域内。</p>
+<p>为了找到真正的最近邻，还需要进行“回溯”操作：算法沿搜索路径反向查找是否有距离查询点更近的数据点。</p>
+<p>此例中先从(7,2)点开始进行二叉查找，然后到达(5,4)，最后到达(2,3)，此时搜索路径中的节点为&lt;(7,2),(5,4),(2,3)&gt;。首先以(2,3)作为当前最近邻点，计算其到查询点(2.1,3.1)的举例为0.1414，然后回溯到其父节点(5,4)，并判断在该父节点的其他子节点空间中是否有距离查询点更近的数据点。以(2.1,3.1)为圆心，以0.1414为半径画圆，如图所示。发现该圆并不和超平面y=4交割，因此不用进入(5,4)节点右子空间中去搜索。<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE4%20%E6%9F%A5%E6%89%BE%282.1,3.1%29%E7%82%B9%E7%9A%84%E4%B8%A4%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png" alt="图4 查找2.1,3.1点的两次回溯判断|center"><br>再回溯到(7,2)，以(2.1,3.1)为圆心，以0.1414为半径的圆更不会与x=7超平面交割，因此不用进入(7,2)右子空间进行查找。至此，搜索路径中的节点已经全部回溯完，结束整个搜索，返回最近邻点(2,3)，最近距离为0.1414。</p>
+<p>一个复杂点例子如查找点为(2,4.5)。同样先进行二叉查找，先从(7,2)查找到(5,4)节点，在进行查找时由y=4为分割超平面的，由于查找点的y值为4.5，因此进入右子空间查找到(4,7)，形成搜索路径&lt;(7,2),(5,4),(4,7)&gt;，取(4,7)为当前最近邻点，计算其与目标查找点的举例为3.202。然后回溯到(5,4)，计算其与查找点之间的举例为3.041。以(2,4.5)为圆心，以3.041为半径作圆，如图5所示。<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE5%20%E6%9F%A5%E6%89%BE%282,4.5%29%E7%82%B9%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png" alt="图5 查找2,4.5点的第一次回溯判断|center"><br>课件该圆和y=4超平面交割，所以需要进入(5,4)左子空间进行查找。此时需要将(2,3)节点加入搜索路径中得&lt;(7,2),(2,3)&gt;。回溯至(2,3)叶子节点，(2,3)距离(2,4.5)比(5,4)要近，所以最近邻点更新为(2,3)，最近距离更新为1.5。回溯至(7,2)，以(2,4.5)为圆心1.5为半径作圆，并不和x=7分割超平面交割，如图6所示。至此，搜索路径回溯完。返回最近邻点(2,3)，最近距离1.5。kd树查询算法的伪代码如表3所示。<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%9B%BE6%20%E6%9F%A5%E6%89%BE%282,4.5%29%E7%82%B9%E7%9A%84%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%9B%9E%E6%BA%AF%E5%88%A4%E6%96%AD.png" alt="图6 查找2,4.5点的第二次回溯判断|center"><br><img src="http://on58f12qv.bkt.clouddn.com/WiKi%203D%20kd-tree%E5%AF%B9%E5%BA%94%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%86%E5%89%B2.jpg" alt="3D kd-tree对应的空间分割"></p>
+<p>表3 标准kd树查询算法<br><img src="http://on58f12qv.bkt.clouddn.com/%E8%A1%A83%20%E6%A0%87%E5%87%86kd%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%AE%97%E6%B3%95-1.png" alt="表3 标准kd树查询算法-1|center"><br><img src="http://on58f12qv.bkt.clouddn.com/%E8%A1%A83%20%E6%A0%87%E5%87%86kd%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%AE%97%E6%B3%95-2.png" alt="表3 标准kd树查询算法-2|center"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">算法：kd树最近邻查找</div><div class="line">输入：kd，	//kd tree类型</div><div class="line">	 target //查询数据定</div><div class="line">输出：nearest   //最近邻数据点</div><div class="line">     dist      //最近邻数据点和查询点间的距离</div><div class="line">1. IF kd为NULL，则设dist为infinite并返回</div><div class="line">2. //进行二叉查找，生成搜索路径</div><div class="line">	Kd_point = &amp;Kd;        //Kd-point中保存kd tree根节点地址</div><div class="line">	nearest = Kd_point -&gt; Node-data;    // 初始化最近邻点</div><div class="line">	while (Kd_point)</div><div class="line">		push(Kd_point) 到 search_path中;   //search_path是一个堆栈结构，存储着搜索路径节点指针</div><div class="line">/*** IF Dist(nearest,target) &gt; Dist(Kd_point -&gt; Node-data,target)</div><div class="line">	nearest = Kd_point -&gt; Node-data;    //更新最近邻点</div><div class="line">	Max_dist = Dist(Kd_point,target);    //更新最近邻点与查询点间的距离***/</div><div class="line">		s = Kd_point -&gt; split;    //确定待分割的方向</div><div class="line">		If target[s] &lt;= Kd_point -&gt;Node-data[s]</div><div class="line">			Kd_point = Kd_point -&gt; left;</div><div class="line">		else</div><div class="line">			Kd_point = Kd_point -&gt; right;</div><div class="line">	nearest = search_path中最后一个叶结点; //注意：二叉搜索时不必计算选择搜索路径中的最近邻点，这部分已被注释</div><div class="line">	Max_dist = Dist(nearest,target);    //直接取最后叶子节点作为回溯前的初始最近邻点</div><div class="line">3. // 回溯查找</div><div class="line">    while (search_path != NULL)</div><div class="line">	    back_point = 从search_path取出一个节点指针;    //从search_path堆栈弹栈</div><div class="line">	    s = back_point -&gt; split;    //确定分割方向</div><div class="line">	    If Dist(target[s],back_point -&gt; Node-data[s]) &lt; Max_dist    //判断还需进入的子空间</div><div class="line">		    If target[s] &lt;=  back_point -&gt; Node-data[s]</div><div class="line">			    Kd_point = back_point -&gt; right;    //如果target位于左子空间，就应进入右子空间</div><div class="line">		    else</div><div class="line">			    Kd_point = back_point -&gt; left;    //如果target位于右子空间，就应该进入左子空间将Kd_point压入search_path堆栈;</div><div class="line">		If Dist(nearest,target) &gt; Dist(Kd_point -&gt; Node-data,target)</div><div class="line">			nearest = Kd_point -&gt; Node-data;    //更新最近邻点</div><div class="line">			Min_dist = Dist(Kd_point -&gt; Node-data,target);    //更新最近邻点与查询点间的距离</div></pre></td></tr></table></figure></p>
+<p>上述两次实例表明，当查询点的领域与分割超平面两侧空间交割时，需要查找另一侧子空间，导致检索过程复杂，效率下降。研究表明N个节点的k维kd树搜索过程时间复杂度为：$t_{worst}=O(kN^{1-1/k})$。</p>
+<hr>
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>对于拥有n个已知点的kd-Tree，其复杂度如下：<br>构建：$O(log 2n)$<br>插入：$O(log n)$<br>删除：$O(log n)$<br>查询：?</p>
+<hr>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上为了介绍方便，讨论的是二维情形。实际的应用中，维度都比较大，直接利用kd树快速检索的性能急剧下降。其中一个比较著名的就是Best-Bin-First，它通过设置有限级队列和运行超时限定来获取近似的最近邻，有效地减少回溯的次数。假设数据集的维数为D，一般来说要求数据的规模N满足$N&gt;&gt;2^D$，才能达到高效的搜索。</p>
+<hr>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><strong>[转载]</strong> <a href="http://www.cnblogs.com/eyeszjwang/articles/2429382.html" target="_blank" rel="external">http://www.cnblogs.com/eyeszjwang/articles/2429382.html</a><br><a href="https://en.wikipedia.org/wiki/K-d_tree" target="_blank" rel="external">https://en.wikipedia.org/wiki/K-d_tree</a><br><a href="http://baike.baidu.com/item/kd-tree" target="_blank" rel="external">http://baike.baidu.com/item/kd-tree</a><br><a href="http://www.aichengxu.com/suanfa/10987660.htm" target="_blank" rel="external">http://www.aichengxu.com/suanfa/10987660.htm</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-KD-Tree-数据结构-算法/" rel="tag"># Python,KD Tree,数据结构,算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/《Python算法教程》读书笔记-（一）/" rel="next" title="《Python算法教程》读书笔记 - （一）">
+                <i class="fa fa-chevron-left"></i> 《Python算法教程》读书笔记 - （一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用背景"><span class="nav-number">1.</span> <span class="nav-text">应用背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kd树构建算法"><span class="nav-number">2.1.</span> <span class="nav-text">kd树构建算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kd树上的最近邻查找算法"><span class="nav-number">2.2.</span> <span class="nav-text">kd树上的最近邻查找算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-number">3.</span> <span class="nav-text">复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
