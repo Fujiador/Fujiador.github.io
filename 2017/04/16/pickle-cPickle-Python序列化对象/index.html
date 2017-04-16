@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,序列化,pickle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="简介pickle &amp;amp; cPickle模块提供了一个基础但功能强大的算法，用于将Python对象数据结构序列化(serialization)和反序列化(de-serialization)。”pickling”是将Python对象层次结构转换为字节流的过程，”unpickling”是逆操作，即将字节流转换为Python对象层次结构。
+
+与其他Python模块的关系pickle模块有一个优化后的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pickle & cPickle Python序列化对象">
+<meta property="og:url" content="https://fujiador.github.io/2017/04/16/pickle-cPickle-Python序列化对象/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="简介pickle &amp;amp; cPickle模块提供了一个基础但功能强大的算法，用于将Python对象数据结构序列化(serialization)和反序列化(de-serialization)。”pickling”是将Python对象层次结构转换为字节流的过程，”unpickling”是逆操作，即将字节流转换为Python对象层次结构。
+
+与其他Python模块的关系pickle模块有一个优化后的">
+<meta property="og:updated_time" content="2017-04-16T15:06:16.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pickle & cPickle Python序列化对象">
+<meta name="twitter:description" content="简介pickle &amp;amp; cPickle模块提供了一个基础但功能强大的算法，用于将Python对象数据结构序列化(serialization)和反序列化(de-serialization)。”pickling”是将Python对象层次结构转换为字节流的过程，”unpickling”是逆操作，即将字节流转换为Python对象层次结构。
+
+与其他Python模块的关系pickle模块有一个优化后的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/04/16/pickle-cPickle-Python序列化对象/"/>
+
+
+
+
+
+  <title> pickle & cPickle Python序列化对象 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/16/pickle-cPickle-Python序列化对象/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                pickle & cPickle Python序列化对象
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T23:05:00+08:00">
+                2017-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>pickle &amp; cPickle</code>模块提供了一个基础但功能强大的算法，用于将Python对象数据结构序列化(serialization)和反序列化(de-serialization)。”pickling”是将Python对象层次结构转换为字节流的过程，”unpickling”是逆操作，即将字节流转换为Python对象层次结构。</p>
+<hr>
+<h3 id="与其他python模块的关系"><a href="#与其他Python模块的关系" class="headerlink" title="与其他Python模块的关系"></a>与其他Python模块的关系</h3><p><code>pickle</code>模块有一个优化后的类似模块<code>cPickle</code>，是用C编写的，比<code>pickle</code>快1000倍。但是在cPickle中不支持Pickler()和Unpickler()类的子类化，因为在cPickle中这些是函数，而不是类。两个模块提供的接口几乎是通用的，并且另个模块产生的数据流失可相互转换的。<br><code>pickle &amp; cPickle</code>模块始终是序列化Python对象的首选方式，<code>marshal</code>主要为了支持Python的”.pyc”文件。</p>
+<blockquote>
+<p>“pickle”模块持续跟踪已经被序列化的对象，以便后续再引用这些序列化的对象时不再进行重新序列化。当对同一个序列化对象有多个引用时，会发现对象共享。pickle只存储这样的对象一次，并确保其他引用毒性都是指向主副本。</p>
+</blockquote>
+<p>pickle模块可将复杂的Python对象转换成字节流，并且可以将字节流转换成具有相同原始结构的Python对象。对字节流李硕，最常见的处理方式就是讲他们写入文件，也可以将其通过网络传输存储在数据库中。</p>
+<hr>
+<h3 id="字节流格式"><a href="#字节流格式" class="headerlink" title="字节流格式"></a>字节流格式</h3><p><code>pickle</code>使用的数据格式是Python特点的。非Python程序可能无法将已经被序列化的字节流恢复成Python对象。</p>
+<p>默认情况下，序列化数据格式使用可打印的ASCII表示。最大的优点在于，在调试或恢复被序列化的对象时，易于通过文本编辑器阅读。</p>
+<p>目前有三种<code>protocols</code>格式应用于序列化：</p>
+<blockquote>
+<ol>
+<li>协议版本0是指原始的ASCII协议，向后兼容早起版本的Python</li>
+<li>协议版本1是指旧的二进制格式，向后兼容早起版本的Python</li>
+<li>协议版本2是指在Python2.3后引入，提供了更高效的序列化新格式。<br>默认使用协议0。如果protocal参数被指定为负值或HIGHEST_PROTOCOL，则将使用可移动的最高协议版本。可通过<code>pickle.format_version</code>和<code>pickle.compatible_formats</code>分别查看当前协议版本和所有兼容的协议版本。</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>序列化一个Python对象，首先创建一个pickler对象，然后调用<code>dump()</code>方法。反序列化一个字节流对象，首先创建一个unpickler对象，然后调用<code>load()</code>方法。<br><strong>pickle提供的变量：</strong></p>
+<blockquote>
+<p><code>pickle.HIGHEST_PROTOCOL</code> ：可兼容的最高协议版本</p>
+</blockquote>
+<p><strong>pickle提供的方法：</strong></p>
+<blockquote>
+<p><code>pickle.dump(obj, file [,protocal])</code>：将序列化的对象写入到文件中。等价于<code>Pickler(file, protocol).dump(obj)</code>。<br><code>pickle.load(file)</code> ：从文件中读取序列化的字节流，并将其转换返回原始Python对象。等效于<code>Unpickler(file).load()</code>。<br><code>pickle.dumps(obj, [,protocal])</code>：将Python对象序列化为字节流，并将其作为字符串返回，而不是写入到文件兑现中。<br><code>pickle.loads(string)</code>：读取序列化的字节流字符串对象，并将其恢复为Python对象。</p>
+</blockquote>
+<p><strong>pickle提供的类：</strong></p>
+<blockquote>
+<p><code>class pickle.Pickler(file[, protocol])</code>：将序列化后的字节流写入到文件对象。</p>
+<blockquote>
+<p><code>dump(obj)</code>：将Python的obj对象以序列化字节流的形式写入到文件对象中。可以对同一个Pickler实例的dump()方法进行多次调用。<br><code>clear_memo()</code>：清楚pickler的“memo”。<br><code>class pickle.Unpickler(file)</code>：从文件对象中读取序列化数据流。自动确定数据流是否是以二进制模式，不需要protocol参数。<br><code>load()</code>：读取序列化数据流对象并将其返回重构后的Python对象。自动确定数据流是否是以二进制模式，不需要protocol参数。</p>
+</blockquote>
+</blockquote>
+<hr>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>其实比较核心的内容概括如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="string">"""</span></div><div class="line">Create portable serialized representations of Python object.</div><div class="line"># 创建Python对象的便携式序列化表示</div><div class="line"></div><div class="line">Classes:</div><div class="line">    Pickler</div><div class="line">    Unpickler</div><div class="line"></div><div class="line">Functions:</div><div class="line">    dump(object, file)</div><div class="line">    dumps(object) -&gt; string</div><div class="line">    load(file) -&gt; object</div><div class="line">    loads(string) -&gt; object</div><div class="line"></div><div class="line">Misc variables:</div><div class="line">    __version__</div><div class="line">    format_version</div><div class="line">    compatible_formats</div><div class="line">"""</div><div class="line"><span class="comment"># pickle.__doc__都已经说明</span></div><div class="line"><span class="keyword">print</span> pickle.__doc__</div></pre></td></tr></table></figure></p>
+<p>示例1：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pickle</div><div class="line"><span class="keyword">import</span> pprint</div><div class="line"></div><div class="line">data = &#123;</div><div class="line">    <span class="string">'a'</span>:[<span class="number">1</span>,<span class="number">2.0</span>,<span class="number">3</span>,<span class="number">4</span>+<span class="number">6j</span>],</div><div class="line">    <span class="string">'b'</span>:(<span class="string">"Character string"</span>,<span class="string">b"byte string"</span>),</div><div class="line">    <span class="string">'c'</span>:&#123;<span class="keyword">None</span>,<span class="keyword">True</span>,<span class="keyword">False</span>&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">pprint.pprint(data)</div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'data.pkl'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</div><div class="line">    pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)</div><div class="line"><span class="comment"># data.pkl内容如下</span></div><div class="line">-------------------------------------</div><div class="line">�&#125;q (Uaq]q(KG@       Kc__builtin__</div><div class="line">complex</div><div class="line">qG@      G@      唓RqeUcqc__builtin__</div><div class="line">set</div><div class="line">q]q(増Ne卶	Rq</div><div class="line">UbqUCharacter stringqUbyte stringq</div><div class="line">唓u.</div><div class="line">-------------------------------------</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"*"</span>*<span class="number">66</span></div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'data.pkl'</span>,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</div><div class="line">    data = pickle.load(f)</div><div class="line"></div><div class="line">pprint.pprint(data)</div><div class="line"><span class="comment"># data内容如下</span></div><div class="line">-------------------------------------</div><div class="line">&#123;<span class="string">'a'</span>: [<span class="number">1</span>, <span class="number">2.0</span>, <span class="number">3</span>, (<span class="number">4</span>+<span class="number">6j</span>)],</div><div class="line"> <span class="string">'b'</span>: (<span class="string">'Character string'</span>, <span class="string">'byte string'</span>),</div><div class="line"> <span class="string">'c'</span>: set([<span class="keyword">None</span>, <span class="keyword">False</span>, <span class="keyword">True</span>])&#125;</div><div class="line">-------------------------------------</div></pre></td></tr></table></figure></p>
+<p>示例2：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">import pickle</div><div class="line"></div><div class="line">class Person(object):</div><div class="line">    def __init__(self, name, age):</div><div class="line">        self.name = name</div><div class="line">        self.age = age</div><div class="line">Bob = Person("Bob",26)</div><div class="line">print Bob</div><div class="line">&gt;&gt;&gt; &lt;__main__.Person object at 0x02BAA450&gt;</div><div class="line">print Bob.name</div><div class="line">&gt;&gt;&gt; Bob</div><div class="line">print Bob.age</div><div class="line">&gt;&gt;&gt; 26</div><div class="line"></div><div class="line">pickled_str =  pickle.dumps(Bob)</div><div class="line">print pickled_str </div><div class="line"># pickled_str 内容如下</div><div class="line">--------------------------------------</div><div class="line">ccopy_reg</div><div class="line">_reconstructor</div><div class="line">p0</div><div class="line">(c__main__</div><div class="line">Person</div><div class="line">p1</div><div class="line">c__builtin__</div><div class="line">object</div><div class="line">p2</div><div class="line">Ntp3</div><div class="line">Rp4</div><div class="line">(dp5</div><div class="line">S'age'</div><div class="line">p6</div><div class="line">I26</div><div class="line">sS'name'</div><div class="line">p7</div><div class="line">S'Bob'</div><div class="line">p8</div><div class="line">sb.</div><div class="line">--------------------------------------</div><div class="line"></div><div class="line">Bob_ = pickle.loads(pickled_str)</div><div class="line">print Bob_</div><div class="line">&gt;&gt;&gt; &lt;__main__.Person object at 0x02B3A530&gt;</div><div class="line"></div><div class="line">print 'Bob type is :',type(Bob)</div><div class="line">print 'Bob_ tyoe is :',type(Bob_)</div><div class="line">print Bob is Bob_</div><div class="line"></div><div class="line">Bob type is : &lt;class '__main__.Person'&gt;</div><div class="line">Bob_ tyoe is : &lt;class '__main__.Person'&gt;</div><div class="line">False</div></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://docs.python.org/2/library/pickle.html" target="_blank" rel="external">https://docs.python.org/2/library/pickle.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-序列化-pickle/" rel="tag"># Python,序列化,pickle</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/KD-Tree算法/" rel="next" title="KD Tree算法">
+                <i class="fa fa-chevron-left"></i> KD Tree算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与其他python模块的关系"><span class="nav-number">2.</span> <span class="nav-text">与其他Python模块的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节流格式"><span class="nav-number">3.</span> <span class="nav-text">字节流格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">4.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">5.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资源"><span class="nav-number">6.</span> <span class="nav-text">参考资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
