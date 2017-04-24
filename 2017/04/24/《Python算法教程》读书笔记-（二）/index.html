@@ -101,7 +101,7 @@
 算法，指包含能够解决某个特定问题的有限步骤集的执行过程。
 
 渐进记忆法在常数单位上的差距（通常取决于一些特定的事物，如编程语言的性能、硬">
-<meta property="og:updated_time" content="2017-04-24T01:13:32.774Z">
+<meta property="og:updated_time" content="2017-04-24T01:19:35.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Python算法教程》读书笔记 - （二）">
 <meta name="twitter:description" content="《Python Algorithms》主体内容是“数学技术”、“算法设计原则”和“经典算法”。
@@ -388,7 +388,7 @@
 </blockquote>
 <hr>
 <h4 id="时间复杂度定义"><a href="#时间复杂度定义" class="headerlink" title="时间复杂度定义"></a>时间复杂度定义</h4><p>通常，所获得的运行时间往往取决于某个特定基本操作被执的次数。</p>
-<p>渐进记忆法记号分别是$O（omicron  | 大O）$、$Ω$、$\theta$。$O$记法所代表的其实是所谓的渐进上界，而$Ω$记法所代表的则是渐进下界，$\theta$正好是前两种记法的交集。</p>
+<p>渐进记忆法记号分别是$O（大O）$、$Ω$、$\theta$。$O$记法所代表的其实是所谓的渐进上界，而$Ω$记法所代表的则是渐进下界，$\theta$正好是前两种记法的交集。</p>
 <p>对于Python中的list而言，append n个数字所需要的运行时间约为$O(n)$，而在首端insert相同数量的数字需要的时间约为$O(n^2)$。</p>
 <hr>
 <h4 id="时间复杂度示例"><a href="#时间复杂度示例" class="headerlink" title="时间复杂度示例"></a>时间复杂度示例</h4><p>渐进记号最大限度的简化了数学问题，可以忽略乘法或加法中的那些常数，以及函数中其他<em>所有影响较小的部分</em>，从而让事情得到很大程度的简化。<br>下表给出一些时间复杂度对应的示例，并按照复杂度来排序，即每一行都要比它的前一行复杂。<br>$\theta(1)$         常数级            哈希表的查询与修改<br>$\theta(lg n)$         对数级        二分搜索<br>$\theta(n)$        线性级        列表的遍历<br>$\theta(n lg n)$        线性对数级            任意值序列的最优化排序<br>$\theta(n^2)$         平方级            n个对象相互比对<br>$\theta(n^3)$        立方级            Floyed-Warshall算法<br>$\theta(n^k)$        多项式级        基于n的k层嵌套循环<br>$\theta(k^n)$      指数级<br>$\theta(n{!})$      阶乘级</p>
