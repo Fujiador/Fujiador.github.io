@@ -270,6 +270,158 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/26/数据需求-填充Excel-Cell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/26/数据需求-填充Excel-Cell/" itemprop="url">
+                  [数据需求] 填充Excel Cell
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T12:11:17+08:00">
+                2017-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h3><p>这个数据需求来自Q群水友：期望将Excel内各行的数据，在首次出现数字1之后的空单元格填充为0，单元格值为1的单元格保留不变。</p>
+<p>常规的VBA可以进行处理，因为VBA已经多年不用，现在用Python来解决实现这一需求。</p>
+<p>需求数据示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82%E6%A0%B7%E5%BC%8F.png" alt="需求数据样例"></p>
+<p>处理转化为结果示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E7%BB%93%E6%9E%9C%E6%A0%B7%E5%BC%8F.png" alt="需求结果样例"></p>
+<hr>
+<h3 id="python实现"><a href="#Python实现" class="headerlink" title="Python实现"></a>Python实现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>python version：2.7.10<br>系统：windows</p>
+<h4 id="第三方package"><a href="#第三方Package" class="headerlink" title="第三方Package"></a>第三方Package</h4><p>OpenPyXL<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install openpyxl</div></pre></td></tr></table></figure></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FJ'</span></div><div class="line"><span class="string">"""</span></div><div class="line">需求: 在excel sheet页内,在每行row中,将首次出现数字1之后的空cell填充数字0</div><div class="line">python env : 2.7.10</div><div class="line">Excel version : 2016 (适用版本没有正式测试,Excel的版本应该都可以)</div><div class="line">"""</div><div class="line"></div><div class="line"><span class="keyword">from</span> openpyxl <span class="keyword">import</span> load_workbook</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">operation_data</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,workbook_path,sheet_name)</span>:</span></div><div class="line">        self.workbook_path = workbook_path</div><div class="line">        self.sheet_name = sheet_name</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_workbook</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.workbook = load_workbook(self.workbook_path)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Please check and input the correct workbook name!"</span></div><div class="line">        sheetnames = self.workbook.get_sheet_names()</div><div class="line">        <span class="keyword">if</span> sheet_name <span class="keyword">in</span> sheetnames:</div><div class="line">            self.worksheet = self.workbook.get_sheet_by_name(sheet_name)</div><div class="line">            <span class="keyword">return</span> self.workbook,self.worksheet</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Please check and input the correct worksheet name!"</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_cell_content</span><span class="params">(self)</span>:</span></div><div class="line">        MAX_ROW = self.worksheet.max_row</div><div class="line">        MAX_COL = self.worksheet.max_column</div><div class="line">        self.cell_dict = defaultdict(list)</div><div class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">1</span>,MAX_ROW+<span class="number">1</span>):</div><div class="line">            <span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">1</span>,MAX_COL+<span class="number">1</span>):</div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                    value = self.worksheet.cell(row=row, column=col).value</div><div class="line">                    self.cell_dict[row].append(value)</div><div class="line">                <span class="keyword">except</span> Exception,e:</div><div class="line">                    <span class="keyword">print</span> e</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">continue</span></div><div class="line">        <span class="keyword">return</span> self.cell_dict</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_cell_content</span><span class="params">(self)</span>:</span></div><div class="line">        n,m = len(self.cell_dict),len(self.cell_dict[<span class="number">1</span>])</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n+<span class="number">1</span>):</div><div class="line">            <span class="keyword">if</span> <span class="number">1</span> <span class="keyword">in</span> self.cell_dict[i]:</div><div class="line">                j = self.cell_dict[i].index(<span class="number">1</span>)</div><div class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(j,m):</div><div class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> self.cell_dict[i][k]:</div><div class="line">                        self.cell_dict[i][k] = <span class="number">0</span></div><div class="line">                    <span class="keyword">else</span>:</div><div class="line">                        <span class="keyword">continue</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line">        <span class="keyword">return</span> self.cell_dict</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_excel</span><span class="params">(self,workbook_name)</span>:</span></div><div class="line">        n,m = len(self.cell_dict),len(self.cell_dict[<span class="number">1</span>])</div><div class="line">        worksheet = self.workbook.create_sheet(<span class="string">'Sheet2'</span>,<span class="number">0</span>)</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n+<span class="number">1</span>):</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,m+<span class="number">1</span>):</div><div class="line">                worksheet.cell(row=i,column=j,value=self.cell_dict[i][j<span class="number">-1</span>])</div><div class="line">        self.workbook.save(workbook_name)</div><div class="line">        <span class="keyword">print</span> <span class="string">"The data transform has been done successfully!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self)</span>:</span></div><div class="line">        workbook,worksheet = self.get_workbook()</div><div class="line">        cell_dict = self.get_cell_content()</div><div class="line">        cell_dict = self.update_cell_content()</div><div class="line">        self.write_excel(<span class="string">u"测试结果1.xlsx"</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    workbook_path,sheet_name = <span class="string">u'./测试.xlsx'</span>,<span class="string">'Sheet1'</span></div><div class="line">    excel_obj = operation_data(workbook_path,sheet_name)</div><div class="line">    excel_obj.main()</div><div class="line"></div><div class="line"><span class="comment"># ------------------------------------------</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FJ'</span></div><div class="line"><span class="string">"""</span></div><div class="line">需求: 在excel sheet页内,在每行row中,将首次出现数字1之后的空cell填充数字0</div><div class="line">python env : 2.7.10</div><div class="line">Excel version : 2016 (适用版本没有正式测试,Excel的版本应该都可以)</div><div class="line">"""</div><div class="line"></div><div class="line"><span class="keyword">from</span> openpyxl <span class="keyword">import</span> load_workbook</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_workbook</span><span class="params">(workbook_path,sheet_name)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        workbook = load_workbook(workbook_path)</div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">print</span> <span class="string">"Please check and input the correct workbook name!"</span></div><div class="line">    sheetnames = workbook.get_sheet_names()</div><div class="line">    <span class="keyword">if</span> sheet_name <span class="keyword">in</span> sheetnames:</div><div class="line">        worksheet = workbook.get_sheet_by_name(sheet_name)</div><div class="line">        <span class="keyword">return</span> workbook,worksheet</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">"Please check and input the correct worksheet name!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_cell_content</span><span class="params">(worksheet)</span>:</span></div><div class="line">    MAX_ROW = worksheet.max_row</div><div class="line">    MAX_COL = worksheet.max_column</div><div class="line">    result = defaultdict(list)</div><div class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">1</span>,MAX_ROW+<span class="number">1</span>):</div><div class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">1</span>,MAX_COL+<span class="number">1</span>):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                value = worksheet.cell(row=row, column=col).value</div><div class="line">                result[row].append(value)</div><div class="line">            <span class="keyword">except</span> Exception,e:</div><div class="line">                <span class="keyword">print</span> e</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_cell_content</span><span class="params">(cell_dict)</span>:</span></div><div class="line">    n,m = len(cell_dict),len(cell_dict[<span class="number">1</span>])</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n+<span class="number">1</span>):</div><div class="line">        <span class="keyword">if</span> <span class="number">1</span> <span class="keyword">in</span> cell_dict[i]:</div><div class="line">            j = cell_dict[i].index(<span class="number">1</span>)</div><div class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(j,m):</div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> cell_dict[i][k]:</div><div class="line">                    cell_dict[i][k] = <span class="number">0</span></div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">continue</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">    <span class="keyword">return</span> cell_dict</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_excel</span><span class="params">(cell_dict,workbook,workbook_name)</span>:</span></div><div class="line">    n,m = len(cell_dict),len(cell_dict[<span class="number">1</span>])</div><div class="line">    worksheet = workbook.create_sheet(<span class="string">'Sheet2'</span>,<span class="number">0</span>)</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n+<span class="number">1</span>):</div><div class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,m+<span class="number">1</span>):</div><div class="line">            worksheet.cell(row=i,column=j,value=cell_dict[i][j<span class="number">-1</span>])</div><div class="line">    workbook.save(workbook_name)</div><div class="line">    <span class="keyword">print</span> <span class="string">"The data transform has been done successfully!"</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(workbook_path,sheet_name)</span>:</span></div><div class="line">    workbook,worksheet = get_workbook(workbook_path,sheet_name)</div><div class="line">    cell_dict = get_cell_content(worksheet)</div><div class="line">    cell_dict = update_cell_content(cell_dict)</div><div class="line">    write_excel(cell_dict,workbook,<span class="string">u"测试结果.xlsx"</span>)</div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    workbook_path,sheet_name = <span class="string">u'./测试.xlsx'</span>,<span class="string">'Sheet1'</span></div><div class="line">    main(workbook_path,sheet_name)</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://openpyxl.readthedocs.io/en/default/index.html" target="_blank" rel="external">OpenPyXL</a>  :  <a href="https://openpyxl.readthedocs.io/en/default/index.html" target="_blank" rel="external">https://openpyxl.readthedocs.io/en/default/index.html</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/24/《Python算法教程》读书笔记-（二）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1977,193 +2129,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/03/31/JSON概述以及Python操作JSON数据/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/31/JSON概述以及Python操作JSON数据/" itemprop="url">
-                  JSON概述以及Python操作JSON数据
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-31T23:30:55+08:00">
-                2017-03-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="json介绍"><a href="#JSON介绍" class="headerlink" title="JSON介绍"></a>JSON介绍</h3><p>JSON(JavaScript Object Notation)是一种轻量级的数据<strong>交换格式</strong>，易于阅读和编写，也易于及其生成和解析。采用完全独立于语言的文本格式，这些特性使JSON成为理想的数据交换语言。<br>JSON构建于两种结构：</p>
-<ul>
-<li>“名称/值”对的集合（A collection of name、value pairs）。不同的语言中被理解为对象object，记录record，结构struct，字典dictionary，哈希表hash table，有键列表keyed list，或者关联数组associative array。</li>
-<li>值的有序列表（An ordered list of values）。大部分语言中，被理解为数组array。<br>JSON具有以下这些特征形式：<br>JSON对象是一个无序的“名称/值对”的集合。一个JSON对象以“{”开始，以“}”结束。每个“名称”后跟一个“:”，“名称/值对”之间使用“,”分隔。</li>
-</ul>
-<h4 id="json中如果内容中包含单引号或双引号如何处理"><a href="#JSON中如果内容中包含单引号或双引号如何处理" class="headerlink" title="JSON中如果内容中包含单引号或双引号如何处理"></a>JSON中如果内容中包含单引号或双引号如何处理</h4><p>此情况，直接用<code>json.loads()</code>去处理，会导致报错。解决方法是，把内容中单引号或双引号前，加上反斜杠转义即可。</p>
-<h4 id="字典类型的json字符串中的key一定要用双引号括起来"><a href="#字典类型的JSON字符串中的key一定要用双引号括起来" class="headerlink" title="字典类型的JSON字符串中的key一定要用双引号括起来"></a>字典类型的JSON字符串中的key一定要用双引号括起来</h4><p>JSON字符处串是字典变量类型的字符串的时候，对应字典中的key，是需要用双引号括起来，且类型必须是str，否则<code>json.loads()</code>会报错。</p>
-<h4 id="字典类型的json字符串中的key要用双引号而不能用单引号也不能少了双引号"><a href="#字典类型的JSON字符串中的key要用双引号，而不能用单引号，也不能少了双引号" class="headerlink" title="字典类型的JSON字符串中的key要用双引号，而不能用单引号，也不能少了双引号"></a>字典类型的JSON字符串中的key要用双引号，而不能用单引号，也不能少了双引号</h4><p><code>ValueError: Expecting property name:line x column x</code></p>
-<hr>
-<h3 id="json-python模块"><a href="#JSON-Python模块" class="headerlink" title="JSON Python模块"></a>JSON Python模块</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div></pre></td></tr></table></figure>
-<p><strong>最重要的两个函数</strong>:</p>
-<ul>
-<li><code>json.dumps()</code> 把一个python对象编码成JSON格式字符串</li>
-<li><code>json.loads</code> 把JSON格式字符串解码成python对象</li>
-</ul>
-<hr>
-<h4 id="jsondumps"><a href="#json-dumps" class="headerlink" title="json.dumps()"></a>json.dumps()</h4><p><code>json.dumps()</code>用于将python对象编码成JSON字符串。</p>
-<p>语法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">json.dumps(obj, skipkeys=<span class="keyword">False</span>, ensure_ascii=<span class="keyword">True</span>, check_circular=<span class="keyword">True</span>, allow_nan=<span class="keyword">True</span>, cls=<span class="keyword">None</span>, indent=<span class="keyword">None</span>, separators=<span class="keyword">None</span>, encoding=<span class="string">"utf-8"</span>, default=<span class="keyword">None</span>, sort_keys=<span class="keyword">False</span>, **kw)</div><div class="line"><span class="comment"># 其中最为常用的参数sort_keys,separators,indent,skipkeys</span></div><div class="line"><span class="comment"># sort_keys -&gt; 对dict对象排序</span></div><div class="line"><span class="comment"># indent -&gt; 缩进空白的意思，使展示的格式更加优雅</span></div><div class="line"><span class="comment"># separators -&gt; 该参数传递是一个元组，包含已什么标记分割对象的字符串。这个参数可以移除多余的空白符，达到压缩数据的目的，效果比较明显。可以通过查看不同参数转化后的长度进一步了解</span></div><div class="line"><span class="comment"># skipkeys -&gt; 默认是False，dumps()存储dict对象时，要求key必须是str类型，如果出现其他类型，会产生TypeError异常，如果开启该参数，设置为True，则会优雅的跳过skip</span></div></pre></td></tr></table></figure></p>
-<p>输出的数据被格式化之后，可读性更强、更优雅，但通过增加冗余的空白进行填充。JSON主要是作为一种数据通信的格式存在，网络通信对数据的大小敏感，冗余的空格会占据通信带宽，适当的对数据进行压缩更有效率。</p>
-<p>实例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line">data =  [ &#123; <span class="string">'a'</span> : <span class="number">1</span>, <span class="string">'b'</span> : <span class="number">2</span>, <span class="string">'c'</span> : <span class="number">3</span>, <span class="string">'d'</span> : <span class="number">4</span>, <span class="string">'e'</span> : <span class="number">5</span> &#125; ]</div><div class="line"><span class="keyword">print</span> type(data)  <span class="comment"># &lt;type  'list'&gt;</span></div><div class="line"><span class="keyword">print</span> type(data[<span class="number">0</span>])   <span class="comment"># &lt;type 'dict'&gt;</span></div><div class="line">json_example = json.dumps(data)</div><div class="line"><span class="keyword">print</span> json_example   <span class="comment"># [&#123;"a": 1, "c": 3, "b": 2, "e": 5, "d": 4&#125;]</span></div><div class="line"><span class="keyword">print</span> type(json_example)   <span class="comment"># &lt;type 'str'&gt;</span></div><div class="line"></div><div class="line"><span class="comment"># 使用参数让JSON数据格式化输出</span></div><div class="line"><span class="keyword">print</span> json.dumps(&#123;<span class="string">'a'</span>:<span class="string">'Runoob'</span>,<span class="string">'b'</span>:<span class="number">7</span>&#125;,sort_keys=<span class="keyword">True</span>,indent=<span class="number">4</span>,separators=(<span class="string">','</span>,<span class="string">':'</span>))</div><div class="line">&gt;&gt;&gt;</div><div class="line">&#123;</div><div class="line">    <span class="string">"a"</span>: <span class="string">"Runoob"</span>,</div><div class="line">    <span class="string">"b"</span>: <span class="number">7</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Python原始类型向JSON类型的转化对照表：<br><img src="http://on58f12qv.bkt.clouddn.com/python%E7%B1%BB%E5%9E%8B%E5%90%91JSON%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%BD%AC%E5%8C%96.png" alt="@Python原始类型向JSON类型的转化对照表|center|480x0"></p>
-<hr>
-<h4 id="jsonloads"><a href="#json-loads" class="headerlink" title="json.loads()"></a>json.loads()</h4><p><code>json.loads</code>用于解码JSON数据，该函数返回python字段的数据类型。</p>
-<p>语法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">json.loads(s[, encoding[, cls[, object_hook[, parse_float[, parse_int[, parse_constant[, object_pairs_hook[, **kw]]]]]]]])</div></pre></td></tr></table></figure></p>
-<p>实例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line">jsonData = <span class="string">'&#123;"a":1,"b":2,"c":3,"d":4,"e":5&#125;'</span></div><div class="line">text = json.loads(jsonData)</div><div class="line"><span class="keyword">print</span> text</div><div class="line"></div><div class="line"><span class="comment"># 注意转化为unicode类型</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;<span class="string">u'a'</span>: <span class="number">1</span>, <span class="string">u'c'</span>: <span class="number">3</span>, <span class="string">u'b'</span>: <span class="number">2</span>, <span class="string">u'e'</span>: <span class="number">5</span>, <span class="string">u'd'</span>: <span class="number">4</span>&#125;</div></pre></td></tr></table></figure></p>
-<p>JSON类型转换到python的类型对照表：<br><img src="http://on58f12qv.bkt.clouddn.com/JSON%E7%B1%BB%E5%9E%8B%E5%90%91Python%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%BD%AC%E5%8C%96.png" alt="JSON类型转换到python的类型对照表|center|480x0"></p>
-<hr>
-<h4 id="解析json"><a href="#解析JSON" class="headerlink" title="解析JSON"></a>解析JSON</h4><p>在<a href="http://docs.python-guide.org/en/latest/scenarios/json/" target="_blank" rel="external">The Hitchhiker’s  <strong>Guide to Python</strong></a>中，提到<code>the json can parse JSON from strings or files.the library parse JSON into a python dictionary or list.it can also convert python dictionaries or list into JSON strings</code>简单扼要的说明了JSON的作用。</p>
-<p>实例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="comment"># the following string containing JSON data</span></div><div class="line">json_string = <span class="string">'&#123;"first_name": "Guido", "last_name":"Rossum"&#125;'</span>   <span class="comment"># 小提示：JSON格式字符串</span></div><div class="line"><span class="comment"># it can be parsed like this</span></div><div class="line">parsed_json = json.loads(json_string)   <span class="comment"># 由JSON object解码为python dict对象</span></div><div class="line"><span class="comment"># used as a normal dictionary</span></div><div class="line"><span class="keyword">print</span> parsed_json[<span class="string">'first_name'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"Guido"</span></div><div class="line"></div><div class="line"><span class="comment"># can alse convert the following to JSON</span></div><div class="line">d = &#123;</div><div class="line">    <span class="string">'first_name'</span>: <span class="string">'Guido'</span>,</div><div class="line">    <span class="string">'second_name'</span>: <span class="string">'Rossum'</span>,</div><div class="line">    <span class="string">'titles'</span>: [<span class="string">'BDFL'</span>, <span class="string">'Developer'</span>],</div><div class="line">&#125;</div><div class="line"><span class="keyword">print</span> json.dumps(d)   <span class="comment"># 将python dict类型对象编码成JSON字符串格式</span></div><div class="line">&gt;&gt;&gt;<span class="string">'&#123;"first_name": "Guido", "last_name": "Rossum", "titles": ["BDFL", "Developer"]&#125;'</span></div></pre></td></tr></table></figure></p>
-<h3 id="demjson-第三方库"><a href="#Demjson-第三方库" class="headerlink" title="Demjson 第三方库"></a>Demjson 第三方库</h3><p><code>demjson</code>可用于编码和解码JSON数据，包含了JSONLint的格式化及校验功能。</p>
-<p>安装：<br><code>pip install demjson</code></p>
-<p>JSON函数：</p>
-<ul>
-<li><code>encode</code> 将python对象编码成JSON字符串</li>
-<li><code>decode</code> 将已编码的JSON字符串解码为python对象</li>
-</ul>
-<h4 id="encode"><a href="#encode" class="headerlink" title="encode"></a>encode</h4><p><code>encode()</code>函数用于将python对象编码成JSON字符串。</p>
-<p>语法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">demjson.encode(self,obj,nest_level=<span class="number">0</span>)</div></pre></td></tr></table></figure></p>
-<p>实例：<br>将数组编码为JSON格式数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> demjson</div><div class="line">data = [ &#123; <span class="string">'a'</span> : <span class="number">1</span>, <span class="string">'b'</span> : <span class="number">2</span>, <span class="string">'c'</span> : <span class="number">3</span>, <span class="string">'d'</span> : <span class="number">4</span>, <span class="string">'e'</span> : <span class="number">5</span> &#125; ]</div><div class="line"><span class="keyword">print</span> type(data)   <span class="comment"># &lt;type 'list'&gt;</span></div><div class="line"><span class="keyword">print</span> type(data[<span class="number">0</span>])	  <span class="comment"># &lt;type 'dict'&gt;</span></div><div class="line">json = demjson.encode(data)</div><div class="line"><span class="keyword">print</span> json</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[&#123;<span class="string">"a"</span>:<span class="number">1</span>,<span class="string">"b"</span>:<span class="number">2</span>,<span class="string">"c"</span>:<span class="number">3</span>,<span class="string">"d"</span>:<span class="number">4</span>,<span class="string">"e"</span>:<span class="number">5</span>&#125;]</div><div class="line"><span class="keyword">print</span> type(json)   <span class="comment">#  &lt;type 'str'&gt;</span></div></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="decode"><a href="#decode" class="headerlink" title="decode"></a>decode</h3><p>使用<code>demjson.decode()</code>函数解码JSON数据，该函数返回python字段的数据类型。</p>
-<p>语法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">demjson.decode(self,txt)</div></pre></td></tr></table></figure></p>
-<p>实例：<br>展示解码JSON对象：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> demjson</div><div class="line">json = <span class="string">'&#123;"a":1,"b":2,"c":3,"d":4,"e":5&#125;'</span>   <span class="comment"># 注意类型为JSON格式字符串str</span></div><div class="line">text = demjson.decode(json)</div><div class="line"><span class="keyword">print</span> text</div><div class="line">&gt;&gt;&gt;&#123;<span class="string">u'a'</span>: <span class="number">1</span>, <span class="string">u'c'</span>: <span class="number">3</span>, <span class="string">u'b'</span>: <span class="number">2</span>, <span class="string">u'e'</span>: <span class="number">5</span>, <span class="string">u'd'</span>: <span class="number">4</span>&#125; <span class="comment"># 将object解码为python的dict对象</span></div></pre></td></tr></table></figure></p>
-<h3 id="资源参考"><a href="#资源参考" class="headerlink" title="资源参考"></a>资源参考</h3><p><a href="http://json.org/json-zh.html" target="_blank" rel="external">http://json.org/json-zh.html</a><br><a href="https://docs.python.org/3/library/json.html" target="_blank" rel="external">https://docs.python.org/3/library/json.html</a><br><a href="http://www.runoob.com/python/python-json.html" target="_blank" rel="external">http://www.runoob.com/python/python-json.html</a><br><a href="http://docs.python-guide.org/en/latest/scenarios/json/" target="_blank" rel="external">http://docs.python-guide.org/en/latest/scenarios/json/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2213,7 +2178,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2235,7 +2200,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
