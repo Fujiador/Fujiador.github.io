@@ -270,6 +270,248 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/05/K近邻算法-原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/05/K近邻算法-原理/" itemprop="url">
+                  K近邻算法 - 原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-05T23:18:17+08:00">
+                2017-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<p>k-NN近邻算法（k-nearest neighbor，k-NN），在1968年由Cover和Hart提出。<br>k-NN的输入为实例的特征向量，即对应于特征空间的点；输出为实例的类别，可取多类。k-NN是在给定实例类别的训练数据集中，根据新的实例其k个最近邻的训练实例的类别，通过多数表决等方式进行预测新的实例的类别。<br>k-NN不具有显式的学习过程，利用训练数据集对特征向量空间进行划分，并作为其分类的“模型”。<br>k-NN是一种用于实现<strong>分类</strong>和<strong>回归</strong>的非参数方法。k-NN在分类中，输出结果是一个类别标签，在回归中，输出结果是对象的属性值(This value is the average of the values of its k nearest neighbors)。k-NN是一种基于实例的学习（lazy learning,in which generalization beyond the training data is delayed until a query is made to the system）。</p>
+<p><strong>K-NN三要素</strong>：k值得选择、距离度量、分类决策规则</p>
+<hr>
+<h3 id="k近邻算法"><a href="#k近邻算法" class="headerlink" title="k近邻算法"></a>k近邻算法</h3><p><strong>直观描述</strong>：针对一个给定的训练数据集，对新的输入实例，在训练数据集中找到与该实例对近邻的k个实例，这k个实例的多数属于某个类别，就把该输入实例分类为这个类。<br><strong>算法</strong>：</p>
+<ul>
+<li>输入：训练数据集 $T = \lbrace(x_1,y_1),(x_2,y_2),…,(x_n,y_n)\rbrace $，其中$x_i$为实例的特征向量，$y_i$为实例的类别，$y_i∈\lbrace c_1,c_2,…,c_k \rbrace，i=1,2,…,N$；实例特征向量$x$。</li>
+<li>输出：实例x所属的类别C。</li>
+</ul>
+<blockquote>
+<p>(1)根据给定的举例度量方法，在训练集T中找出与x最近邻的k个点，记作邻域$N_k(x)$；<br>(2)在$N_k(x)$中根据分类决策规则决定x的类别c</p>
+</blockquote>
+<p>k-NN的特殊情形是k=1，称为最近邻算法。</p>
+<hr>
+<h3 id="k-nn模型"><a href="#k-NN模型" class="headerlink" title="k-NN模型"></a>k-NN模型</h3><p>k-NN模型实际上对应于对数据集特征空间的划分。<br><strong>模型</strong><br>当训练集、距离度量、k值和分类决策规则确定后，对任意新的输入实例，确定其唯一的所属类别。相当于将特征空间划分为一些子空间，确定子空间里的每个点所属的类别。<br><img src="http://on58f12qv.bkt.clouddn.com/knn%E6%A8%A1%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.jpg" alt="knn模型对应特征空间|center|300x0"></p>
+<hr>
+<p><strong>距离度量</strong><br>特征空间中两个实例点的距离是相似程度的反映。<br>设特征空间$X$是n维实数向量空间$R^n$，$x_i,x_j∈X$，$x_i=(x_i^{(1)},x_i^{(2)},…,x_i^{(n)})^{T}，x_j=(x_j^{(1)},x_j^{(2)},…,x_j^{(n)})^{T}$，$x_i,x_j$的$L_P$距离定义为：<br>$$<br>L_P(x_i,x_j)=(\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|^p)^{1/p}<br>$$</p>
+<blockquote>
+<p>当p=2时，称为欧式距离Euclidean Distance，即：<br>$$<br>L_2(x_i,x_j)=(\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|^2)^{1/2}<br>$$<br>当p=1时，称为曼哈顿距离，即：<br>$$<br>L_1(x_i,x_j)=\sum_{l=1}^{n}|x_i^{(l)}-x_j^{(l)}|<br>$$<br>当p=∞时，是各个坐标距离的最大值，即：<br>$$<br>L_∞(x_i,x_j)=max_l|x_i^{(l)}-x_j^{(l)}|<br>$$</p>
+</blockquote>
+<p>k-NN对距离度量的定义敏感，可能不同的距离定义所确定的最近邻点是不同的。</p>
+<blockquote>
+<p>注：后续详细讨论数距离度量的方法和实现</p>
+</blockquote>
+<hr>
+<p><strong>k值的选择</strong><br>k-NN对k值的选择敏感。<br><img src="http://on58f12qv.bkt.clouddn.com/KnnClassification.svg.png" alt="@k值敏感示例|center|300x0"></p>
+<p>若k值较小，即用较少的训练实例进行预测，<strong>近似误差会减小</strong>，只有与输入实例较近的训练实例才会对预测结果起作用；但缺点是<strong>估计误差会增大</strong>，预测结果会对近邻的实例点非常敏感。如果近邻点恰巧是噪声，预测则会出错。<strong>k值的减小就意味着整体模型变得复杂，容易发生过拟合。</strong><br>若k值较大，即用较多的训练实例进行预测，优点是可减少学习的估计误差；但缺点是学习的近似误差会增大。与输入实例较远的训练实例也会对预测起作用，使预测发生错误。<strong>k值的增大就意味着整体的模型变得简单。</strong></p>
+<p><strong>k值一般取一个比较小的数值，通常采用经验和交叉验证法来选取最优的k值。</strong></p>
+<hr>
+<p><strong>分类决策规则</strong><br>分类的决策规则往往是多数表决（majority voting rule），即由输入实例的k个邻近的训练实例中的多数类决定输入实例的类。<br>如果分类的损失函数为0-1损失函数，分类函数为：<br>$$f:R^n - \lbrace c_1,c_2,…,c_k\rbrace $$</p>
+<blockquote>
+<p><strong>损失函数：直观的含义就是预测值与真实值的差值</strong></p>
+</blockquote>
+<p>那么误分类的概率是：<br>$$P(Y≠f(X))=1-P(Y=f(X))$$<br>对给定的实例$x∈X$，其最近邻的k个训练实例点构成集合$N_k(x)$，如果$N_k(x)$区域的类别是$C_j$，那么误分类概率是：<br>$$\frac{1}{k}\sum{I(y_i≠c_j)}=1-\frac{1}{k}\sum{I(y_i=c_j)}$$<br>要使误分类概率最小即经验风险最小，就要使$\frac{1}{k}\sum{I(y_i=c_j)}$最大，所以多数表决规则等价于经验风险最小化。</p>
+<blockquote>
+<p><strong>经验风险：直观的含义就是训练误差</strong></p>
+</blockquote>
+<hr>
+<h3 id="k-nn实现kd树"><a href="#k-NN实现：kd树" class="headerlink" title="k-NN实现：kd树"></a>k-NN实现：kd树</h3><p>k-NN算法主要的问题是如何对训练数据进行快速k近邻搜索。在特征空间的维数较大以及训练数据量较大时尤其重要。<br>k-NN最简单的实现方法是现行扫描（linear scan），计算输入实例与每一个训练实例的举例。优点是简单直观，但缺点更明显，计算非常耗时，方法不可取。</p>
+<blockquote>
+<p>为提高k-NN搜索的效率，使用特殊的结构存储训练数据，以减少计算距离的次数。接下来介绍<strong>kd树方法</strong>。</p>
+</blockquote>
+<hr>
+<h4 id="构造kd树"><a href="#构造kd树" class="headerlink" title="构造kd树"></a>构造kd树</h4><p><strong>kd树</strong>概括的讲是一种对k维空间中的实例点进行存储以便对其进行快速检索的树形数据结构。kd树是二叉树，表示对k维空间的一个划分（partition）。<br>构造kd树相当于不断用垂直于坐标轴的超平面将k维空间切分，构成一系列的k维超巨型区域，kd树的每个节点对应于一个k维超巨型区域。</p>
+<p>构造kd树的方法：</p>
+<blockquote>
+<ul>
+<li>构造根节点，使根结点对应于k维空间中包含所有实例点的超矩形区域；</li>
+<li>通过下面的递归，不断地对k维空间进行切分，生成子结点；</li>
+<li>在超矩形区域（结点）上选择一个坐标轴和在此坐标轴上的一个切分点，确定一个超平面，这个超平面通过选定的切分点并垂直于选定的坐标轴，将当前超矩形区域切分为左右两个子区域（子结点）；<br>这时，实例被分到两个子区域，这个过程直到子区域内没有实例时终止（终止时的结点为叶节点）。</li>
+</ul>
+</blockquote>
+<p>在此过程中，将实例保存在相应的结点上。</p>
+<p>通常，选择坐标轴对空间切分，选择训练实例点在选定坐标轴的中位数为切分点，这样得到的kd树是平衡的。但平衡的kd树搜索时的效率未必是最优的。</p>
+<hr>
+<p><strong>算法</strong></p>
+<blockquote>
+<p>输入：k维空间数据集$T=\lbrace x_1,x_2,…,x_n\rbrace $<br>其中$x_i=(x_i^{(1)},x_i^{(2)},…,x_i^{(n)})^{T},i=1,2,3,…,N$<br>输出：kd树</p>
+<blockquote>
+<p>(1) 开始：构造根结点，根结点对应于包含$T$的k维空间的超矩形区域。<br>选择$x^{(l)}$为坐标轴，以$T$中所有实例的$x^{(l)}$坐标的中位数为切分点，将根结点对应的超矩形区域切分为两个子区域，切分由通过切分点并与坐标轴$x^{(l)}$垂直的超平面实现。<br>由根结点生成深度为1的左、右子结点：左子结点对应坐标$x^{(l)}$小于切分点的子区域，右子结点对应于坐标$x^{(l)}$大于切分点的子区域。<br>(2) 重复：对深度为$j$的结点，选择$x^{(l)}$为切分的坐标轴，以该结点的区域中所有的实例的$x^{(l)}$坐标的中位数为切分点，将该结点对应的超矩形区域切分为两个子区域，切分由通过切分点并与坐标轴$x^{(l)}$垂直的超平面实现。<br>由该结点生成深度为$j+1$的左、右子结点：左子结点对应坐标$x^{(l)}$小于切分点的子区域，右子结点对应坐标$x^{(l)}$大于切分点的子区域。<br>将落在切分超平面上的实例点保存在该结点。<br>(3) 直到两个子区域没有实例存在时停止，从而形成kd树的区域划分。</p>
+</blockquote>
+</blockquote>
+<hr>
+<h4 id="搜索kd树"><a href="#搜索kd树" class="headerlink" title="搜索kd树"></a>搜索kd树</h4><p>kd树可省去对大部分数据点的搜索，从而减少搜索的计算量。下面以最近领为例加以说明，同样的方法可以推广到k-NN。</p>
+<p>给定一个目标点，搜索其最近邻。</p>
+<blockquote>
+<ul>
+<li>首先，找到包含目标点的叶结点；</li>
+<li>然后，从该叶结点出发，依次回退到父结点；</li>
+<li>不断查找与目标点最近邻的结点，当确定不可能存在更近的结点时终止。</li>
+</ul>
+</blockquote>
+<p>这样，搜索就被限制在空间的局部区域上，效率大为提高。<br>包含目标点的叶结点对应包含目标点的最小超矩形区域。以此叶结点的实例点作为当前最近点。目标点的最近邻一定在以目标点为中心并通过当前最近点的超球体的内部。然后返回当前结点的父结点，如果父结点的另一子节点的超矩形区域与超球体相交，那么在相交的区域内寻找与目标点更近的实例点，继续上述过程。如果父结点的另一子结点的超矩形区域与超球体不相交，或不存在比当前最近点更近的点，则停止搜索。</p>
+<p><strong>算法</strong></p>
+<blockquote>
+<p>输入：已构造的kd数，目标点x<br>输出：x的最近邻</p>
+<blockquote>
+<p>(1) 在kd树种找出包含目标点x的叶结点：从根结点出发，递归地向下访问kd树。若目标点x当前维的坐标小于切分点的坐标，则移动到左子结点，否则移动到右子结点。直到子结点为叶结点为止。<br>(2) 以此叶结点为“当前最近点”<br>(3) 递归地向上回退，在每个结点进行以下操作</p>
+<blockquote>
+<p>(a) 如果该结点保存的实例点比当前最近距离目标点更近，则以该实例点为“当前最近点”<br>(b) 当前最近点一定存在于该结点一个子结点对应的区域。检查该子结点的父结点的另一子节点对应的区域是否有更近的点。具体地，检查另一子结点对应的区域是否与以目标点为球心，以目标点与“当前最近点”间的距离为半径的超球体相交。<br>如果相交，可能在另一个子结点对应的区域内存在距目标点更近的点，移动到另一个子结点。接着，递归地进行最近邻搜索；<br>如果不相交，向上回退。</p>
+</blockquote>
+<p>(4) 当回退到根结点时，搜索结束。最后的“当前最近点”即为x的最近邻点。</p>
+</blockquote>
+</blockquote>
+<p><strong>如果实例点是随机分布的，kd树搜索的平均计算复杂度是$O(logN)$，N是训练实例数。</strong><br><strong>kd树更适用于训练实例数远大于空间维数时的k-NN搜索。当空间维数接近训练实例时，它的效率会迅速下降，几乎接近线性扫描。</strong></p>
+<hr>
+<h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h3><ul>
+<li>异常数据处理</li>
+<li>数据标准化</li>
+<li>数据归一化</li>
+</ul>
+<blockquote>
+<p>注：后续详细讨论数据处理的方法和实现</p>
+</blockquote>
+<hr>
+<h3 id="权重k-nn"><a href="#权重k-NN" class="headerlink" title="权重k-NN"></a>权重k-NN</h3><p>无论是在分类还是回归算法中，均可以通过增加权重以调整各个近邻实例点的贡献，即离输入实例点越近的邻近点比相对距离稍远的邻近点的贡献越大。<br>常见的权重是$\frac{1}{d}$，其中d是与近邻点的距离。</p>
+<hr>
+<h3 id="数据倾斜"><a href="#数据倾斜" class="headerlink" title="数据倾斜"></a>数据倾斜</h3><p>在“Majority viting”分类过程中，如果训练实例数据集的分类标签存在数据倾斜，即大量出现的某个类标签往往决定了预测的实例点的类别，因为它们更可能是最近邻的k个最近邻的邻近点。<br>其中的一种解决方法是，对分类过程增加权重，考虑各邻近点到测试点的距离的倒数。<br>另外一种解决方法是<code>abstraction in data representation</code>(不会准确的翻译这个术语)，例如SOM(self-organizing map)，个人理解，简而言之即将相同类标签的相似聚簇点抽象一个质点或中心点，而忽略原始数据实例点的密度分布问题。</p>
+<hr>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>&lt;&lt;统计学习方法&gt;&gt;     李航 著<br><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm" target="_blank" rel="external">https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/04/XlsxWriter-Python操作Excel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1068,7 +1310,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
