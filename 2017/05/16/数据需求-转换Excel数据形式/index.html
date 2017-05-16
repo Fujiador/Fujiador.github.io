@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,Excel,OpenPyXL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="需求说明这个数据需求来自Q群水友：期望将Excel内各行的文本数据，转化为表格形式的数据以方便统计。
+常规的Excel函数或多次分列、VBA、可以进行处理，现在用Python来解决实现这一需求。
+需求数据示例如下：
+数据格式比较规律，分别以”,”分隔为一组数据tuple，tuple内部以不定长空格进行分隔字段fields。
+处理转化为结果示例如下：
+
+Python实现环境python versio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[数据需求] 转换Excel数据形式">
+<meta property="og:url" content="https://fujiador.github.io/2017/05/16/数据需求-转换Excel数据形式/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="需求说明这个数据需求来自Q群水友：期望将Excel内各行的文本数据，转化为表格形式的数据以方便统计。
+常规的Excel函数或多次分列、VBA、可以进行处理，现在用Python来解决实现这一需求。
+需求数据示例如下：
+数据格式比较规律，分别以”,”分隔为一组数据tuple，tuple内部以不定长空格进行分隔字段fields。
+处理转化为结果示例如下：
+
+Python实现环境python versio">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E9%9C%80%E6%B1%82.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/Excel_Temp%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png">
+<meta property="og:updated_time" content="2017-05-16T13:58:52.713Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[数据需求] 转换Excel数据形式">
+<meta name="twitter:description" content="需求说明这个数据需求来自Q群水友：期望将Excel内各行的文本数据，转化为表格形式的数据以方便统计。
+常规的Excel函数或多次分列、VBA、可以进行处理，现在用Python来解决实现这一需求。
+需求数据示例如下：
+数据格式比较规律，分别以”,”分隔为一组数据tuple，tuple内部以不定长空格进行分隔字段fields。
+处理转化为结果示例如下：
+
+Python实现环境python versio">
+<meta name="twitter:image" content="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E9%9C%80%E6%B1%82.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/05/16/数据需求-转换Excel数据形式/"/>
+
+
+
+
+
+  <title> [数据需求] 转换Excel数据形式 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/16/数据需求-转换Excel数据形式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [数据需求] 转换Excel数据形式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-16T21:58:13+08:00">
+                2017-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h3><p>这个数据需求来自Q群水友：期望将Excel内各行的文本数据，转化为表格形式的数据以方便统计。</p>
+<p>常规的Excel函数或多次分列、VBA、可以进行处理，现在用Python来解决实现这一需求。</p>
+<p>需求数据示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E9%9C%80%E6%B1%82.png" alt="数据需求|center"></p>
+<p>数据格式比较规律，分别以”,”分隔为一组数据tuple，tuple内部以不定长空格进行分隔字段fields。</p>
+<p>处理转化为结果示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C.png" alt="需求结果|center"></p>
+<hr>
+<h3 id="python实现"><a href="#Python实现" class="headerlink" title="Python实现"></a>Python实现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>python version：2.7.10<br>系统：windows</p>
+<h4 id="第三方package"><a href="#第三方Package" class="headerlink" title="第三方Package"></a>第三方Package</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pip install xlsxwriter</div><div class="line">pip install pandas</div></pre></td></tr></table></figure>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="string">""" Transform the Excel Data.</span></div><div class="line">"""</div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_Data</span><span class="params">(file_in, sheetname=<span class="number">0</span>)</span>:</span></div><div class="line">	df = pd.read_excel(file_in, sheetname=sheetname)</div><div class="line">	data = []</div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> df[df.columns[<span class="number">1</span>]]:</div><div class="line">		data.append(line)</div><div class="line">	<span class="keyword">return</span> data</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_workbook</span><span class="params">(workbook_name, sheet_name)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        workbook = xlsxwriter.Workbook((workbook_name + <span class="string">".xlsx"</span>))</div><div class="line">        worksheet = workbook.add_worksheet(sheet_name)</div><div class="line">        <span class="keyword">print</span> <span class="string">"the %s excel workbook has been created successfully!"</span> % (workbook_name + <span class="string">".xlsx"</span>)</div><div class="line">        <span class="keyword">return</span> workbook,worksheet</div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">print</span> e</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_title</span><span class="params">(worksheet, title_lists, row=<span class="number">1</span>, col=<span class="number">0</span>, title_format=None)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">for</span> i,title <span class="keyword">in</span> enumerate(title_lists):</div><div class="line">            <span class="keyword">if</span> title:</div><div class="line">                worksheet.write(row, col+i, title, title_format)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">break</span></div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">return</span> e</div><div class="line">    <span class="keyword">print</span> <span class="string">"Done Successful!"</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">format_style</span><span class="params">(workbook)</span>:</span></div><div class="line">    <span class="keyword">if</span> workbook:</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            title_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>, <span class="string">'bg_color'</span>:<span class="string">'#B0C4DE'</span>, <span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">            cell_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">            date_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>, <span class="string">'num_format'</span>: <span class="string">'yyyy-mm-dd'</span>&#125;)</div><div class="line">            <span class="keyword">return</span> title_formats,cell_formats,date_formats</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">"the workbook object is invalid, please check the workbook object!"</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">"please check and input the correct workbook object!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_data</span><span class="params">(worksheet,data,row=<span class="number">2</span>,col=<span class="number">0</span>)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        i = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> data:</div><div class="line">            j = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> tp <span class="keyword">in</span> line.split(<span class="string">','</span>):</div><div class="line">                name,count,amount = tp.split()</div><div class="line">                worksheet.write(row+i,col+<span class="number">0</span> + j*<span class="number">3</span>,name)</div><div class="line">                worksheet.write(row+i,col+<span class="number">1</span> + j*<span class="number">3</span>,count)</div><div class="line">                worksheet.write(row+i,col+<span class="number">2</span> + j*<span class="number">3</span> ,amount)</div><div class="line">                j +=<span class="number">1</span></div><div class="line">            i += <span class="number">1</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"The data has been write into excel worksheet object successfully!"</span></div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">print</span> <span class="string">"please check the data's content!"</span></div><div class="line">    <span class="keyword">return</span> None3</div><div class="line">   </div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    file_in = <span class="string">r'test.xlsx'</span></div><div class="line">    title_lists = [<span class="string">u'姓名'</span>,<span class="string">u'数量'</span>,<span class="string">u'金额'</span>] * <span class="number">3</span></div><div class="line">	data = get_data(file_in)</div><div class="line"></div><div class="line">	workbook,worksheet = create_workbook( <span class="string">'out'</span>, <span class="string">'sheet1'</span>)</div><div class="line">	title_formats,cell_formats,_ = format_style(workbook)</div><div class="line">	write_title(worksheet, title_lists, row=<span class="number">1</span>, col=<span class="number">1</span>, title_format=title_formats)</div><div class="line">	write_data(worksheet,data,row=<span class="number">2</span>,col=<span class="number">1</span>, cell_format=cell_formats)</div><div class="line">	workbook.close()</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ul>
+<li>1.代码重构</li>
+<li>2.通用性</li>
+</ul>
+<h3 id="代码重构"><a href="#代码重构" class="headerlink" title="代码重构"></a>代码重构</h3><h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><p><img src="http://on58f12qv.bkt.clouddn.com/Excel_Temp%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png" alt="代码结构|center"></p>
+<p>‘data’ 文件夹存放输入和输出数据文件。<br>‘Excel_Object’ 存放Excel类及实例结构和操作方法。<br>‘main’ 处理数据的主函数。<br>‘transform’ 代码重构前函数式、流水操作式代码。</p>
+<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">###  Excel_Object.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Excel_Operator</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, workbook_name, worksheet_name)</span>:</span></div><div class="line">        self.workbook_name = workbook_name</div><div class="line">        self.worksheet_name = worksheet_name</div><div class="line">        self.workbook = xlsxwriter.Workbook(self.workbook_name + <span class="string">".xlsx"</span>)</div><div class="line">        self.worksheet = self.workbook.add_worksheet(self.worksheet_name)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format_style</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> self.workbook:</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                title_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>, <span class="string">'bg_color'</span>:<span class="string">'#B0C4DE'</span>, <span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">                cell_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">                date_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>, <span class="string">'num_format'</span>: <span class="string">'yyyy-mm-dd'</span>&#125;)</div><div class="line">                <span class="keyword">return</span> title_formats,cell_formats,date_formats</div><div class="line">            <span class="keyword">except</span> Exception,e:</div><div class="line">                <span class="keyword">print</span> <span class="string">"the workbook object is invalid, please check the workbook object."</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"please check and input the correct workbook object!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_title</span><span class="params">(self, title_lists, row=<span class="number">0</span>, col=<span class="number">0</span>, title_format=None)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i, title <span class="keyword">in</span> enumerate(title_lists):</div><div class="line">                <span class="keyword">if</span> title:</div><div class="line">                    self.worksheet.write(row, col+i, title, title_format)</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">break</span></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> e</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"The titles has been write into excel worksheet object successfully!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_data</span><span class="params">(self, data, row=<span class="number">0</span>, col=<span class="number">0</span>, cell_format=None)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            i = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> data:</div><div class="line">                j = <span class="number">0</span></div><div class="line">                <span class="keyword">for</span> tp <span class="keyword">in</span> line.split(<span class="string">','</span>):</div><div class="line">                    name, count, amount = tp.split()</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">0</span> + j*<span class="number">3</span>,name, cell_format)</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">1</span> + j*<span class="number">3</span>,count, cell_format)</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">2</span> + j*<span class="number">3</span> ,amount, cell_format)</div><div class="line">                    j += <span class="number">1</span></div><div class="line">                i += <span class="number">1</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"The data has been write into excel worksheet object successfully!"</span></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">"please check the data's content!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        self.workbook.close()</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### main.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">from</span> Excel_Object <span class="keyword">import</span> Excel_Operator</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span><span class="params">(file_in, sheetname=<span class="number">0</span>)</span>:</span></div><div class="line">    df = pd.read_excel(file_in, sheetname)</div><div class="line">    data = []</div><div class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> df[df.columns[<span class="number">1</span>]]:</div><div class="line">        data.append(line)</div><div class="line">    <span class="keyword">return</span> data</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(data, title_lists)</span>:</span></div><div class="line">    Excel_obj = Excel_Operator(<span class="string">'./data/out'</span>, <span class="string">'sheet1'</span>)</div><div class="line"></div><div class="line">    title_formats,cell_formats,_ = Excel_obj.format_style()</div><div class="line"></div><div class="line">    Excel_obj.write_title( title_lists, row=<span class="number">1</span>, col=<span class="number">1</span>, title_format=title_formats)</div><div class="line">    Excel_obj.write_data(data,row=<span class="number">2</span>,col=<span class="number">1</span>, cell_format=cell_formats)</div><div class="line">    Excel_obj.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line"></div><div class="line">    title_lists = [<span class="string">u'姓名'</span>,<span class="string">u'数量'</span>,<span class="string">u'金额'</span>] * <span class="number">3</span></div><div class="line">    data = get_data(<span class="string">'./data/test.xlsx'</span>)</div><div class="line"></div><div class="line">    main(data, title_lists)</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="to-do"><a href="#To-DO" class="headerlink" title="To-DO"></a>To-DO</h3><ul>
+<li><ol>
+<li>功能代码通用化</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-Excel-OpenPyXL/" rel="tag"># Python,Excel,OpenPyXL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/14/Python项目：IP地址信息可视化/" rel="next" title="Python项目：IP地址信息可视化">
+                <i class="fa fa-chevron-left"></i> Python项目：IP地址信息可视化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求说明"><span class="nav-number">1.</span> <span class="nav-text">需求说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python实现"><span class="nav-number">2.</span> <span class="nav-text">Python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境"><span class="nav-number">2.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方package"><span class="nav-number">2.2.</span> <span class="nav-text">第三方Package</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码"><span class="nav-number">2.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#to-do"><span class="nav-number">3.</span> <span class="nav-text">To-Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码重构"><span class="nav-number">4.</span> <span class="nav-text">代码重构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码结构"><span class="nav-number">4.1.</span> <span class="nav-text">代码结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细代码"><span class="nav-number">4.2.</span> <span class="nav-text">详细代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#to-do"><span class="nav-number">5.</span> <span class="nav-text">To-DO</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

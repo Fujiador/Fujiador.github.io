@@ -270,6 +270,197 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/09/ConfigParser-Python解析配置文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/09/ConfigParser-Python解析配置文件/" itemprop="url">
+                  ConfigParser  Python解析配置文件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T20:05:43+08:00">
+                2017-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>ConfigParser</code>，如其名即配置文件解析模块(Configuration file parser module)。注意，在Python 3.x中，对应功能的模块被重命名为<code>configparse</code>。</p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><hr>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>ini是Initialization File的缩写(windows环境)，cfg是Configuration File的缩写(Linux或UNIX环境)，均指初始化文件，使操作系统或程序进行初始化或进行参数设置。</p>
+<p>为什么要用配置文件呢？从我个人当前工作中遇到的问题(例如读取很多个数据库)看，如果程序没有配置文件，对外是相对封闭的，如果程序(如数据库)的参数进行了修改，必须要修改程序代码以及重新编译才可。这样效率差且容易出错。此时使用配置文件，将参数的修改集中在内，程序调用配置文件内对应功能或模块的参数即可，以达到统一管理参数的作用。</p>
+<blockquote>
+<p>注：还有其他类型的配置文件，当前主要考虑Windows .ini文件和Ubuntu .cfg文件。实际配置文件就是常规的text文件，只是其遵循一定的文件语法格式。<br>以下统称为配置文件。</p>
+</blockquote>
+<hr>
+<h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p><strong>格式很简单，三大基本要素：paramters、sections和comments</strong></p>
+<p>配置文件是由section和参数 name &amp; value 组成。</p>
+<ul>
+<li>[section]：直观的理解就是节或部分，某些参数形成的块</li>
+<li>name = value：对应的[section]下的参数</li>
+</ul>
+<p>同一配置文件内可以存在多个<code>[sections]</code>以便提供项目使用。</p>
+<p><strong>parameters</strong><br>最基本的元素就是parameters，每个parameter都有一个name和value，name和value由 ‘=’ 隔开，例如<em>name = value</em>。<br><strong>sections</strong><br>所有parameters都是以sections为单位结合在一起。section名称独占一行，例如<em>[section name]</em>，且由方括号包围。在section申明后的所有parameters都是属于该section。section没有显式的结束标志符，下一个<strong>新</strong> section开始即上一个<strong>老</strong> section的结束。<br><strong>comments</strong><br>注释以<code>;</code>标记开始，所有的注释语句不管多次都是独占一行直到结束，即在分号和行结束符之间的所有内容均被忽略，例如<em>; comments text</em><br><strong>如下示例：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">; last modified at 2017-4-7 01:19:25 by Dor</div><div class="line">[DataBase_MySQL_business]</div><div class="line">server = 127.0.0.1</div><div class="line">user = user_name</div><div class="line">passwd = pass_word</div><div class="line">port = 3306</div><div class="line">charset = <span class="string">'gbk'</span></div><div class="line"></div><div class="line">; last modified at 2017-4-7 01:19:25 by Dor</div><div class="line">[DataBase_MySQL_log]</div><div class="line">server = 127.0.0.1</div><div class="line">user = user_name</div><div class="line">passwd = pass_word</div><div class="line">port = 3306</div><div class="line">charset = <span class="string">'gbk'</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="configparser模块"><a href="#ConfigParser模块" class="headerlink" title="ConfigParser模块"></a>ConfigParser模块</h3><p>常用到的主要是三大类：<code>ConfigParser.RawConfigParser()</code>,<code>ConfigParser.ConfigParser()</code>,<code>ConfigParser.SafeConfigParser()</code>,其他主要是一些Error异常类。</p>
+<ul>
+<li><code>[defaults[, dict_type[, allow_no_value]]]</code>：When defaults is given, it is initialized into the dictionary of intrinsic defaults. When dict_type is given, it will be used to create the dictionary objects for the list of sections, for the options within a section, and for the default values. When allow_no_value is true (default: False), options without values are accepted; the value presented for these is None。</li>
+</ul>
+<hr>
+<h4 id="rawconfigparser"><a href="#RawConfigParser" class="headerlink" title="RawConfigParser"></a>RawConfigParser</h4><p>RawConfigParser实例包含以下方法：</p>
+<blockquote>
+<p><code>.defaults()</code>：返回包含默认的实例字典类型，OrderedDict()<br><code>.sections()</code>：返回配置文件内的section列表<br><code>.add_section(section)</code>：为配置文件实例增加section名<br><code>.has_section(section)</code>：判断section名是否存在<br><code>.options(section)</code>：返回对应section的属性名列表<br><code>.has_option(section, option)</code>：判断属性名是否存在section节内<br><code>.read(filenames)</code>：读取和解析文件名列表，返回成功解析的文件名列表<br><code>.readfp(fp[,filename])</code>：读取和解析文件或类文件fp对象，并制定文件名<br><code>.get(section,option)</code>：获取section下对应option属性值<br><code>.getint(section,option)</code><br><code>.getfloat(section,option)</code><br><code>.getboolean(section,option)</code>：以上三个方法都是将section下option的属性值格式化<br><code>.items(section)</code>：返回对应section下的(name,value)对列表<br><code>.set(section,option,value)</code>：添加或修改section下对应option的属性值<br><code>.write(fileobject)</code>：将指定配置写入对应文件对象，可由read()解析<br><code>.remove_option(section,option)</code>：删除section下对应的option内容<br><code>.remove_section(section)</code>：删除对应的section内容</p>
+</blockquote>
+<h4 id="configparser"><a href="#ConfigParser" class="headerlink" title="ConfigParser"></a>ConfigParser</h4><p>ConfigParser在RawConfigParser基础上扩展了一些方法，增加了一些可选参数。</p>
+<blockquote>
+<p><code>.get(section, option[, raw[, vars]])</code>：获取section下对应option的属性值。如果提供vars参数(必须是字典类型)，option属性值在会在vars参数中查找。如果raw=0，即不使用raw mode模式，在属性值中的“%”进行对应的替换，如果raw=1，即使用raw mode模式，输出原始的option值，不进行对应的替换。<br><code>.items(section[,raw[,vars]])</code>：返回对应section下的(name,value)对列表，其参数与get方法中参数的意义一致。</p>
+</blockquote>
+<p>示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJiaDor'</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> io</div><div class="line"></div><div class="line">config = ConfigParser.RawConfigParser()</div><div class="line"><span class="comment"># 1. write configuration section into file</span></div><div class="line">config.add_section(<span class="string">'Section1'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'an_int'</span>,<span class="string">'15'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'a_bool'</span>,<span class="string">'true'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'a_float'</span>,<span class="string">'3.1415'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'baz'</span>,<span class="string">'fun'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'bar'</span>,<span class="string">'Python'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="string">'%(bar)s is %(baz)s!'</span>)  <span class="comment"># 注意这里option属性值的形式,是格式化字符串的形式</span></div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'example.cfg'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> config_file:</div><div class="line">    config.write(config_file)</div><div class="line"></div><div class="line"><span class="comment"># 2. read configuration form section</span></div><div class="line">config = ConfigParser.RawConfigParser()</div><div class="line">config.read(<span class="string">'example.cfg'</span>)</div><div class="line">a_float = config.getfloat(<span class="string">'Section1'</span>,<span class="string">'a_float'</span>)</div><div class="line">an_int = config.getint(<span class="string">'Section1'</span>,<span class="string">'an_int'</span>)</div><div class="line"><span class="keyword">print</span> a_float + an_int</div><div class="line"></div><div class="line"><span class="comment"># notice that the next output does not interpolate '%(bar)s is %(baz)s!'</span></div><div class="line"><span class="comment"># this is because we are using a RawConfigParser().</span></div><div class="line"><span class="keyword">if</span> config.getboolean(<span class="string">'Section1'</span>,<span class="string">'a_bool'</span>):</div><div class="line">    <span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div><div class="line"></div><div class="line"><span class="comment"># 对比说明ConfigParser.get(section,option[,raw[,vars])</span></div><div class="line">config = ConfigParser.ConfigParser()</div><div class="line">config.read(<span class="string">'example.cfg'</span>)</div><div class="line"></div><div class="line"><span class="comment"># set the third optional argument of get to 1 if you wish to use raw mode</span></div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">0</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>Python <span class="keyword">is</span> fun!</div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">1</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div><div class="line"></div><div class="line"><span class="comment"># the optional fourth argument is a dict with members that will take precedence in interpolation</span></div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">0</span>,&#123;<span class="string">'bar'</span>:<span class="string">'Documentation'</span>,<span class="string">'baz'</span>:<span class="string">'evil'</span>&#125;)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>Documentation <span class="keyword">is</span> evil!</div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">1</span>,&#123;<span class="string">'bar'</span>:<span class="string">'Documentation'</span>,<span class="string">'baz'</span>:<span class="string">'evil'</span>&#125;)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div></pre></td></tr></table></figure></p>
+<h4 id="safeconfigparser"><a href="#SafeConfigParser" class="headerlink" title="SafeConfigParser"></a>SafeConfigParser</h4><p>SafeConfigParser类同样是ConfigParser类的扩展。</p>
+<blockquote>
+<p><code>.set(section,option,value)</code>：如果给定的section存在，则将option属性值修改为value，value必须为string类型，否则报错。</p>
+</blockquote>
+<hr>
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="comment"># ConfigParser类最核心的方法</span></div><div class="line"></div><div class="line">config = ConfigParser.ConfigParser()  <span class="comment"># create ConfigParser instance</span></div><div class="line">config.sections()   <span class="comment"># return the sections list of the config file</span></div><div class="line">config.options(section)   <span class="comment"># return the options list of the section config</span></div><div class="line">config.get(section,option)   <span class="comment"># return the option's value</span></div><div class="line">config.add_section(section_name)   <span class="comment"># add a sction </span></div><div class="line">config.set(section,option,value)   <span class="comment"># add the option ,value pairs</span></div><div class="line">config.read(filename)   <span class="comment"># read the config file</span></div><div class="line">config.write(object_file)    <span class="comment"># write the config information into file or file_like object</span></div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_Config</span><span class="params">(file_name,section,*args)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.add_section(section)</div><div class="line">	host,user,passwd,db,charset,port = args</div><div class="line">	config.set(section,<span class="string">'host'</span>,host)</div><div class="line">	config.set(section,<span class="string">'user'</span>,user)</div><div class="line">	config.set(section,<span class="string">'passwd'</span>,passwd)</div><div class="line">	config.set(section,<span class="string">'db'</span>,db)</div><div class="line">	config.set(section,<span class="string">'charset'</span>,charset)</div><div class="line">	config.set(section,<span class="string">'port'</span>,port)</div><div class="line"></div><div class="line">	<span class="keyword">with</span> open(file_name,<span class="string">'a+'</span>) <span class="keyword">as</span> config_file:</div><div class="line">		config.write(config_file)</div><div class="line">	<span class="keyword">return</span> <span class="string">'The config information has been writed successfully!'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_Config</span><span class="params">(file_name,section,**kwargs)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.read(file_name)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">for</span> option,value <span class="keyword">in</span> kwargs.items():</div><div class="line">			config.set(section,option,value)</div><div class="line">		<span class="keyword">with</span> open(file_name,<span class="string">'wb'</span>) <span class="keyword">as</span> config_file:	</div><div class="line">			config.write(config_file)</div><div class="line">		<span class="keyword">return</span> <span class="string">"The config file has been updated successfully!"</span></div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> <span class="string">"The config file updated failed.the Error is '%s'"</span> % e</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	file_name = <span class="string">'mysql.config'</span></div><div class="line">	section = <span class="string">'mysql_boss'</span></div><div class="line">	<span class="keyword">print</span> write_Config(file_name,section,<span class="string">'127.0.0.1'</span>,<span class="string">'user'</span>,<span class="string">'passwd'</span>,<span class="string">'report'</span>,<span class="string">'gbk'</span>,<span class="string">'3306'</span>)</div><div class="line">	<span class="keyword">print</span> update_Config(file_name,section,host=<span class="string">'127.0.0.0'</span>)		</div><div class="line"> </div><div class="line"><span class="meta">&gt;&gt;&gt; </span>The config information has been writed successfully!</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>The config file has been updated successfully!</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*- </span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_Config_Infor</span><span class="params">(config_file_path, section)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.read(config_file_path)</div><div class="line"></div><div class="line">	option_result = OrderedDict()</div><div class="line">	<span class="keyword">for</span> option <span class="keyword">in</span> config.options(section):</div><div class="line">		option_result[option] = config.get(section,option)</div><div class="line">	<span class="keyword">return</span> option_result</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> io</div><div class="line"></div><div class="line"><span class="comment"># opt_move函数，实现在sections之间移动option的功能</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">opt_move</span><span class="params">(config, section1, section2, option)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        config.set(section2, option, config.get(section1, option, <span class="number">1</span>))</div><div class="line">    <span class="keyword">except</span> ConfigParser.NoSectionError:</div><div class="line">        config.add_section(section2)</div><div class="line">        opt_move(config, section1, section2, option)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        config.remove_option(section1, option)</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mysql.config</span></div><div class="line">[Frist_mysql]</div><div class="line">outer_host = <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">inner_host = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">user = reader</div><div class="line">passwd = passwd</div><div class="line">db = text</div><div class="line">charset = gbk</div><div class="line">port = <span class="number">3306</span></div><div class="line"></div><div class="line">[Second_mysql]</div><div class="line">outer_host = <span class="number">192.168</span><span class="number">.0</span><span class="number">.2</span></div><div class="line">inner_host = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">user = reader</div><div class="line">passwd = passwd</div><div class="line">db = text</div><div class="line">charset = gbk</div><div class="line">port = <span class="number">3306</span></div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MysqlUtil</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, filepath, section)</span>:</span></div><div class="line">        self.filepath = filepath</div><div class="line">        self.section = section</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getMysqlConfig</span><span class="params">(self)</span>:</span></div><div class="line">        result = []</div><div class="line">        conf = ConfigParser.ConfigParser()</div><div class="line">        conf.read(self.filepath)</div><div class="line">        options = conf.options(self.section)</div><div class="line">        <span class="keyword">if</span> sys.platform.find(<span class="string">"win"</span>) &gt;= <span class="number">0</span>:</div><div class="line">            options.pop(options.index(<span class="string">"inner_host"</span>))</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            options.pop(options.index(<span class="string">"outer_host"</span>))</div><div class="line">        <span class="keyword">for</span> option <span class="keyword">in</span> options:</div><div class="line">            result.append(conf.get(self.section, option))</div><div class="line">        <span class="keyword">return</span> result</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></div><div class="line">        host, user, passwd, db, charset, port = self.getMysqlConfig()</div><div class="line">        port = int(port)</div><div class="line">        self.conn = MySQLdb.connect(host=host, user=user,</div><div class="line">                               passwd=passwd, db=db, charset=charset, port=port)</div><div class="line">        self.cur = self.conn.cursor()</div><div class="line">        <span class="keyword">return</span> self.conn, self.cur</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self, str_sql)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> str_sql:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        conn, cur = self.connect()</div><div class="line">        cur.execute(str_sql)</div><div class="line">        out = cur.fetchall()</div><div class="line">        <span class="keyword">return</span> out</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, str_sql)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> str_sql:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        conn, cur = self.connect()</div><div class="line">        cur.execute(str_sql)</div><div class="line">        conn.commit()</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.conn:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        self.conn.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    mysqlutil_instance = MysqlUtil(<span class="string">'./mysql.config'</span>,<span class="string">'section_name'</span>)</div><div class="line">    select_sql = <span class="string">'''select * from table_name limit 5'''</span></div><div class="line">    mysql_connect.select(sql)</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://docs.python.org/2.7/library/configparser.html#configparser-objects" target="_blank" rel="external">https://docs.python.org/2.7/library/configparser.html#configparser-objects</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/06/数据结构：树、二叉树、二叉树搜索-一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1487,7 +1678,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
