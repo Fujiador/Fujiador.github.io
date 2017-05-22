@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,汉字统计," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="项目简介这个练手代码实际不能称为“项目”的，因为实在是太简单，并且没有实质的干货内容。这篇博客仅仅是做一个小小的记录，在过程的一些坑做一个小备忘。：)
+
+环境
+Python 2.7.10
+文本素材：随便一本小说即可(注意文本数据的编码UTF-8)
+
+
+思路大的方向即：获取文件的内容，并高效的拆分单个汉字，简单统计各个汉字在小说文件中出现的次数（没有什么实质意义）。将统计结果排序，并且查看在小说文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python项目：小说汉字统计">
+<meta property="og:url" content="https://fujiador.github.io/2017/05/22/Python项目：小说汉字统计/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="项目简介这个练手代码实际不能称为“项目”的，因为实在是太简单，并且没有实质的干货内容。这篇博客仅仅是做一个小小的记录，在过程的一些坑做一个小备忘。：)
+
+环境
+Python 2.7.10
+文本素材：随便一本小说即可(注意文本数据的编码UTF-8)
+
+
+思路大的方向即：获取文件的内容，并高效的拆分单个汉字，简单统计各个汉字在小说文件中出现的次数（没有什么实质意义）。将统计结果排序，并且查看在小说文件">
+<meta property="og:updated_time" content="2017-05-22T14:27:56.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python项目：小说汉字统计">
+<meta name="twitter:description" content="项目简介这个练手代码实际不能称为“项目”的，因为实在是太简单，并且没有实质的干货内容。这篇博客仅仅是做一个小小的记录，在过程的一些坑做一个小备忘。：)
+
+环境
+Python 2.7.10
+文本素材：随便一本小说即可(注意文本数据的编码UTF-8)
+
+
+思路大的方向即：获取文件的内容，并高效的拆分单个汉字，简单统计各个汉字在小说文件中出现的次数（没有什么实质意义）。将统计结果排序，并且查看在小说文件">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/05/22/Python项目：小说汉字统计/"/>
+
+
+
+
+
+  <title> Python项目：小说汉字统计 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/22/Python项目：小说汉字统计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python项目：小说汉字统计
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T22:26:17+08:00">
+                2017-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h3><p>这个练手代码实际不能称为“项目”的，因为实在是太简单，并且没有实质的干货内容。这篇博客仅仅是做一个小小的记录，在过程的一些坑做一个小备忘。：)</p>
+<hr>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>Python 2.7.10</li>
+<li>文本素材：随便一本小说即可(注意文本数据的编码UTF-8)</li>
+</ul>
+<hr>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>大的方向即：获取文件的内容，并高效的拆分单个汉字，简单统计各个汉字在小说文件中出现的次数（没有什么实质意义）。将统计结果排序，并且查看在小说文件中最长见的Top-N汉字，并将统计结果数据保存。</p>
+<hr>
+<h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/ - <span class="comment"># 根目录</span></div><div class="line">  -	./data</div><div class="line">  - main.py</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># main.py 代码</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Characters_Summary</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="keyword">global</span> stop_characters</div><div class="line">	</div><div class="line">	stop_characters = [<span class="string">''</span>,<span class="string">'\t'</span>,<span class="string">'\n'</span>,<span class="string">'.'</span>,<span class="string">','</span>,<span class="string">'?'</span>,<span class="string">'!'</span>,<span class="string">'('</span>,<span class="string">')'</span>,<span class="string">':'</span>,<span class="string">'&#123;'</span>,<span class="string">'&#125;'</span>,<span class="string">';'</span>,<span class="string">'/'</span>,<span class="string">'['</span>,<span class="string">']'</span>,<span class="string">'．'</span>,<span class="string">'＋'</span>,<span class="string">'—'</span>,<span class="string">''</span>,<span class="string">'\r\n'</span>,<span class="string">'"'</span>,<span class="string">'*'</span>,<span class="string">'-'</span>,<span class="string">u'。'</span>,<span class="string">u'，'</span>,<span class="string">u'？'</span>,<span class="string">u'！'</span>,<span class="string">u'（'</span>,<span class="string">u'）'</span>,<span class="string">u'：'</span>,<span class="string">u'；'</span>,<span class="string">u'《'</span>,<span class="string">u'》'</span>,<span class="string">u'’'</span>,<span class="string">u'‘'</span>,<span class="string">u''</span>,<span class="string">u'【'</span>,<span class="string">u'】'</span>,<span class="string">u'、'</span>,<span class="string">u'￥'</span>,<span class="string">u'“'</span>,<span class="string">u'…'</span>,<span class="string">u'”'</span>,<span class="string">u'*'</span>,<span class="string">u'-'</span>,<span class="string">u''</span>]</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, file_in_path)</span>:</span></div><div class="line">		self.stop_characters = stop_characters</div><div class="line">		self.file_in_path = file_in_path</div><div class="line">		self.characters_dict = self.main()</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self)</span>:</span></div><div class="line">		characters_dict = Counter()</div><div class="line">		<span class="keyword">try</span>:</div><div class="line">			<span class="keyword">with</span> codecs.open(self.file_in_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">				<span class="keyword">for</span> line <span class="keyword">in</span> file:</div><div class="line">					line = line.strip()</div><div class="line">					<span class="keyword">if</span> <span class="keyword">not</span> line:</div><div class="line">						<span class="keyword">continue</span></div><div class="line">					<span class="keyword">else</span>:</div><div class="line">						<span class="keyword">for</span> idx,character <span class="keyword">in</span> enumerate(line):</div><div class="line">							<span class="keyword">if</span> character <span class="keyword">not</span> <span class="keyword">in</span> self.stop_characters <span class="keyword">and</span> <span class="keyword">not</span> re.search(<span class="string">r'[0-9]|[A-Z]'</span>,character,re.S):</div><div class="line">								characters_dict[character] += <span class="number">1</span></div><div class="line">			<span class="keyword">return</span> characters_dict</div><div class="line">		<span class="keyword">except</span> Exception,e:</div><div class="line">			<span class="keyword">print</span> <span class="string">'Error Information :'</span>,e</div><div class="line">			<span class="keyword">return</span> dict()</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">sort_</span><span class="params">(self)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			characters_dict_sorted = sorted(self.characters_dict.iteritems(), key=<span class="keyword">lambda</span> d:d[<span class="number">1</span>], reverse=<span class="keyword">True</span>)</div><div class="line">			<span class="keyword">return</span> characters_dict_sorted</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">most_comm</span><span class="params">(self, top=None)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">return</span> self.characters_dict.most_common(top)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">save_txt</span><span class="params">(self, file_save_path)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">if</span> isinstance(self.characters_dict, dict):</div><div class="line">				<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">					<span class="keyword">for</span> character, cnt <span class="keyword">in</span> self.characters_dict.iteritems():</div><div class="line">						file.write(character + <span class="string">'\t'</span> + str(cnt) + <span class="string">'\n'</span>)</div><div class="line">			<span class="keyword">elif</span> isinstance(self.characters_dict, list):</div><div class="line">				<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">					<span class="keyword">for</span> tuple_ <span class="keyword">in</span> self.characters_dict:</div><div class="line">						character, cnt = tuple_</div><div class="line">						file.write(character + <span class="string">'\t'</span> + str(cnt) + <span class="string">'\n'</span>)</div><div class="line">			<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">save_json</span><span class="params">(self, file_save_path)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">				file.write(json.dumps(self.characters_dict))</div><div class="line">			<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	characters = Characters_Summary(<span class="string">'./data/novel.txt'</span>)</div><div class="line"></div><div class="line">	characters.most_comm(top=<span class="number">50</span>)</div><div class="line">	characters.save_txt(<span class="string">'./data/out_txt.txt'</span>)</div><div class="line">	characters.save_json(<span class="string">'./data/out_json.json'</span>)</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h4><ol>
+<li>小说文本数据，推荐使用UTF-8编码，并且注意编辑器所对应的编码设置。在Python2.7中常见的编码解码问题</li>
+<li>停用标点符号的清洗和过滤，配合正则表达式使用</li>
+<li>dict数据结构，通过<code>sorted(dict.iteritems(), key=lambda d:d[1], reverse=True)</code>排序后返回的数据是list类型，因为dict是无序的，若要排序，就需要数据类型可排序</li>
+</ol>
+<h4 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h4><ol>
+<li>Counter()类及其方法的使用，高效便捷！</li>
+</ol>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ol>
+<li>单个汉字统计，没有实质的信息，后续通过分词并在其基础上，进一步探索</li>
+<li>在停用标点符号过滤部分代码，提示一个警告：’UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal<br>if character not in self.stop_characters and not re.search(r’[0-9]|[A-Z]’,character,re.S)’<br>这个警告主要因为停用标点符号中有字符无法将其转换为Unicode，不能正常的判定是否需要过滤操作。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-汉字统计/" rel="tag"># Python,汉字统计</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/16/数据需求-转换Excel数据形式/" rel="next" title="[数据需求] 转换Excel数据形式">
+                <i class="fa fa-chevron-left"></i> [数据需求] 转换Excel数据形式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目简介"><span class="nav-number">1.</span> <span class="nav-text">项目简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码结构"><span class="nav-number">3.1.</span> <span class="nav-text">代码结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细代码"><span class="nav-number">3.2.</span> <span class="nav-text">详细代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备注"><span class="nav-number">3.3.</span> <span class="nav-text">备注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐"><span class="nav-number">3.4.</span> <span class="nav-text">推荐</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#to-do"><span class="nav-number">4.</span> <span class="nav-text">To-Do</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
