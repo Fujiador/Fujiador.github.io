@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,wordcloud,词云," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Python项目：定制化词云[TOC]
+项目简介“词云”是对常见的文本中出现频率较高的“关键词”或“高频词”予以视觉和展示上的突出，形成层次有序、主题突出的“词云”图形，从而过滤掉大量的无意义信息，并凸显想要展示的信息内容。一幅制作精美的词云图片，可以达到一图胜千言的效果，通常在PPT报告中使用漂亮的词云，关键是可以装X~   :）
+接下来，将使用wordcloud第三方包来制作词云，并且解决中文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python项目：定制化词云">
+<meta property="og:url" content="https://fujiador.github.io/2017/05/30/Python项目：定制化词云/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="Python项目：定制化词云[TOC]
+项目简介“词云”是对常见的文本中出现频率较高的“关键词”或“高频词”予以视觉和展示上的突出，形成层次有序、主题突出的“词云”图形，从而过滤掉大量的无意义信息，并凸显想要展示的信息内容。一幅制作精美的词云图片，可以达到一图胜千言的效果，通常在PPT报告中使用漂亮的词云，关键是可以装X~   :）
+接下来，将使用wordcloud第三方包来制作词云，并且解决中文">
+<meta property="og:image" content="https://fujiador.github.io/./Unoffical_wordcloud.PNG">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/US_constitution.txt.jpeg">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA.png">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/alice.png">
+<meta property="og:updated_time" content="2017-05-30T14:31:51.847Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python项目：定制化词云">
+<meta name="twitter:description" content="Python项目：定制化词云[TOC]
+项目简介“词云”是对常见的文本中出现频率较高的“关键词”或“高频词”予以视觉和展示上的突出，形成层次有序、主题突出的“词云”图形，从而过滤掉大量的无意义信息，并凸显想要展示的信息内容。一幅制作精美的词云图片，可以达到一图胜千言的效果，通常在PPT报告中使用漂亮的词云，关键是可以装X~   :）
+接下来，将使用wordcloud第三方包来制作词云，并且解决中文">
+<meta name="twitter:image" content="https://fujiador.github.io/./Unoffical_wordcloud.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/05/30/Python项目：定制化词云/"/>
+
+
+
+
+
+  <title> Python项目：定制化词云 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/30/Python项目：定制化词云/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python项目：定制化词云
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-30T22:26:34+08:00">
+                2017-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="python项目定制化词云"><a href="#Python项目：定制化词云" class="headerlink" title="Python项目：定制化词云"></a>Python项目：定制化词云</h2><p>[TOC]</p>
+<h3 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h3><p>“词云”是对常见的文本中出现频率较高的“关键词”或“高频词”予以视觉和展示上的突出，形成层次有序、主题突出的“词云”图形，从而过滤掉大量的无意义信息，并凸显想要展示的信息内容。<br>一幅制作精美的词云图片，可以达到一图胜千言的效果，通常在PPT报告中使用漂亮的词云，关键是可以装X~   :）</p>
+<p>接下来，将使用<code>wordcloud</code>第三方包来制作词云，并且解决中文字符显示的问题，生成定制化个性词云。</p>
+<hr>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>Python 3.6</li>
+</ul>
+<hr>
+<h3 id="第三方packages"><a href="#第三方Packages" class="headerlink" title="第三方Packages"></a>第三方Packages</h3><ul>
+<li>wordcloud</li>
+<li>PIL</li>
+</ul>
+<hr>
+<h4 id="wordcloud安装"><a href="#wordcloud安装" class="headerlink" title="wordcloud安装"></a>wordcloud安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple wordcloud</div></pre></td></tr></table></figure>
+<p>Windows环境下，推荐从<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank" rel="external">非官方Windows第三方库</a>下载安装。<br><img src="./Unoffical_wordcloud.PNG" alt="wordcloud|center"><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install C:\Users\Desktop\wordcloud-1.3.1-cp36-cp36m-win_amd64.whl</div></pre></td></tr></table></figure></p>
+<p><code>Unofficial Windows Binaries for Python Extension Packages</code>可以高效的在windows环境下安装第三方包，并且避免pip安装过程中莫名其妙的坑。</p>
+<p><strong>wordcloud</strong><a href="https://github.com/amueller/word_cloud" target="_blank" rel="external">GitHub</a>。wordcloud作者是使用Python2+编写，但是Python3+也是兼容的。</p>
+<h3 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h3><p>官方Git展示的简单示例，将《美国宪法》生成词云。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> os <span class="keyword">import</span> path</div><div class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line">FILE_PATH = path.dirname(__file__)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_text</span><span class="params">(FILE_NAME)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line">	file_path = path.join(FILE_PATH, FILE_NAME)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">with</span> codecs.open(file_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">			text = file.read()</div><div class="line">		<span class="keyword">return</span> text</div><div class="line">	<span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</div><div class="line">		print(<span class="string">"FileNot Found ,&#123;&#125;"</span>.format(e))</div><div class="line">		<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text,)</span>:</span></div><div class="line">	wordcloud = WordCloud(max_font_size=<span class="number">40</span>).generate(text)</div><div class="line"></div><div class="line">	plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>)</div><div class="line">	plt.axis(<span class="string">"off"</span>)</div><div class="line">	plt.show()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	FILE_NAME = <span class="string">'US_constitution.txt'</span></div><div class="line">	text = load_text(FILE_NAME)</div><div class="line"></div><div class="line">	generate_wordcloud(text)</div></pre></td></tr></table></figure></p>
+<p>下图是生成的《美国宪法》默认样式参数的词云图。<br><img src="http://on58f12qv.bkt.clouddn.com/US_constitution.txt.jpeg" alt="美国宪法-词云|center"></p>
+<p><code>wordcloud</code>包的核心是<code>WordCloud</code>类，用于生成和绘制WordCloud对象。<br><strong>参数：</strong></p>
+<ul>
+<li>font_path  要使用的字体的路径（OTF或TTF文件）</li>
+<li>width  画布宽度，默认400</li>
+<li>heifht  画布高度，默认200</li>
+<li>prefer_horizontal </li>
+<li>mask </li>
+<li>scale 缩放，默认1</li>
+<li>min_font_size 使用最小的字体大小，默认4</li>
+<li>font_step 字体的步长大小，morning1</li>
+<li>max_words 最大字数，默认200</li>
+<li>stopwords  禁用词，默认内置的STOPWORDS列表</li>
+<li>background_color 词云图像的北京颜色，默认black</li>
+<li>max_font_size 最大字体的字体大小</li>
+<li>mode 模式，默认RGB，当mode=RGBA时，产生透明背景</li>
+<li>relative_scaling</li>
+<li>color_func callable，default=None。一般使用Image的generate_image方法获取图片的颜色设置</li>
+<li>colormap 色彩映射将每个单词随机绘制颜色</li>
+</ul>
+<p>在上面的代码中，当输入中文格式的文本时，是不能正常显示的中文的。如下图所示：<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98.png" alt="中文问题|center"></p>
+<p>因为WordCloud类中font_path参数变量没有找到显示中文的字体。通过WordCloud的参数说明，可以用font_path参数来设置可显示中文的字体。并将对应部分的代码进行如下调整：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text, save_name, font_name=None)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> font_path:</div><div class="line">        wordcloud = WordCloud(max_font_size=<span class="number">40</span>).generate(text) </div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        wordcloud = WordCloud(font_path=path.join(FILE_PATH,font_name),max_font_size=<span class="number">40</span>).generate(text)</div><div class="line"></div><div class="line">    plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>)</div><div class="line">    plt.axis(<span class="string">"off"</span>)</div><div class="line">    plt.savefig(save_name+<span class="string">".jpeg"</span>)</div><div class="line">    plt.show()</div></pre></td></tr></table></figure></p>
+<p>调整之后的词云结果如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA.png" alt="解决中文问题|center"></p>
+<hr>
+<h3 id="奇形怪状的词云"><a href="#奇形怪状的词云" class="headerlink" title="奇形怪状的词云"></a>奇形怪状的词云</h3><p>接下来，我们绘制定制图形的词云！git官方的实例，是关于爱丽丝的一个词云。</p>
+<h4 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> os <span class="keyword">import</span> path</div><div class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud,STOPWORDS</div><div class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"></div><div class="line">FILE_PATH = path.dirname(__file__)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_text</span><span class="params">(FILE_NAME)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line">	file_path = path.join(FILE_PATH, FILE_NAME)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">with</span> codecs.open(file_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">			text = file.read()</div><div class="line">		<span class="keyword">return</span> text</div><div class="line">	<span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</div><div class="line">		print(<span class="string">"FileNot Found ,&#123;&#125;"</span>.format(e))</div><div class="line">		<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text, save_name, font_name=None, mask_name=None)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line"></div><div class="line">	image_mask = np.array(Image.open(path.join(FILE_PATH,mask_name)))</div><div class="line">	stopwords = set(STOPWORDS)</div><div class="line">	stopwords.add(<span class="string">"said"</span>)</div><div class="line"></div><div class="line">	wordcloud = WordCloud(background_color=<span class="string">'white'</span>, max_words=<span class="number">2000</span>, mask=image_mask,</div><div class="line">	                            stopwords=stopwords,font_path=path.join(FILE_PATH,font_name))</div><div class="line">	wordcloud.generate(text)</div><div class="line"></div><div class="line">	wordcloud.to_file(path.join(FILE_PATH, save_name.split(<span class="string">'.'</span>)[<span class="number">0</span>] + <span class="string">'.png'</span>))</div><div class="line">	plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>, cmap=plt.cm.gray)</div><div class="line">	plt.axis(<span class="string">"off"</span>)</div><div class="line">	plt.savefig(path.join(FILE_PATH, save_name.split(<span class="string">'.'</span>)[<span class="number">0</span>] + <span class="string">'.png'</span>))</div><div class="line">	plt.show()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	FILE_NAME = <span class="string">'alice.txt'</span></div><div class="line">	text = load_text(FILE_NAME)</div><div class="line"></div><div class="line">	generate_wordcloud(text, FILE_NAME, font_name=<span class="string">'simhei.ttf'</span>, mask_name=<span class="string">'alice_mask.png'</span>)</div></pre></td></tr></table></figure>
+<p>效果图如下所示：<br><img src="http://on58f12qv.bkt.clouddn.com/alice.png" alt="alice|center|800*0"></p>
+<p>最核心的一个参数是<code>mask=image_mask</code>，设置一个图片轮廓作为词云的mask，让我们的单词只在这个mask的空间内进行展示。</p>
+<hr>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ol>
+<li>代码重构</li>
+<li>参数添加，更加通用化</li>
+<li>可否制作成可安装的exe小程序</li>
+</ol>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://github.com/amueller/word_cloud" target="_blank" rel="external">https://github.com/amueller/word_cloud</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-wordcloud-词云/" rel="tag"># Python,wordcloud,词云</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/22/Python项目：小说汉字统计/" rel="next" title="Python项目：小说汉字统计">
+                <i class="fa fa-chevron-left"></i> Python项目：小说汉字统计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python项目定制化词云"><span class="nav-number">1.</span> <span class="nav-text">Python项目：定制化词云</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目简介"><span class="nav-number">1.1.</span> <span class="nav-text">项目简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">1.2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三方packages"><span class="nav-number">1.3.</span> <span class="nav-text">第三方Packages</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wordcloud安装"><span class="nav-number">1.3.1.</span> <span class="nav-text">wordcloud安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例代码"><span class="nav-number">1.4.</span> <span class="nav-text">实例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#奇形怪状的词云"><span class="nav-number">1.5.</span> <span class="nav-text">奇形怪状的词云</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实例"><span class="nav-number">1.5.1.</span> <span class="nav-text">代码实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#to-do"><span class="nav-number">1.6.</span> <span class="nav-text">To-Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资源"><span class="nav-number">1.7.</span> <span class="nav-text">参考资源</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
