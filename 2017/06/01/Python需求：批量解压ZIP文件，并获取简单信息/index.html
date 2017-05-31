@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,unzip,批量解压文件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="需求简介现在需要获取服务器上某一类文件夹下的全部ZIP文件的创建时间信息，以及ZIP文件内的内容行数信息。服务器上基础的文件层级如下截图：其中以“YYYMM”命名的文件均为目标文件夹，“result”文件存放我们中间处理的结果以及放置脚本的位置，这些文件均在某一个固定目录下。其中“YYYYMM”文件夹下均未ZIP压缩文件，如下截图：
+需要说明的一点，在ZIP文件内，是不定数量的Excel（“.xl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python需求：批量解压ZIP文件，并获取简单信息">
+<meta property="og:url" content="https://fujiador.github.io/2017/06/01/Python需求：批量解压ZIP文件，并获取简单信息/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="需求简介现在需要获取服务器上某一类文件夹下的全部ZIP文件的创建时间信息，以及ZIP文件内的内容行数信息。服务器上基础的文件层级如下截图：其中以“YYYMM”命名的文件均为目标文件夹，“result”文件存放我们中间处理的结果以及放置脚本的位置，这些文件均在某一个固定目录下。其中“YYYYMM”文件夹下均未ZIP压缩文件，如下截图：
+需要说明的一点，在ZIP文件内，是不定数量的Excel（“.xl">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82-1.PNG">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82-2.PNG">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png">
+<meta property="og:updated_time" content="2017-05-31T16:51:12.799Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python需求：批量解压ZIP文件，并获取简单信息">
+<meta name="twitter:description" content="需求简介现在需要获取服务器上某一类文件夹下的全部ZIP文件的创建时间信息，以及ZIP文件内的内容行数信息。服务器上基础的文件层级如下截图：其中以“YYYMM”命名的文件均为目标文件夹，“result”文件存放我们中间处理的结果以及放置脚本的位置，这些文件均在某一个固定目录下。其中“YYYYMM”文件夹下均未ZIP压缩文件，如下截图：
+需要说明的一点，在ZIP文件内，是不定数量的Excel（“.xl">
+<meta name="twitter:image" content="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82-1.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/06/01/Python需求：批量解压ZIP文件，并获取简单信息/"/>
+
+
+
+
+
+  <title> Python需求：批量解压ZIP文件，并获取简单信息 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/06/01/Python需求：批量解压ZIP文件，并获取简单信息/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python需求：批量解压ZIP文件，并获取简单信息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T00:50:08+08:00">
+                2017-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="需求简介"><a href="#需求简介" class="headerlink" title="需求简介"></a>需求简介</h3><p>现在需要获取服务器上某一类文件夹下的全部ZIP文件的创建时间信息，以及ZIP文件内的内容行数信息。服务器上基础的文件层级如下截图：<br><img src="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82-1.PNG" alt="需求-1|center"><br>其中以“YYYMM”命名的文件均为目标文件夹，“result”文件存放我们中间处理的结果以及放置脚本的位置，这些文件均在某一个固定目录下。其中“YYYYMM”文件夹下均未ZIP压缩文件，如下截图：<br><img src="http://on58f12qv.bkt.clouddn.com/%E9%9C%80%E6%B1%82-2.PNG" alt="需求-2|center"></p>
+<p>需要说明的一点，在ZIP文件内，是不定数量的Excel（“.xls”格式，且以中文命名，而且只保证在单个ZIP文件下不重复）文件的压缩包（可能是空文件，也可能有很多个）。</p>
+<p>现在的需求即：统计这些ZIP文件的创建时间，ZIP内各Excel的行数信息。</p>
+<hr>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>获取某固定目录下的子目录以及各子目录下的ZIP文件列表，依次获取ZIP的创建时间信息。就ZIP文件内各Excel行数信息而言，需要将各ZIP文件解压，之后通过读取Excel获取行数信息。</p>
+<p>大致的思路就是上述步骤，接下来是具体的代码实现。</p>
+<hr>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><ul>
+<li>Ubuntu</li>
+<li>Python 2.7.10</li>
+</ul>
+<p>代码结构如下截图：<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png" alt="代码结构|center"></p>
+<h4 id="解压zip文件"><a href="#解压ZIP文件" class="headerlink" title="解压ZIP文件"></a>解压ZIP文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## Unzip_file.py</span></div><div class="line"><span class="comment">## 实现ZIP文件的自动解压,同时读取各ZIP文件的创建时间</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"></div><div class="line"><span class="comment"># root_dir = '/mnt/home/data/upload'   #此路径为个人路径</span></div><div class="line">root_dir = <span class="string">'/mnt/online-env/upload/file'</span>   <span class="comment"># 此路径为线上环境路径</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_dir_list</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">""" 获取指定路径下子目录列表"""</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    <span class="keyword">if</span> os.path.exists(root_dir):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            dir_list = os.listdir(root_dir)</div><div class="line">            <span class="keyword">return</span> dir_list</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The root_dir is not exists.'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_zip_list</span><span class="params">(target_dir)</span>:</span></div><div class="line">    <span class="string">""" 获取指定子目录下的ZIP文件列表"""</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    target_dir_ = os.path.join(root_dir, target_dir)</div><div class="line">    <span class="keyword">if</span> os.path.exists(target_dir_):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            zip_list = [zp <span class="keyword">for</span> zp <span class="keyword">in</span> os.listdir(target_dir_)]</div><div class="line">            <span class="keyword">return</span> zip_list</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The target_dir &#123;0&#125; is not exists.'</span>.format(target_dir)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">unzip_file</span><span class="params">(target_dir,zip_name)</span>:</span></div><div class="line">    <span class="string">""" 自动化解压ZIP文件功能"""</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    zip_file = os.path.join(root_dir, target_dir, zip_name)</div><div class="line">    <span class="keyword">if</span> os.path.exists(zip_file):</div><div class="line">	    <span class="comment"># root_dir是生产环境,不宜操作.故将数据解压到指定个人路径.</span></div><div class="line">	    <span class="comment"># 因ZIP文件只保证单个ZIP下不重复,因此以ZIP文件的"(*).ZIP"形式创建文件夹,存放对应解压后的Excel文件</span></div><div class="line">        new_dir_path = <span class="string">'/mnt/home/data/upload/result/&#123;0&#125;'</span>.format(zip_name[:<span class="number">-4</span>])</div><div class="line">        os.system(<span class="string">'mkdir &#123;0&#125;'</span>.format(new_dir_path))</div><div class="line">        os.system(<span class="string">'unzip -n -O CP936 &#123;0&#125; -d &#123;1&#125;'</span>.format(zip_file, new_dir_path))</div><div class="line">        <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The target_dir &#123;0&#125; is not exists.'</span>.format(zip_file)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">        </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time</span><span class="params">(target_dir, zip_file)</span>:</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    zip_path = os.path.join(root_dir, target_dir, zip_file)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> os.path.exists(zip_path):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            create_time = os.path.getctime(zip_path)</div><div class="line">            <span class="keyword">return</span>  zip_path[:<span class="number">-4</span>], datetime.fromtimestamp(create_time)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The target_dir &#123;0&#125; is not exists.'</span>.format(zip_path)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dir_list = get_dir_list()</div><div class="line">	<span class="comment"># 保存ZIP文件创建时间</span></div><div class="line">    file_save = codecs.open(<span class="string">'/mnt/home/data/upload/time_result.txt'</span>, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> target_dir <span class="keyword">in</span> dir_list:</div><div class="line">        zip_list = get_zip_list(target_dir)</div><div class="line">        <span class="keyword">for</span> zip_name <span class="keyword">in</span> zip_list:</div><div class="line">            unzip_file(target_dir, zip_name)</div><div class="line">            zip_path, create_time = get_time(target_dir, zip_name)</div><div class="line">            file_save.write( zip_path.decode(<span class="string">'utf-8'</span>) + <span class="string">'\t'</span> + create_time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>) +<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    file_save.close()</div></pre></td></tr></table></figure>
+<p>实现代码比较简单，其中备注下在Debug代码过程中踩的坑。<br><strong>k-1</strong></p>
+<blockquote>
+<p>因为需要操作生成环境下的文件，首先想到的第一步措施可能是将数据文件全部CP或者MV到指定的个人目录下。在这个地方趟的第一个坑，就是CP或MV命令操作ZIP文件之后，其时间就会发生变化，更新为命令动作发生时的时间。所以，选择的方法是在解压ZIP文件的同时，顺道将ZIP文件的创建时间信息获取并保存。</p>
+</blockquote>
+<p><strong>k-2</strong></p>
+<blockquote>
+<p>这个算是个小知识吧，不能算坑~。<code>os.listdir()</code>自动过滤指定目录下的当前目录和上级目录，这个在解释器内执行下对应代码即可了解。</p>
+</blockquote>
+<p><strong>k-3</strong></p>
+<blockquote>
+<p>前面也已经提到了ZIP内Excel的特征。因为是中文Excel名称，在解压时若直接使用<code>unzip file_name</code>命令，得到的Excel名称是乱码形式，并在下一步的Excel读取行数的过程中无法正常读取。因此调整命令为<code>unzip -O CP936 file_name</code>，完美将解压后中文问题解决。<br>其次，因为ZIP文件内的Excel命名格式只能保证在此ZIP文件下是不重复的，无法保证所有的ZIP下的文件都是不重复的。所以在此，选择了一个比较粗鲁的方案。依据ZIP文件的文成来生成对应的文件夹，同时将指定解压的文件目标路径为上述创建的文件夹中。因此调整命令为<code>unzip -n -d target_path</code>。</p>
+</blockquote>
+<p>这部分主要逻辑和代码是：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">new_dir_path = <span class="string">'/mnt/home/data/upload/result/&#123;0&#125;'</span>.format(zip_name[:<span class="number">-4</span>])</div><div class="line">os.system(<span class="string">'mkdir &#123;0&#125;'</span>.format(new_dir_path))</div><div class="line">os.system(<span class="string">'unzip -n -O CP936 &#123;0&#125; -d &#123;1&#125;'</span>.format(zip_file, new_dir_path))</div></pre></td></tr></table></figure></p>
+<p>到此，解压ZIP文件的工作已经完成。接下来统计Excel行数的工作就比较轻松啦。</p>
+<h4 id="统计excel行数"><a href="#统计Excel行数" class="headerlink" title="统计Excel行数"></a>统计Excel行数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="comment">## Summary_info.py</span></div><div class="line"><span class="comment">## 统计解压后的Excel文件的行数信息</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> xlrd</div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"></div><div class="line"><span class="comment"># 个人数据处理路径</span></div><div class="line">root_dir = <span class="string">'/mnt/home/data/upload/result'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_dir_list</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    <span class="keyword">if</span> os.path.exists(root_dir):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            dir_list = os.listdir(root_dir)</div><div class="line">            dir_list.pop(dir_list.index(<span class="string">'Summary_info.py'</span>))</div><div class="line">            dir_list.pop(dir_list.index(<span class="string">'Unzip_files.py'</span>))</div><div class="line">            <span class="keyword">return</span> dir_list</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The root_dir is not exists.'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_dir_list_</span><span class="params">(target_dir)</span>:</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    dir_ = os.path.join(root_dir, target_dir)</div><div class="line">    <span class="keyword">if</span> os.path.exists(dir_):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            file_list = os.listdir(dir_)</div><div class="line">            <span class="keyword">return</span> file_list</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The root_dir is not exists.'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time</span><span class="params">(target_dir, excel_file)</span>:</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    excel_path = os.path.join(root_dir, target_dir, excel_file)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> os.path.exists(excel_path):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            create_time = os.path.getctime(excel_path)</div><div class="line">            <span class="keyword">return</span>  excel_path, datetime.fromtimestamp(create_time)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The target_dir &#123;0&#125; is not exists.'</span>.format(excel_file)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_rows</span><span class="params">(target_dir, excel_file)</span>:</span></div><div class="line">    <span class="keyword">global</span> root_dir</div><div class="line">    excel_path = os.path.join(root_dir, target_dir, excel_file)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> os.path.exists(excel_path):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            excelFile = xlrd.open_workbook(excel_path.decode(<span class="string">'utf-8'</span>))</div><div class="line">            sheet = excelFile.sheet_by_index(<span class="number">0</span>)</div><div class="line">            nrows = sheet.nrows</div><div class="line">            <span class="keyword">return</span> nrows</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'The Error &#123;0&#125;.'</span>.format(e)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The target_dir &#123;0&#125; is not exists.'</span>.format(excel_file)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dir_list = get_dir_list()</div><div class="line"></div><div class="line">    file_save = codecs.open(<span class="string">'/mnt/home/data/upload/summary_result.txt'</span>, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> target_dir <span class="keyword">in</span> dir_list:</div><div class="line">        file_list = get_dir_list_(target_dir)</div><div class="line">        <span class="keyword">if</span> file_list <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">for</span> excel_file <span class="keyword">in</span> file_list:</div><div class="line">                excel_path, create_time = get_time(target_dir, excel_file)</div><div class="line">                nrows = get_rows(target_dir, excel_file)</div><div class="line">                file_save.write( excel_path.decode(<span class="string">'utf-8'</span>) + <span class="string">'\t'</span> + create_time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>) + <span class="string">'\t'</span> + str(nrows) + <span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    file_save.close()</div></pre></td></tr></table></figure>
+<p>这部分的代码很简单，只需要稍微注意下<code>xlrd.open_workbook()</code>中文名的Excel即可。</p>
+<hr>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ol>
+<li>重构代码，两个功能部分的代码还是有很大的相似性，减少代码的冗余，使代码更加通用化</li>
+<li>扩展获取文件相关信息的功能</li>
+</ol>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><ol>
+<li>Python官方 OS 文档</li>
+<li>Ubuntu unzip 命令</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-unzip-批量解压文件/" rel="tag"># Python,unzip,批量解压文件</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/30/Python项目：定制化词云/" rel="next" title="Python项目：定制化词云">
+                <i class="fa fa-chevron-left"></i> Python项目：定制化词云
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求简介"><span class="nav-number">1.</span> <span class="nav-text">需求简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境"><span class="nav-number">3.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解压zip文件"><span class="nav-number">3.2.</span> <span class="nav-text">解压ZIP文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#统计excel行数"><span class="nav-number">3.3.</span> <span class="nav-text">统计Excel行数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#to-do"><span class="nav-number">4.</span> <span class="nav-text">To-Do</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资源"><span class="nav-number">5.</span> <span class="nav-text">参考资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
