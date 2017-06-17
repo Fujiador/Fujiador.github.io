@@ -270,6 +270,205 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/24/《Python算法教程》读书笔记-（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/24/《Python算法教程》读书笔记-（二）/" itemprop="url">
+                  《Python算法教程》读书笔记 - （二）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T09:11:27+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>《Python Algorithms》主体内容是“数学技术”、“算法设计原则”和“经典算法”。</p>
+<p>首先聚焦于两个话题：<strong>渐进记忆法(asymptotic notation)</strong>，关注运行时间的本质。另外就是<strong>树(tree)</strong>和<strong>图(graph)</strong>数据结构的Python实现方法。</p>
+<p>算法，指包含能够解决某个特定问题的有限步骤集的执行过程。</p>
+<hr>
+<h3 id="渐进记忆法"><a href="#渐进记忆法" class="headerlink" title="渐进记忆法"></a>渐进记忆法</h3><p>在常数单位上的差距（通常取决于一些特定的事物，如编程语言的性能、硬件速度等），以及其在问题规模扩大时运行时间的增长幅度，才是研究算法分析时所要关心的中点。</p>
+<p><strong>小插曲：</strong></p>
+<blockquote>
+<p>Python中的list不是传统意义上的列表，这即使append操作比insert操作高效的原因所在。<br>传统列表也叫做链表(linked list)，由一系列节点来实现，其每个结点(尾节点除外)中都持有一个指向下一节点的引用。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,value,next=None)</span>:</span></div><div class="line">		self.value = value</div><div class="line">		self.next = next</div><div class="line"><span class="comment"># 将所有节点构造成一个列表</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>L = Node(<span class="string">"a"</span>,Node(<span class="string">"b"</span>,Node(<span class="string">"c"</span>,Node(<span class="string">"d"</span>))))</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>L.next.next.value</div><div class="line"><span class="string">'c'</span></div></pre></td></tr></table></figure></p>
+<p>这是一个单向列表。双向列表的各节点中还需要持有一个指向前一节点的引用。<br>但Python中的list与此有些不同。Python的list不是由若干个独立的节点相互引用而成，而是一整块单一连续的内存区块，通常称为数组(array)。<br>尽管两者在遍历时的效率相差无几，但若按既定索引值对某元素进行直接访问的话，显然使用数组会更有效率！因为在数组中，可以直接计算出目标元素在内存中的位置，并能对其进行直接访问。而对于链表而言，必须从头开始遍历整个链表。</p>
+<p>但具体到insert操作上，情况又会有所不同。对于链表而言，只要知道要在哪里执行insert操作，其操作成本非常低的。无论该列表中有多少元素，其操作时间大致上是相同的。而数组就不一样了，它每次执行insert操作都需要移动插入点右边所有元素，甚至在必要时，可能还需要将这些列表元素整体搬到一个更大的数组中去。<br>正因如此，append操作通常采用一种被称为<strong>动态数组或向量</strong>的特定解决方案，其主要想法是将内存分配的大一些，并且等到其溢出时，在线性时间内再次重新分配内存。<br>尽管两者情况都会迫使我们去搬动大量的元素，但主要的不用点在于，对append操作发生这样的可能性要小的多，如果能确保每次所搬入的数组都打过原数组一定的比例(20%甚至100%)，那么该操作的平均成本通常是常数的。</p>
+</blockquote>
+<hr>
+<h4 id="时间复杂度定义"><a href="#时间复杂度定义" class="headerlink" title="时间复杂度定义"></a>时间复杂度定义</h4><p>通常，所获得的运行时间往往取决于某个特定基本操作被执的次数。</p>
+<p>渐进记忆法记号分别是$O（大O）$、$Ω$、$\theta$。$O$记法所代表的其实是所谓的渐进上界，而$Ω$记法所代表的则是渐进下界，$\theta$正好是前两种记法的交集。</p>
+<p>对于Python中的list而言，append n个数字所需要的运行时间约为$O(n)$，而在首端insert相同数量的数字需要的时间约为$O(n^2)$。</p>
+<hr>
+<h4 id="时间复杂度示例"><a href="#时间复杂度示例" class="headerlink" title="时间复杂度示例"></a>时间复杂度示例</h4><p>渐进记号最大限度的简化了数学问题，可以忽略乘法或加法中的那些常数，以及函数中其他<em>所有影响较小的部分</em>，从而让事情得到很大程度的简化。<br>下表给出一些时间复杂度对应的示例，并按照复杂度来排序，即每一行都要比它的前一行复杂。<br>$\theta(1)$         常数级            哈希表的查询与修改<br>$\theta(lg n)$         对数级        二分搜索<br>$\theta(n)$        线性级        列表的遍历<br>$\theta(n lg n)$        线性对数级            任意值序列的最优化排序<br>$\theta(n^2)$         平方级            n个对象相互比对<br>$\theta(n^3)$        立方级            Floyed-Warshall算法<br>$\theta(n^k)$        多项式级        基于n的k层嵌套循环<br>$\theta(k^n)$      指数级<br>$\theta(n{!})$      阶乘级</p>
+<p>注：有的时间复杂度不理解，后续逐步深入学习</p>
+<hr>
+<h4 id="时间复杂度练习"><a href="#时间复杂度练习" class="headerlink" title="时间复杂度练习"></a>时间复杂度练习</h4><p>首先要考虑的是程序在时间复杂度与问题规模之间的关系。</p>
+<p>例一：假设对大小为n的list，调用一次append的复杂度为$\theta(1)$，而调用一次insert(0,x)的复杂度则为$\theta(n)$。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">nums.append(<span class="number">1</span>)</div><div class="line">nums.insert(<span class="number">0</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure></p>
+<p>第一行时间复杂度为常数时间，当执行到第二行时，list的大小已经变成n+1，即现在的时间复杂度应该为$\theta(n+1)$，它与$\theta(n)$是等价的。总的运行时间就是这两种复杂度之和：$\theta(1) + \theta(n) = \theta(n)$。</p>
+<p>例二：简单循环遍历n个元素序列。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:		<span class="comment"># seqp = range(n)</span></div><div class="line">	s += x</div></pre></td></tr></table></figure></p>
+<p>对seq中的n个元素都执行了常数时间操作，其运行时间应该是线性的，即$\theta(n)$，而初始化操作被站主导地位的循环操作忽略掉了。同样逻辑也使用与内嵌式循环代码中，例如列表解析式和生成器表达式。</p>
+<p>例三：涉及嵌套循环时，单独每一层循环都是线性的，但层与层之间是依赖的关系，因此时间复杂度是线性的乘方的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">s = o </div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:</div><div class="line">	<span class="keyword">for</span> y <span class="keyword">in</span> seq:</div><div class="line">		s += x * y</div></pre></td></tr></table></figure></p>
+<p>其实，基本的规则是：代码块的时间复杂度由其先后执行的语句累加而成；而嵌套循环的时间复杂度则在此基础上成本的增长。理由很简单：由于外层循环每执行一次，内循环都要完整执行一遍。此时，其时间复杂度相当于“线性级乘线性级”，即平方级，$\theta(n * n) = \theta(n^2)$。这种规则可以用于指代更多层嵌套，只需随之增加其乘方数值即可($\theta(n^k)$)！</p>
+<p>例四：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:</div><div class="line">	<span class="keyword">for</span> y <span class="keyword">in</span> seq:</div><div class="line">		s += x * y</div><div class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> seq:</div><div class="line">		<span class="keyword">for</span> w <span class="keyword">in</span> seq:</div><div class="line">			s += x -w</div></pre></td></tr></table></figure></p>
+<p>z循环是线性，且其中嵌套一个线性循环，此时时间复杂度是平方级$\theta(n^2)$；y循环时间复杂度是线性$\theta(n)$的。x循环的时间复杂度是$\theta(n(n^2 + n)) = \theta(n^3 + n^2) = \theta(n^3)$，即立方级。z循环在时间复杂度中占主导贡献。</p>
+<p>例五：算出序列中各元素之间的乘积之和，要求是避免对象自身相乘或者同一乘积被累加两次的情况。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line">n = len(seq)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n<span class="number">-1</span>):</div><div class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,n):</div><div class="line">		s += seq[i] * seq[j]</div><div class="line"><span class="comment">## 结果  seq = [1,2,3,4,5]</span></div><div class="line"><span class="number">1</span> <span class="number">2</span></div><div class="line"><span class="number">1</span> <span class="number">3</span></div><div class="line"><span class="number">1</span> <span class="number">4</span></div><div class="line"><span class="number">1</span> <span class="number">5</span></div><div class="line"><span class="number">2</span> <span class="number">3</span></div><div class="line"><span class="number">2</span> <span class="number">4</span></div><div class="line"><span class="number">2</span> <span class="number">5</span></div><div class="line"><span class="number">3</span> <span class="number">4</span></div><div class="line"><span class="number">3</span> <span class="number">5</span></div><div class="line"><span class="number">4</span> <span class="number">5</span></div></pre></td></tr></table></figure></p>
+<p>时间复杂度是多少呢？</p>
+<hr>
+<h4 id="三种重要情况"><a href="#三种重要情况" class="headerlink" title="三种重要情况"></a>三种重要情况</h4><p>实际情况中，比如构建一个排序算法的话，我们可能这样的代码逻辑：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_w_check</span><span class="params">(seq)</span>:</span></div><div class="line">	n = len(seq)</div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(n<span class="number">-1</span>):</div><div class="line">		<span class="keyword">if</span> seq[i] &gt; seq[i+<span class="number">1</span>]</div><div class="line">			<span class="keyword">break</span></div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		<span class="keyword">return</span> ...</div><div class="line"><span class="comment"># 在进行实际排序之前先做一个检查，如果目标序列已经排序，函数就直接返回。</span></div></pre></td></tr></table></figure></p>
+<p>此种情况下，无论排序算法的效率多低，只要输入是已排序的序列，其时间复杂度始终是线性级的。而在一般情况下是没有排序算法能达到线性级运行时间的。此时所谓的“最好的情况”实际是一个异常情况。我们不能依据这个来预测可靠的时间复杂度。因此引出有关时间复杂度的三种重要情况：</p>
+<ol>
+<li><strong>最好的情况：</strong>算法在理想输入时的时间复杂度，此例中是线性级。</li>
+<li><strong>最坏的情况：</strong>通常最有用的情况，希望对算法效率做出某些保证，此时最坏情况下的时间复杂度即是给出的最佳保证。</li>
+<li><strong>平均情况：</strong>最复杂的情况，简而言之就是它是对于按照一定的概率分布的随机输入的期望运行时间。一般会回避这种情况。</li>
+</ol>
+<p>估计时间复杂度的基本原则：通常以最坏的情况下的时间复杂度为准，即直接选择上界或下界(用$O$或$Ω$)来描述问题。</p>
+<hr>
+<h4 id="算法工程与算法评估"><a href="#算法工程与算法评估" class="headerlink" title="算法工程与算法评估"></a>算法工程与算法评估</h4><p>算法工程(algorithm engineering)，即如何有效实现相关算法。</p>
+<ol>
+<li><strong>提示一：只要有可能，就不必去担心</strong>  对时间复杂度的担心可能很重要，但只要有可能就不必去担心。不妨试试先简单实现程序，然后再看看它是否足够好！如果感觉无从下手时，推荐蛮力算法。</li>
+<li><strong>提示二：请用timeit模块来进行计算</strong>  timeit模块本身就是为执行相对可靠的计时操作而设计的！<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> timeit</div><div class="line"><span class="keyword">print</span> timeit.timeit(<span class="string">"l = range(1000)"</span>)</div><div class="line"><span class="comment">## 结果</span></div><div class="line"><span class="number">0.0169961213126</span></div><div class="line"><span class="number">6.22491721517</span></div><div class="line"></div><div class="line"><span class="comment"># 对封装的函数进行计时</span></div><div class="line">$ python -m timeit <span class="string">"import mymodule as m"</span> <span class="string">"m.myfunction()"</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>后续详细的学习下<code>timeit</code>模块。</p>
+<ol>
+<li><p><strong>提示3：请使用profiler找出瓶颈</strong>  确定自己的代码中需要优化的是哪一部分！使用<code>cProfiler</code>模块(trace模块)！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> cProfiler</div><div class="line"><span class="comment"># 自定义的主函数main(),结果打印出各函数的计时结果</span></div><div class="line">cProfiler.run(<span class="string">'main()'</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>绘制出结果</strong>  可视化往往是最好的工具。常见的是放映问题规模与运行时间关系的图表，或展示的相关运行时间的详细分布情况的图表。推荐<code>matplotlib</code>。<br>后续详细的学习下<code>matplotlib</code>模块。</p>
+</li>
+<li><strong>根据计时对比结果做出判断时要小心</strong>  </li>
+</ol>
+<p>我们进行时间复杂度分析的目的也主要是为了实现算法，以及在实际问题中运行算法时，能够对该算法的行为做出某些描述。</p>
+<p>下一篇博客详细学习树和图数据结构！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/20/smtplib-Python-操作SMTP服务/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1965,167 +2164,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/03/29/Python-3-6-Scipy-Numpy-安装/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/29/Python-3-6-Scipy-Numpy-安装/" itemprop="url">
-                  Python 3.6  Scipy + Numpy 安装
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T01:28:30+08:00">
-                2017-03-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>之前环境一直使用<code>Python 2.7.10</code>版本，但大的趋势是<code>Python 3.x</code>版本会变得越来越流行，并且支持的包会越来越多，因此配置<code>python 3.6</code>版本的环境，并安装基础包。<br>　　安装过程中遇到的主要问题，基本是与安装<code>Python 2.X</code>版本遇到的问题一致。在此做简要的记录。</p>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>python 3.6   32 位</li>
-<li>Windows 7   64位操作系统</li>
-</ul>
-<h3 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h3><p>常见的基础环境中，有以下两类小问题：</p>
-<ul>
-<li>Microsoft Visual C ++ G环境安装或升级</li>
-<li>Framework 4.0 +环境安装或升级<br>　　这两个类型的问题解决方式与<code>Python 2.x</code>配置过程中一致，依据报错提示安装或升级即可解决。<br>　　在正常的<code>pip install scipy</code>时，遇到一些错误提示，例如：“no lapack/blas resources found”或者提示“需要升级Visual C ++环境（明明已经已经正确安装的）莫名奇怪的问题。这些都不是安装scipy中报错原因的关键所在，其实是因为windows环境缺少<code>lapack &amp; blas</code>，而且又不同于ubuntu系统直接可以<code>sudo apt-get install lapack lapack-devel blas blas-devel</code>。<br>　　因此安装scipy，推荐采用非官方版的安装方式。</li>
-</ul>
-<h3 id="安装python-36"><a href="#安装Python-3-6" class="headerlink" title="安装Python 3.6"></a>安装Python 3.6</h3><p>　　选择32位还是64的Python，各有优劣。其中32位因为支持适配的包比较丰富，推荐的首选；64位的内存使用不限制在2G之内。<br><strong>下载地址</strong>：<a href="https://www.python.org/downloads/windows/" target="_blank" rel="external">https://www.python.org/downloads/windows/</a><br>　　下载对应版本之后正常安装即可。</p>
-<h3 id="安装-numpymkl"><a href="#安装-numpy-mkl" class="headerlink" title="安装 numpy+mkl"></a>安装 numpy+mkl</h3><p>　　为什么安装<code>scipy</code>时会先安装<code>numpy+mkl</code>呢？其实原因很简单，即非官方版<code>scipy</code>需要<code>numpy+mkl</code>，并且在<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs" target="_blank" rel="external">UWB</a>站上有详细的英文说明。<br><code>Use pip version 8 or newer to install the downloaded .whl files. This page is not a pip package index.
-Many binaries depend on numpy-1.11+mkl and the Microsoft Visual C++ 2008 (x64, x86, and SP1 for CPython 2.7), Visual C++ 2010 (x64, x86, for CPython 3.4), or the Visual C++ 2015 (x64 and x86 for CPython 3.5 and 3.6) redistributable packages.
-Install numpy+mkl before other packages that depend on it.</code></p>
-<p><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>numpy-1.12.1+mkl-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install &quot;numpy-1.12.1+mkl-cp36-cp36m-win32.whl&quot;</code>等待安装完成即可。</p>
-<h3 id="安装scipy"><a href="#安装Scipy" class="headerlink" title="安装Scipy"></a>安装Scipy</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scipy-0.19.0-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scipy-0.19.0-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
-<h3 id="安装scikit-learn"><a href="#安装Scikit-learn" class="headerlink" title="安装Scikit-learn"></a>安装Scikit-learn</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy &amp; scikit-learn</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
-<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div><div class="line">pip install gensim</div><div class="line">pip install matplotlib</div><div class="line">pip install seaborn</div><div class="line">pip install Django</div><div class="line">pip install Flask</div><div class="line">pip install pillow</div><div class="line">pip install ipython</div><div class="line">pip install notebook</div><div class="line">pip install lxml</div><div class="line">pip install nltk</div><div class="line">pip install jieba</div><div class="line">pip install snownlp</div><div class="line">pip install requests</div><div class="line">pip install xlrd</div><div class="line">...</div><div class="line">...</div></pre></td></tr></table></figure>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br><a href="https://www.douban.com/note/302711300/" target="_blank" rel="external">https://www.douban.com/note/302711300/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2175,7 +2213,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2197,7 +2235,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

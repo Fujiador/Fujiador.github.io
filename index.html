@@ -270,6 +270,274 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/06/18/《Intermediate-Python》-读书笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/18/《Intermediate-Python》-读书笔记/" itemprop="url">
+                  《Intermediate Python》 读书笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T02:44:12+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="intermediate-python简介"><a href="#《Intermediate-Python》简介" class="headerlink" title="《Intermediate Python》简介"></a>《Intermediate Python》简介</h3><p>《Intermediate Python》即“Python 进阶”，首先感谢英文原著作者 <a href="https://pythontips.com/" target="_blank" rel="external">@Muhammad Yasoob Ullah Khalid</a>《Intermediate Python》的杰出贡献，请支持原著的伙伴购买正版书籍。</p>
+<p><a href="https://github.com/yasoob/intermediatePython" target="_blank" rel="external">《Intermediate Python》Git地址</a></p>
+<hr>
+<h3 id="python-进阶简介"><a href="#《Python-进阶》简介" class="headerlink" title="《Python 进阶》简介"></a>《Python 进阶》简介</h3><p>《Python进阶》是《Intermediate Python》的中文译本，由辛勤的译者：老高 @spawnris  |  刘宇 @liuyu  |  明源 @muxueqz  |  大牙 @suqi  |  蒋委员长 @jiedo  翻译，感谢这些无私的译者的贡献。</p>
+<p><a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/index.html" target="_blank" rel="external">《Python 进阶》在线阅读地址</a><br><img src="http://on58f12qv.bkt.clouddn.com/Python%E8%BF%9B%E9%98%B6%20%E6%A0%B7%E4%BE%8B.png" alt="页面示意截图"></p>
+<hr>
+<h3 id="体验"><a href="#体验" class="headerlink" title="体验"></a>体验</h3><p>Python语言对绝大多数使用者而言，是一门入门较易、精通较难的高级编程语言。引用译者对原著的评价“本书作者的行文方式有着科普作家的风范，那就是能将晦涩难懂的技术用比较清晰简洁的方式进行呈现，深入浅出的风格在每个章节的讨论中都得到了体现”。有些Python的知识点的确是循序渐进、深入浅出的讲解。</p>
+<hr>
+<h4 id="书籍目录"><a href="#书籍目录" class="headerlink" title="书籍目录"></a>书籍目录</h4><ul>
+<li>*args 和 **kwargs 魔法变量</li>
+<li>调试 Debugging</li>
+<li>生成器 Generators    ※※</li>
+<li>Map和Filter    ※※</li>
+<li>set 数据结构</li>
+<li>三元运算符    ※</li>
+<li><a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/index.html" target="_blank" rel="external">装饰器     ※※※</a></li>
+<li>Global和Return</li>
+<li>对象变动 Mutation</li>
+<li>__slots__魔法</li>
+<li>虚拟环境    ※※</li>
+<li>容器 Collections    ※※</li>
+<li>枚举 Enumerate    ※※</li>
+<li>对象自省</li>
+<li>推导式    ※※</li>
+<li>异常    ※※</li>
+<li>lambda表达式    ※※※</li>
+<li>一行式    ※</li>
+<li>For-Else    ※</li>
+<li>使用C扩展</li>
+<li>open函数</li>
+<li>目标Python2+3</li>
+<li>协程    ※※</li>
+<li>函数缓存</li>
+<li>上下文管理器</li>
+<li><a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/seealso.html" target="_blank" rel="external">推荐阅读 ※※※※</a><blockquote>
+<p>1.<br>在基本目录中，依据我个人的使用和理解情况，依次对不同重要程度的内容以“※”进行标记。其中<strong>装饰器</strong>知识点部分尤其清晰明了，读者可以自行阅读体验。<br>2.<br>在推荐阅读详情页中给的资源也非常优质，请读者自行跳转阅读体验。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h4 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h4><p>此处内容，是我个人读后感觉需要记录一下的知识点或内容，并不是以Python知识点的重要程度来决定的。</p>
+<ol>
+<li><p>*args 和 *<em>kwargs 魔法变量<br>在函数里同时使用所有这三种参数，顺序是`some_func(fargs, </em>args, **kwargs)`</p>
+</li>
+<li><p>迭代器（iterators）<br>迭代器是一个让程序员可以遍历的容器对象。迭代器包含三个部分：可迭代对象（iterable）、迭代器（iterator）、迭代（iteration）。<br><strong>可迭代对象（iterable）</strong> ：python中任意对象，只要定义了可返回一个迭代器的<code>__iter__</code>方法，或者定义可支持下标索引<code>__getitem__</code>方法，那么它就是一个可迭代对象。<br><strong>迭代器（Iterator）</strong>：任意对象，只要定义了<code>next</code>或<code>__next__</code>方法就是一个迭代器。<br><strong>迭代（Iteration）</strong>：从某个地方取出一个元素的过程。当使用一个循环来遍历某个东西时，这个过程本身就叫迭代。</p>
+</li>
+<li><p>生成器（Generators）<br>生成器也是一种迭代器，但是你只能对其迭代一次。因为它们并没有把所有的值存在内存中，而是在运行时生成值。通过遍历来使用它们，大多数生成器是以函数来实现的，但它们并不返回一个值，而是yield生出一个值。<br>生成器最佳应用场景是：你不想同一时间将所有计算出来的大量结果集分配到内存当中，特别是结果集里还包含循环（会消耗大量资源）。Python2中的标准库函数都会返回列表，而Python3都修改成了返回生成器，因为生成器占用更少的资源。</p>
+</li>
+</ol>
+<p>生成器的典型示例就是计算斐波那契数列：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibon</span><span class="params">(n)</span>:</span></div><div class="line">    a = b = <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</div><div class="line">        <span class="keyword">yield</span> a </div><div class="line">        a, b = b, a+b</div><div class="line"><span class="comment"># use it like this</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> fibon(<span class="number">1000000</span>):</div><div class="line">    print(x)</div><div class="line"><span class="comment"># 使用生成器的方式可以不用担心它会使用大量资源。</span></div><div class="line"></div><div class="line"><span class="comment"># 如果按照下列来实现的话：</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibon</span><span class="params">(n)</span>:</span></div><div class="line">    a = b = <span class="number">1</span></div><div class="line">    result = []</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</div><div class="line">        result.append(a)</div><div class="line">        a, b = b, a+b</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"><span class="comment"># 可能在计算很大的输入参数时，耗尽所有的资源。</span></div></pre></td></tr></table></figure></p>
+<ol>
+<li>Map和Filter<br>适用于函数式编程，关键是灵活应用这两个函数使代码更加Pythonic。<br><strong>map</strong>：将一个函数映射到一个输入列表的所有元素上。<code>map(function_to_apply, list_of_inputs)</code>。通常配合匿名函数（lambdas）来使用。<br>例如：<code>suqared = list(map(lambda x:x**2, [1,2,3,4]))</code>。<br>下面展示一个特殊的例子，将map函数应用于一列表的函数。<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">multiply</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">return</span> x*x</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">return</span> x + x</div><div class="line"></div><div class="line">funcs = [multiply, add]</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</div><div class="line">    value = list(map(<span class="keyword">lambda</span> x:x(i), funcs))</div><div class="line">    print(value)</div><div class="line"><span class="comment"># output</span></div><div class="line"><span class="comment"># [0, 0]</span></div><div class="line"><span class="comment"># [1, 2]</span></div><div class="line"><span class="comment"># [4, 4]</span></div><div class="line"><span class="comment"># [9, 6]</span></div><div class="line"><span class="comment"># [16, 8]</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>filter</strong>：filter能创建一个列表，其中每个元素都是对应一个函数能返回True。例如<code>less_then_zero = list(filter(lambda x:x&lt;0, range(-5,5)))</code></p>
+<ol>
+<li>set 集合数据结构<br>集合最广泛的运用就是高效去重和交并补集合运算。</li>
+</ol>
+<p>例如：<code>duplicates = set([x for x in some_list if some_list.count(x) &gt; 1])</code></p>
+<ol>
+<li><p>三元运算符<br>即条件表达式。伪代码示例<code>condition_is_true if condition else condition_is_false</code>。主要用在简单的一行快速判断，而不是使用复杂的if语句。</p>
+</li>
+<li><p>装饰器（Decorators）<br>这本书里对我个人启发最深的一个知识点—就是装饰器。在日常的工作中，很少的用到装饰器。但它是Python的一个重要部分，是Python的魔法功能。<br>装饰器是修改其他函数的功能的函数，有助于让代码更简短、更Pythonic。初学者首先要懂得“哪些区域里装饰器可以让你的代码更简洁”。</p>
+</li>
+</ol>
+<p>原作者将这个较难掌握的概念，逐层分解，一步步深入讨论装饰器的每个步骤。下面，所有示例和解释均摘要于《Python进阶》一书。</p>
+<blockquote>
+<p>7.1 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/everything_is_object.html" target="_blank" rel="external">一切皆对象</a><br>python中的函数也是对象，可以讲一个函数赋值给一个变量。使用形如<code>func()</code>，带括号的是在调用函数，不带括号<code>func</code>只是python函数对象。 </p>
+<p>7.2 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/def_func_in_func.html" target="_blank" rel="external">在函数中定义函数</a><br>在python中可以在一个函数中定义另一个函数，如下示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hi</span><span class="params">(name=<span class="string">'yasoob'</span>)</span>:</span></div><div class="line">    print(<span class="string">"now you are inside the hi() function"</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">()</span>:</span></div><div class="line">        <span class="keyword">return</span> <span class="string">"now you are in the greet() function"</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">()</span>:</span></div><div class="line">        <span class="keyword">return</span> <span class="string">"now you are in the welcome() function"</span></div><div class="line">	print(greet())</div><div class="line">	print(welcome())</div><div class="line">	print(<span class="string">"now you are back in the hi() function"</span>)</div><div class="line"></div><div class="line">hi()</div><div class="line"><span class="comment"># output</span></div><div class="line"><span class="comment"># now you are inside the hi() function</span></div><div class="line"><span class="comment"># now you are in the greet() function</span></div><div class="line"><span class="comment"># now you are in the welcome() function</span></div><div class="line"><span class="comment"># now you are back in the hi() function</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这个例子重点展示了无论何时你调用<code>hi()</code>函数，在<code>hi()</code>内的<code>greet()</code>和<code>welcome()</code>函数将会依次被调用。但是，<code>greet()</code>和<code>welcome()</code>函数在<code>hi()</code>函数之外是不能访问的。</p>
+<blockquote>
+<p>7.3 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/return_func_in_func.html" target="_blank" rel="external">从函数中返回函数</a><br>在嵌套的函数中，可以将嵌套的函数作为输出返回。如下示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hi</span><span class="params">(name=<span class="string">'yasoob'</span>)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">()</span>:</span></div><div class="line">        <span class="keyword">return</span> <span class="string">"now you are in the greet() function"</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">()</span>:</span></div><div class="line">        <span class="keyword">return</span> <span class="string">"now you are in the welcome() function"</span></div><div class="line">    <span class="keyword">if</span> name == <span class="string">'yasoob'</span>:</div><div class="line">        <span class="keyword">return</span> greet</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">return</span> welcome</div><div class="line">a = hi()</div><div class="line">print(a)</div><div class="line"><span class="comment"># output  a是一个函数对象，不是在调用a函数</span></div><div class="line"><span class="comment"># &lt;function greet at 0x7f2143c01500&gt;</span></div><div class="line"></div><div class="line">print(a())</div><div class="line"><span class="comment"># output  调用 a函数</span></div><div class="line"><span class="comment"># now you are in the greet() function</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>在<code>if/else</code>语句中我们返回<code>greet</code>和<code>welcome</code>。而不是<code>greet()</code>和<code>welcome()</code>。为什么那样？因为当你把一对小括号放在后面，这个函数就会执行；如果你放括号在它后面，那它可以被到处传递，并且可以赋值给别的变量而不去执行它。</p>
+<blockquote>
+<p>7.4 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/func_as_argument.html" target="_blank" rel="external">将函数作为参数传递给另一个函数</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hi</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'hi yasoob!'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">doSomethingBeforHi</span><span class="params">(func)</span>:</span></div><div class="line">    print(<span class="string">"I am doing some boring work before executing hi()"</span>)</div><div class="line">    print(func())</div><div class="line">doSomethingBeforeHi(hi)</div><div class="line"><span class="comment"># output</span></div><div class="line"><span class="comment"># I am doing some boring work before executing hi()</span></div><div class="line"><span class="comment"># hi yasoob!</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>到这里，其实有一些装饰器小影子啦。<code>hi()</code>函数作为参数传递给<code>doSomethingBeforHi()</code>函数，在<code>print(func())</code>中被调用形式参数<code>func()=hi()</code>并且被打印输出。<br>现在已经具备所有必需知识，来进一步学习装饰器真正是什么了。装饰器让你在一个函数的前后去执行代码。</p>
+<blockquote>
+<p>7.5 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/decorators/your_first_decorator.html" target="_blank" rel="external">你的第一个装饰器</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_new_decorator</span><span class="params">(a_func)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapTheFunction</span><span class="params">()</span>:</span></div><div class="line">        print(<span class="string">"I am doing some boring work befor executing a_func()"</span>)</div><div class="line">        a_func()</div><div class="line">        print(<span class="string">"I am doing some boring work after executing a_func()"</span>)</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> wrapTheFunction</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_function_requiring_decoration</span><span class="params">()</span>:</span></div><div class="line">    print(<span class="string">"I am the function which need some decoration to remove my foul smell"</span>)</div><div class="line"></div><div class="line">a_function_requiring_decoration()</div><div class="line"><span class="comment"># output</span></div><div class="line"><span class="comment"># I am the function which needs some decoration to remove my foul smell</span></div><div class="line"></div><div class="line">a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)</div><div class="line"><span class="comment"># now a_function_requiring_decoration is wrapped by wrapTheFunction()</span></div><div class="line"></div><div class="line">a_function_requiring_decoration ()</div><div class="line"><span class="comment">#outputs:I am doing some boring work before executing a_func()</span></div><div class="line"><span class="comment">#        I am the function which needs some decoration to remove my foul smell</span></div><div class="line"><span class="comment">#        I am doing some boring work after executing a_func()</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这正是装饰器做的事情，它们封装一个函数，并且修改它的行为。你也许会疑惑，在代码里并没有使用‘@’符号？<br>那只是一个简短的方式来生成一个被装备的函数。下面是使用“@”来重写之前的代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@a_new_decorator</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_function_requiring_decoration</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">"""Hey you! Decorate me!"""</span></div><div class="line">    print(<span class="string">"I am the function which needs some decoration to remove my foul smell"</span>)</div><div class="line"></div><div class="line">a_function_requiring_decoration()</div><div class="line"><span class="comment">#outputs: I am doing some boring work before executing a_func()</span></div><div class="line"><span class="comment">#         I am the function which needs some decoration to remove my foul smell</span></div><div class="line"><span class="comment">#         I am doing some boring work after executing a_func()</span></div></pre></td></tr></table></figure></p>
+<p><strong>装饰器代码结构&lt;蓝本规范&gt;：</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> function <span class="keyword">import</span> wraps</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator_name</span><span class="params">(f)</span>:</span></div><div class="line"><span class="meta">    @wraps(f)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorated</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> can_run:</div><div class="line">            <span class="keyword">return</span> <span class="string">"Function will not run"</span></div><div class="line">        <span class="keyword">return</span> f(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> decorated</div><div class="line"></div><div class="line"><span class="meta">@decorator_name</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">"Function is running"</span></div><div class="line"></div><div class="line">can_run = <span class="keyword">True</span></div><div class="line">print(func())</div><div class="line"><span class="comment"># Output: Function is running</span></div><div class="line"></div><div class="line">can_run = <span class="keyword">False</span></div><div class="line">print(func())</div><div class="line"><span class="comment"># Output: Function will not run</span></div></pre></td></tr></table></figure></p>
+<p>注意，@wraps接受一个函数来进行装饰，并加入了复制函数名称、注释文档、参数列表等等的功能。可以让我们在装饰器里面访问在装饰器之前的函数的属性。</p>
+<p><em>现在为止，个人对python的装饰器有一个大致的概念，但是还无法熟练使用和彻底理解装饰器的功能、写法、运用场景，还需要多回顾、多写、多体会</em></p>
+<ol>
+<li>虚拟环境（virtualenv）<br>创建独立的Python环境，而不是在全局安装所依赖的模块。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>$ virtualenv myproject</code>  在“myproject”文件夹创建隔离环境；<br><code>$ source bin/activete</code>  激活这个隔离的环境；<br><code>$ deactivate</code> 退出隔离环境。</p>
+<ol>
+<li><p>容器（collections）<br>非常重要的数据结构，必须掌握的内置标准库。直接阅读collection模块的<a href="https://docs.python.org/3.6/library/collections.html" target="_blank" rel="external">官方文档</a>。</p>
+</li>
+<li><p>枚举<br>枚举（<a href="https://www.python.org/dev/peps/pep-0279/" target="_blank" rel="external">enumerate</a>）是Python内置函数。enumerate接受可选参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">enumerate</span><span class="params">(collection)</span>:</span></div><div class="line">   <span class="string">'Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...'</span></div><div class="line">   i = <span class="number">0</span>  <span class="comment"># optional argument</span></div><div class="line">   it = iter(collection)</div><div class="line">   <span class="keyword">while</span> <span class="number">1</span>:</div><div class="line">      <span class="keyword">yield</span> (i, it.next())</div><div class="line">      i += <span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>对象自省<br>自省（introspection），在计算机领域是指在运行时来判断一个对象的类型的能力。dir，返回一个对象所拥有的属性和方法的列表。深入了解可查看<a href="https://docs.python.org/3.6/library/inspect.html" target="_blank" rel="external"><code>inspect</code>模块</a></p>
+</li>
+<li><p>推导式（comprehensions）<br>列表list、字典dict、集合set推导式。</p>
+</li>
+<li><p>异常<br>异常处理时一种艺术，是必须要掌握的代码结构。try/except/finally语句块结构，可能触发异常的代码放到try语句块，而处理异常的代码放在except语句块，它会在try从句中的代码触发异常时执行，finally语句块是不管异常是否触发都将会被执行，一般用来在脚本执行之后做清理工作。</p>
+</li>
+</ol>
+<p>可处理多个异常，例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    file = open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>)</div><div class="line"><span class="keyword">except</span> (IOError, EOFError) <span class="keyword">as</span> e:</div><div class="line">    print(<span class="string">"An error occurred. &#123;&#125;"</span>.format(e.args[<span class="number">-1</span>]))</div><div class="line"></div><div class="line"><span class="comment"># 或</span></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    file = open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>)</div><div class="line"><span class="keyword">except</span> EOFError <span class="keyword">as</span> e:</div><div class="line">    print(<span class="string">"An EOF error occurred."</span>)</div><div class="line">    <span class="keyword">raise</span> e</div><div class="line"><span class="keyword">except</span> IOError <span class="keyword">as</span> e:</div><div class="line">    print(<span class="string">"An error occurred."</span>)</div><div class="line">    <span class="keyword">raise</span> e</div><div class="line"></div><div class="line"><span class="comment"># 下面这种方式会捕获所有异常</span></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    file = open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>)</div><div class="line"><span class="keyword">except</span> Exception:</div><div class="line">    <span class="comment"># 打印一些异常日志，如果你想要的话</span></div><div class="line">    <span class="keyword">raise</span></div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>try/else<br>在没有触发异常的时候执行一些代码，通过else从句来实现。else从句只会在没有异常的情况下执行，而且它会在finally语句之前执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    print(<span class="string">'I am sure no exception is going to occur!'</span>)</div><div class="line"><span class="keyword">except</span> Exception:</div><div class="line">    print(<span class="string">'exception'</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="comment"># 这里的代码只会在try语句里没有触发异常时运行,</span></div><div class="line">    <span class="comment"># 但是这里的异常将 *不会* 被捕获</span></div><div class="line">    print(<span class="string">'This would only run if no exception occurs. And an error here '</span></div><div class="line">          <span class="string">'would NOT be caught.'</span>)</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">    print(<span class="string">'This would be printed in every case.'</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>lambda表达式<br>即匿名函数，也是非常有用的技巧。原型是<code>lambda 参数:操作(参数)</code>。经常使用在数据结构的<code>sort</code>排序中，例如：<code>a_list.sort(key=lambda x:x[1])</code>。</p>
+</li>
+<li><p>for-else<br>for循环还有一个else从句，这个else从句会在循环正常结束时执行，这意味着循环没有遇到任何的break，这是一种非常有用的代码结构。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">10</span>):</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">2</span>, n):</div><div class="line">        <span class="keyword">if</span> n % x == <span class="number">0</span>:</div><div class="line">            print( n, <span class="string">'equals'</span>, x, <span class="string">'*'</span>, n/x)</div><div class="line">            <span class="keyword">break</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># loop fell through without finding a factor</span></div><div class="line">        print(n, <span class="string">'is a prime number'</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>上下文管理器（context managers）<br>在使用时，精确的分配和释放资源。常见的操作文件的上下文管理器，确保文件会被关闭。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(<span class="string">'some_file'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> opened_file:</div><div class="line">    opened_file.write(<span class="string">'Hola!'</span>)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>基于类的实现上下文管理器，起码要定义<code>__enter__</code>和<code>__exit__</code>方法。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">File</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, file_name, method)</span>:</span></div><div class="line">        self.file_obj = open(file_name, method)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> self.file_obj</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, type, value, traceback)</span>:</span></div><div class="line">        self.file_obj.close()</div><div class="line"><span class="comment">#1.with语句先暂存了File类的__exit__方法</span></div><div class="line"><span class="comment">#2.然后它调用File类的__enter__方法</span></div><div class="line"><span class="comment">#3.__enter__方法打开文件并返回给with语句</span></div><div class="line"><span class="comment">#4.打开的文件句柄被传递给opened_file参数</span></div><div class="line"><span class="comment">#5.我们使用.write()来写文件</span></div><div class="line"><span class="comment">#6.with语句调用之前暂存的__exit__方法</span></div><div class="line"><span class="comment">#7.__exit__方法关闭了文件</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h3><p>很好的资源，译者在 <a href="http://www.lizenghai.com/doc/Intermediate_Python_CN/seealso.html" target="_blank" rel="external">http://www.lizenghai.com/doc/Intermediate_Python_CN/seealso.html</a> 分享的阅读资料。</p>
+<p>感兴趣的小伙伴可以取Fork这个<a href="https://github.com/Yixiaohan/codeparkshare" target="_blank" rel="external">资源地址</a>。</p>
+<hr>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>《Intermediate Python》本书的内容知识点相对简单，且数量仅仅是Python中的冰山一角，深入也仅仅是浅层。细读了两遍之后，推荐将这本书定位为入门书目。</p>
+<p>其中“装饰器”部分重点推荐阅读，结合所给实例深入理解。</p>
+<p>最后，仅借着写这篇读书笔记为由，第三遍读此书，感谢开源的力量。 : )</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/06/13/Python需求：嵌套序列展开/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1853,205 +2121,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/24/《Python算法教程》读书笔记-（二）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/24/《Python算法教程》读书笔记-（二）/" itemprop="url">
-                  《Python算法教程》读书笔记 - （二）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T09:11:27+08:00">
-                2017-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>《Python Algorithms》主体内容是“数学技术”、“算法设计原则”和“经典算法”。</p>
-<p>首先聚焦于两个话题：<strong>渐进记忆法(asymptotic notation)</strong>，关注运行时间的本质。另外就是<strong>树(tree)</strong>和<strong>图(graph)</strong>数据结构的Python实现方法。</p>
-<p>算法，指包含能够解决某个特定问题的有限步骤集的执行过程。</p>
-<hr>
-<h3 id="渐进记忆法"><a href="#渐进记忆法" class="headerlink" title="渐进记忆法"></a>渐进记忆法</h3><p>在常数单位上的差距（通常取决于一些特定的事物，如编程语言的性能、硬件速度等），以及其在问题规模扩大时运行时间的增长幅度，才是研究算法分析时所要关心的中点。</p>
-<p><strong>小插曲：</strong></p>
-<blockquote>
-<p>Python中的list不是传统意义上的列表，这即使append操作比insert操作高效的原因所在。<br>传统列表也叫做链表(linked list)，由一系列节点来实现，其每个结点(尾节点除外)中都持有一个指向下一节点的引用。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,value,next=None)</span>:</span></div><div class="line">		self.value = value</div><div class="line">		self.next = next</div><div class="line"><span class="comment"># 将所有节点构造成一个列表</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>L = Node(<span class="string">"a"</span>,Node(<span class="string">"b"</span>,Node(<span class="string">"c"</span>,Node(<span class="string">"d"</span>))))</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>L.next.next.value</div><div class="line"><span class="string">'c'</span></div></pre></td></tr></table></figure></p>
-<p>这是一个单向列表。双向列表的各节点中还需要持有一个指向前一节点的引用。<br>但Python中的list与此有些不同。Python的list不是由若干个独立的节点相互引用而成，而是一整块单一连续的内存区块，通常称为数组(array)。<br>尽管两者在遍历时的效率相差无几，但若按既定索引值对某元素进行直接访问的话，显然使用数组会更有效率！因为在数组中，可以直接计算出目标元素在内存中的位置，并能对其进行直接访问。而对于链表而言，必须从头开始遍历整个链表。</p>
-<p>但具体到insert操作上，情况又会有所不同。对于链表而言，只要知道要在哪里执行insert操作，其操作成本非常低的。无论该列表中有多少元素，其操作时间大致上是相同的。而数组就不一样了，它每次执行insert操作都需要移动插入点右边所有元素，甚至在必要时，可能还需要将这些列表元素整体搬到一个更大的数组中去。<br>正因如此，append操作通常采用一种被称为<strong>动态数组或向量</strong>的特定解决方案，其主要想法是将内存分配的大一些，并且等到其溢出时，在线性时间内再次重新分配内存。<br>尽管两者情况都会迫使我们去搬动大量的元素，但主要的不用点在于，对append操作发生这样的可能性要小的多，如果能确保每次所搬入的数组都打过原数组一定的比例(20%甚至100%)，那么该操作的平均成本通常是常数的。</p>
-</blockquote>
-<hr>
-<h4 id="时间复杂度定义"><a href="#时间复杂度定义" class="headerlink" title="时间复杂度定义"></a>时间复杂度定义</h4><p>通常，所获得的运行时间往往取决于某个特定基本操作被执的次数。</p>
-<p>渐进记忆法记号分别是$O（大O）$、$Ω$、$\theta$。$O$记法所代表的其实是所谓的渐进上界，而$Ω$记法所代表的则是渐进下界，$\theta$正好是前两种记法的交集。</p>
-<p>对于Python中的list而言，append n个数字所需要的运行时间约为$O(n)$，而在首端insert相同数量的数字需要的时间约为$O(n^2)$。</p>
-<hr>
-<h4 id="时间复杂度示例"><a href="#时间复杂度示例" class="headerlink" title="时间复杂度示例"></a>时间复杂度示例</h4><p>渐进记号最大限度的简化了数学问题，可以忽略乘法或加法中的那些常数，以及函数中其他<em>所有影响较小的部分</em>，从而让事情得到很大程度的简化。<br>下表给出一些时间复杂度对应的示例，并按照复杂度来排序，即每一行都要比它的前一行复杂。<br>$\theta(1)$         常数级            哈希表的查询与修改<br>$\theta(lg n)$         对数级        二分搜索<br>$\theta(n)$        线性级        列表的遍历<br>$\theta(n lg n)$        线性对数级            任意值序列的最优化排序<br>$\theta(n^2)$         平方级            n个对象相互比对<br>$\theta(n^3)$        立方级            Floyed-Warshall算法<br>$\theta(n^k)$        多项式级        基于n的k层嵌套循环<br>$\theta(k^n)$      指数级<br>$\theta(n{!})$      阶乘级</p>
-<p>注：有的时间复杂度不理解，后续逐步深入学习</p>
-<hr>
-<h4 id="时间复杂度练习"><a href="#时间复杂度练习" class="headerlink" title="时间复杂度练习"></a>时间复杂度练习</h4><p>首先要考虑的是程序在时间复杂度与问题规模之间的关系。</p>
-<p>例一：假设对大小为n的list，调用一次append的复杂度为$\theta(1)$，而调用一次insert(0,x)的复杂度则为$\theta(n)$。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">nums.append(<span class="number">1</span>)</div><div class="line">nums.insert(<span class="number">0</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure></p>
-<p>第一行时间复杂度为常数时间，当执行到第二行时，list的大小已经变成n+1，即现在的时间复杂度应该为$\theta(n+1)$，它与$\theta(n)$是等价的。总的运行时间就是这两种复杂度之和：$\theta(1) + \theta(n) = \theta(n)$。</p>
-<p>例二：简单循环遍历n个元素序列。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:		<span class="comment"># seqp = range(n)</span></div><div class="line">	s += x</div></pre></td></tr></table></figure></p>
-<p>对seq中的n个元素都执行了常数时间操作，其运行时间应该是线性的，即$\theta(n)$，而初始化操作被站主导地位的循环操作忽略掉了。同样逻辑也使用与内嵌式循环代码中，例如列表解析式和生成器表达式。</p>
-<p>例三：涉及嵌套循环时，单独每一层循环都是线性的，但层与层之间是依赖的关系，因此时间复杂度是线性的乘方的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">s = o </div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:</div><div class="line">	<span class="keyword">for</span> y <span class="keyword">in</span> seq:</div><div class="line">		s += x * y</div></pre></td></tr></table></figure></p>
-<p>其实，基本的规则是：代码块的时间复杂度由其先后执行的语句累加而成；而嵌套循环的时间复杂度则在此基础上成本的增长。理由很简单：由于外层循环每执行一次，内循环都要完整执行一遍。此时，其时间复杂度相当于“线性级乘线性级”，即平方级，$\theta(n * n) = \theta(n^2)$。这种规则可以用于指代更多层嵌套，只需随之增加其乘方数值即可($\theta(n^k)$)！</p>
-<p>例四：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> seq:</div><div class="line">	<span class="keyword">for</span> y <span class="keyword">in</span> seq:</div><div class="line">		s += x * y</div><div class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> seq:</div><div class="line">		<span class="keyword">for</span> w <span class="keyword">in</span> seq:</div><div class="line">			s += x -w</div></pre></td></tr></table></figure></p>
-<p>z循环是线性，且其中嵌套一个线性循环，此时时间复杂度是平方级$\theta(n^2)$；y循环时间复杂度是线性$\theta(n)$的。x循环的时间复杂度是$\theta(n(n^2 + n)) = \theta(n^3 + n^2) = \theta(n^3)$，即立方级。z循环在时间复杂度中占主导贡献。</p>
-<p>例五：算出序列中各元素之间的乘积之和，要求是避免对象自身相乘或者同一乘积被累加两次的情况。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">s = <span class="number">0</span></div><div class="line">n = len(seq)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n<span class="number">-1</span>):</div><div class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,n):</div><div class="line">		s += seq[i] * seq[j]</div><div class="line"><span class="comment">## 结果  seq = [1,2,3,4,5]</span></div><div class="line"><span class="number">1</span> <span class="number">2</span></div><div class="line"><span class="number">1</span> <span class="number">3</span></div><div class="line"><span class="number">1</span> <span class="number">4</span></div><div class="line"><span class="number">1</span> <span class="number">5</span></div><div class="line"><span class="number">2</span> <span class="number">3</span></div><div class="line"><span class="number">2</span> <span class="number">4</span></div><div class="line"><span class="number">2</span> <span class="number">5</span></div><div class="line"><span class="number">3</span> <span class="number">4</span></div><div class="line"><span class="number">3</span> <span class="number">5</span></div><div class="line"><span class="number">4</span> <span class="number">5</span></div></pre></td></tr></table></figure></p>
-<p>时间复杂度是多少呢？</p>
-<hr>
-<h4 id="三种重要情况"><a href="#三种重要情况" class="headerlink" title="三种重要情况"></a>三种重要情况</h4><p>实际情况中，比如构建一个排序算法的话，我们可能这样的代码逻辑：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_w_check</span><span class="params">(seq)</span>:</span></div><div class="line">	n = len(seq)</div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(n<span class="number">-1</span>):</div><div class="line">		<span class="keyword">if</span> seq[i] &gt; seq[i+<span class="number">1</span>]</div><div class="line">			<span class="keyword">break</span></div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		<span class="keyword">return</span> ...</div><div class="line"><span class="comment"># 在进行实际排序之前先做一个检查，如果目标序列已经排序，函数就直接返回。</span></div></pre></td></tr></table></figure></p>
-<p>此种情况下，无论排序算法的效率多低，只要输入是已排序的序列，其时间复杂度始终是线性级的。而在一般情况下是没有排序算法能达到线性级运行时间的。此时所谓的“最好的情况”实际是一个异常情况。我们不能依据这个来预测可靠的时间复杂度。因此引出有关时间复杂度的三种重要情况：</p>
-<ol>
-<li><strong>最好的情况：</strong>算法在理想输入时的时间复杂度，此例中是线性级。</li>
-<li><strong>最坏的情况：</strong>通常最有用的情况，希望对算法效率做出某些保证，此时最坏情况下的时间复杂度即是给出的最佳保证。</li>
-<li><strong>平均情况：</strong>最复杂的情况，简而言之就是它是对于按照一定的概率分布的随机输入的期望运行时间。一般会回避这种情况。</li>
-</ol>
-<p>估计时间复杂度的基本原则：通常以最坏的情况下的时间复杂度为准，即直接选择上界或下界(用$O$或$Ω$)来描述问题。</p>
-<hr>
-<h4 id="算法工程与算法评估"><a href="#算法工程与算法评估" class="headerlink" title="算法工程与算法评估"></a>算法工程与算法评估</h4><p>算法工程(algorithm engineering)，即如何有效实现相关算法。</p>
-<ol>
-<li><strong>提示一：只要有可能，就不必去担心</strong>  对时间复杂度的担心可能很重要，但只要有可能就不必去担心。不妨试试先简单实现程序，然后再看看它是否足够好！如果感觉无从下手时，推荐蛮力算法。</li>
-<li><strong>提示二：请用timeit模块来进行计算</strong>  timeit模块本身就是为执行相对可靠的计时操作而设计的！<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> timeit</div><div class="line"><span class="keyword">print</span> timeit.timeit(<span class="string">"l = range(1000)"</span>)</div><div class="line"><span class="comment">## 结果</span></div><div class="line"><span class="number">0.0169961213126</span></div><div class="line"><span class="number">6.22491721517</span></div><div class="line"></div><div class="line"><span class="comment"># 对封装的函数进行计时</span></div><div class="line">$ python -m timeit <span class="string">"import mymodule as m"</span> <span class="string">"m.myfunction()"</span></div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>后续详细的学习下<code>timeit</code>模块。</p>
-<ol>
-<li><p><strong>提示3：请使用profiler找出瓶颈</strong>  确定自己的代码中需要优化的是哪一部分！使用<code>cProfiler</code>模块(trace模块)！</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> cProfiler</div><div class="line"><span class="comment"># 自定义的主函数main(),结果打印出各函数的计时结果</span></div><div class="line">cProfiler.run(<span class="string">'main()'</span>)</div></pre></td></tr></table></figure>
-</li>
-<li><p><strong>绘制出结果</strong>  可视化往往是最好的工具。常见的是放映问题规模与运行时间关系的图表，或展示的相关运行时间的详细分布情况的图表。推荐<code>matplotlib</code>。<br>后续详细的学习下<code>matplotlib</code>模块。</p>
-</li>
-<li><strong>根据计时对比结果做出判断时要小心</strong>  </li>
-</ol>
-<p>我们进行时间复杂度分析的目的也主要是为了实现算法，以及在实际问题中运行算法时，能够对该算法的行为做出某些描述。</p>
-<p>下一篇博客详细学习树和图数据结构！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2101,7 +2170,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2123,7 +2192,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

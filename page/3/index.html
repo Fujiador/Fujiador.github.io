@@ -270,6 +270,167 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/03/29/Python-3-6-Scipy-Numpy-安装/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/29/Python-3-6-Scipy-Numpy-安装/" itemprop="url">
+                  Python 3.6  Scipy + Numpy 安装
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T01:28:30+08:00">
+                2017-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>之前环境一直使用<code>Python 2.7.10</code>版本，但大的趋势是<code>Python 3.x</code>版本会变得越来越流行，并且支持的包会越来越多，因此配置<code>python 3.6</code>版本的环境，并安装基础包。<br>　　安装过程中遇到的主要问题，基本是与安装<code>Python 2.X</code>版本遇到的问题一致。在此做简要的记录。</p>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>python 3.6   32 位</li>
+<li>Windows 7   64位操作系统</li>
+</ul>
+<h3 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h3><p>常见的基础环境中，有以下两类小问题：</p>
+<ul>
+<li>Microsoft Visual C ++ G环境安装或升级</li>
+<li>Framework 4.0 +环境安装或升级<br>　　这两个类型的问题解决方式与<code>Python 2.x</code>配置过程中一致，依据报错提示安装或升级即可解决。<br>　　在正常的<code>pip install scipy</code>时，遇到一些错误提示，例如：“no lapack/blas resources found”或者提示“需要升级Visual C ++环境（明明已经已经正确安装的）莫名奇怪的问题。这些都不是安装scipy中报错原因的关键所在，其实是因为windows环境缺少<code>lapack &amp; blas</code>，而且又不同于ubuntu系统直接可以<code>sudo apt-get install lapack lapack-devel blas blas-devel</code>。<br>　　因此安装scipy，推荐采用非官方版的安装方式。</li>
+</ul>
+<h3 id="安装python-36"><a href="#安装Python-3-6" class="headerlink" title="安装Python 3.6"></a>安装Python 3.6</h3><p>　　选择32位还是64的Python，各有优劣。其中32位因为支持适配的包比较丰富，推荐的首选；64位的内存使用不限制在2G之内。<br><strong>下载地址</strong>：<a href="https://www.python.org/downloads/windows/" target="_blank" rel="external">https://www.python.org/downloads/windows/</a><br>　　下载对应版本之后正常安装即可。</p>
+<h3 id="安装-numpymkl"><a href="#安装-numpy-mkl" class="headerlink" title="安装 numpy+mkl"></a>安装 numpy+mkl</h3><p>　　为什么安装<code>scipy</code>时会先安装<code>numpy+mkl</code>呢？其实原因很简单，即非官方版<code>scipy</code>需要<code>numpy+mkl</code>，并且在<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs" target="_blank" rel="external">UWB</a>站上有详细的英文说明。<br><code>Use pip version 8 or newer to install the downloaded .whl files. This page is not a pip package index.
+Many binaries depend on numpy-1.11+mkl and the Microsoft Visual C++ 2008 (x64, x86, and SP1 for CPython 2.7), Visual C++ 2010 (x64, x86, for CPython 3.4), or the Visual C++ 2015 (x64 and x86 for CPython 3.5 and 3.6) redistributable packages.
+Install numpy+mkl before other packages that depend on it.</code></p>
+<p><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>numpy-1.12.1+mkl-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install &quot;numpy-1.12.1+mkl-cp36-cp36m-win32.whl&quot;</code>等待安装完成即可。</p>
+<h3 id="安装scipy"><a href="#安装Scipy" class="headerlink" title="安装Scipy"></a>安装Scipy</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scipy-0.19.0-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scipy-0.19.0-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
+<h3 id="安装scikit-learn"><a href="#安装Scikit-learn" class="headerlink" title="安装Scikit-learn"></a>安装Scikit-learn</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy &amp; scikit-learn</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
+<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div><div class="line">pip install gensim</div><div class="line">pip install matplotlib</div><div class="line">pip install seaborn</div><div class="line">pip install Django</div><div class="line">pip install Flask</div><div class="line">pip install pillow</div><div class="line">pip install ipython</div><div class="line">pip install notebook</div><div class="line">pip install lxml</div><div class="line">pip install nltk</div><div class="line">pip install jieba</div><div class="line">pip install snownlp</div><div class="line">pip install requests</div><div class="line">pip install xlrd</div><div class="line">...</div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br><a href="https://www.douban.com/note/302711300/" target="_blank" rel="external">https://www.douban.com/note/302711300/</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/03/21/Hexo-GitHub搭建部署个人博客/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -518,7 +679,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -540,7 +701,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
