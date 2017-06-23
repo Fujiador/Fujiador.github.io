@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Python,numpy,scipy,scikit-learn," />
+  <meta name="keywords" content="正态分布,概率,高斯分布,数学术语," />
 
 
 
@@ -87,31 +87,24 @@
 
 
 
-<meta name="description" content="之前环境一直使用Python 2.7.10版本，但大的趋势是Python 3.x版本会变得越来越流行，并且支持的包会越来越多，因此配置python 3.6版本的环境，并安装基础包。　　安装过程中遇到的主要问题，基本是与安装Python 2.X版本遇到的问题一致。在此做简要的记录。
-环境
-python 3.6   32 位
-Windows 7   64位操作系统
-
-说在前面的话常见的基础环境中，有以">
+<meta name="description" content="正态分布正态分布（Normal Distribution），也称“常态分布”，又名高斯分布（Gaussian Distribution）。正态分布式一个在各个领域内都非常重要的概率分布，在统计学的许多方面有重大的影响力。正态曲线呈钟型，两头低、中间高，左右对称。
+若随机变量$X$服从一个数学期望为$μ$、方差为$σ^2$的正态分布，记为$N(μ,σ^2)$。其概率密度函数为正态分布的期望$μ$决定">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python 3.6  Scipy + Numpy 安装">
-<meta property="og:url" content="https://fujiador.github.io/2017/03/29/Python-3-6-Scipy-Numpy-安装/index.html">
+<meta property="og:title" content="数学术语：正态分布">
+<meta property="og:url" content="https://fujiador.github.io/2017/06/23/数学术语：正态分布/index.html">
 <meta property="og:site_name" content="Fujia's Blog">
-<meta property="og:description" content="之前环境一直使用Python 2.7.10版本，但大的趋势是Python 3.x版本会变得越来越流行，并且支持的包会越来越多，因此配置python 3.6版本的环境，并安装基础包。　　安装过程中遇到的主要问题，基本是与安装Python 2.X版本遇到的问题一致。在此做简要的记录。
-环境
-python 3.6   32 位
-Windows 7   64位操作系统
-
-说在前面的话常见的基础环境中，有以">
-<meta property="og:updated_time" content="2017-03-28T17:32:20.501Z">
+<meta property="og:description" content="正态分布正态分布（Normal Distribution），也称“常态分布”，又名高斯分布（Gaussian Distribution）。正态分布式一个在各个领域内都非常重要的概率分布，在统计学的许多方面有重大的影响力。正态曲线呈钟型，两头低、中间高，左右对称。
+若随机变量$X$服从一个数学期望为$μ$、方差为$σ^2$的正态分布，记为$N(μ,σ^2)$。其概率密度函数为正态分布的期望$μ$决定">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E4%B8%89%E7%BB%B4%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.jpg">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E4%BA%8C%E7%BB%B4%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.jpg">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E9%9D%A2%E7%A7%AF%E6%A6%82%E7%8E%87.jpg">
+<meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E6%A6%82%E7%8E%87%E5%AF%86%E5%BA%A6%E5%87%BD%E6%95%B0.jpg">
+<meta property="og:updated_time" content="2017-06-23T13:17:30.511Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python 3.6  Scipy + Numpy 安装">
-<meta name="twitter:description" content="之前环境一直使用Python 2.7.10版本，但大的趋势是Python 3.x版本会变得越来越流行，并且支持的包会越来越多，因此配置python 3.6版本的环境，并安装基础包。　　安装过程中遇到的主要问题，基本是与安装Python 2.X版本遇到的问题一致。在此做简要的记录。
-环境
-python 3.6   32 位
-Windows 7   64位操作系统
-
-说在前面的话常见的基础环境中，有以">
+<meta name="twitter:title" content="数学术语：正态分布">
+<meta name="twitter:description" content="正态分布正态分布（Normal Distribution），也称“常态分布”，又名高斯分布（Gaussian Distribution）。正态分布式一个在各个领域内都非常重要的概率分布，在统计学的许多方面有重大的影响力。正态曲线呈钟型，两头低、中间高，左右对称。
+若随机变量$X$服从一个数学期望为$μ$、方差为$σ^2$的正态分布，记为$N(μ,σ^2)$。其概率密度函数为正态分布的期望$μ$决定">
+<meta name="twitter:image" content="http://on58f12qv.bkt.clouddn.com/%E4%B8%89%E7%BB%B4%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.jpg">
 
 
 
@@ -139,13 +132,13 @@ Windows 7   64位操作系统
 
 
 
-  <link rel="canonical" href="https://fujiador.github.io/2017/03/29/Python-3-6-Scipy-Numpy-安装/"/>
+  <link rel="canonical" href="https://fujiador.github.io/2017/06/23/数学术语：正态分布/"/>
 
 
 
 
 
-  <title> Python 3.6  Scipy + Numpy 安装 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 数学术语：正态分布 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -284,7 +277,7 @@ Windows 7   64位操作系统
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/03/29/Python-3-6-Scipy-Numpy-安装/">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/06/23/数学术语：正态分布/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Fujia">
@@ -305,7 +298,7 @@ Windows 7   64位操作系统
             
             
               
-                Python 3.6  Scipy + Numpy 安装
+                数学术语：正态分布
               
             
           </h1>
@@ -320,8 +313,8 @@ Windows 7   64位操作系统
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T01:28:30+08:00">
-                2017-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-23T21:16:16+08:00">
+                2017-06-23
               </time>
             
 
@@ -378,25 +371,17 @@ Windows 7   64位操作系统
       
 
       
-        <p>之前环境一直使用<code>Python 2.7.10</code>版本，但大的趋势是<code>Python 3.x</code>版本会变得越来越流行，并且支持的包会越来越多，因此配置<code>python 3.6</code>版本的环境，并安装基础包。<br>　　安装过程中遇到的主要问题，基本是与安装<code>Python 2.X</code>版本遇到的问题一致。在此做简要的记录。</p>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>python 3.6   32 位</li>
-<li>Windows 7   64位操作系统</li>
-</ul>
-<h3 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h3><p>常见的基础环境中，有以下两类小问题：</p>
-<ul>
-<li>Microsoft Visual C ++ G环境安装或升级</li>
-<li>Framework 4.0 +环境安装或升级<br>　　这两个类型的问题解决方式与<code>Python 2.x</code>配置过程中一致，依据报错提示安装或升级即可解决。<br>　　在正常的<code>pip install scipy</code>时，遇到一些错误提示，例如：“no lapack/blas resources found”或者提示“需要升级Visual C ++环境（明明已经已经正确安装的）莫名奇怪的问题。这些都不是安装scipy中报错原因的关键所在，其实是因为windows环境缺少<code>lapack &amp; blas</code>，而且又不同于ubuntu系统直接可以<code>sudo apt-get install lapack lapack-devel blas blas-devel</code>。<br>　　因此安装scipy，推荐采用非官方版的安装方式。</li>
-</ul>
-<h3 id="安装python-36"><a href="#安装Python-3-6" class="headerlink" title="安装Python 3.6"></a>安装Python 3.6</h3><p>　　选择32位还是64的Python，各有优劣。其中32位因为支持适配的包比较丰富，推荐的首选；64位的内存使用不限制在2G之内。<br><strong>下载地址</strong>：<a href="https://www.python.org/downloads/windows/" target="_blank" rel="external">https://www.python.org/downloads/windows/</a><br>　　下载对应版本之后正常安装即可。</p>
-<h3 id="安装-numpymkl"><a href="#安装-numpy-mkl" class="headerlink" title="安装 numpy+mkl"></a>安装 numpy+mkl</h3><p>　　为什么安装<code>scipy</code>时会先安装<code>numpy+mkl</code>呢？其实原因很简单，即非官方版<code>scipy</code>需要<code>numpy+mkl</code>，并且在<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs" target="_blank" rel="external">UWB</a>站上有详细的英文说明。<br><code>Use pip version 8 or newer to install the downloaded .whl files. This page is not a pip package index.
-Many binaries depend on numpy-1.11+mkl and the Microsoft Visual C++ 2008 (x64, x86, and SP1 for CPython 2.7), Visual C++ 2010 (x64, x86, for CPython 3.4), or the Visual C++ 2015 (x64 and x86 for CPython 3.5 and 3.6) redistributable packages.
-Install numpy+mkl before other packages that depend on it.</code></p>
-<p><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>numpy-1.12.1+mkl-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install &quot;numpy-1.12.1+mkl-cp36-cp36m-win32.whl&quot;</code>等待安装完成即可。</p>
-<h3 id="安装scipy"><a href="#安装Scipy" class="headerlink" title="安装Scipy"></a>安装Scipy</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scipy-0.19.0-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scipy-0.19.0-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
-<h3 id="安装scikit-learn"><a href="#安装Scikit-learn" class="headerlink" title="安装Scikit-learn"></a>安装Scikit-learn</h3><p>　　安装方法与numpy如出一辙。<br><strong>下载地址</strong>：<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br>　　下载对应版本之后，打开<code>cmd</code>命令窗口，进入<code>scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>所在目录，或者将对应whl文件存放在<code>/Python35/Scripts/</code>pip所在目录，之后在<code>cmd</code>命令行输入<code>pip install scikit_learn-0.18.1-cp36-cp36m-win32.whl</code>等待安装完成即可。<br>　　到此，<code>numpy &amp; scipy &amp; scikit-learn</code>包的安装已经完成，之后就可以直接安装以<code>numpy &amp; scipy</code>为依赖的包啦。</p>
-<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div><div class="line">pip install gensim</div><div class="line">pip install matplotlib</div><div class="line">pip install seaborn</div><div class="line">pip install Django</div><div class="line">pip install Flask</div><div class="line">pip install pillow</div><div class="line">pip install ipython</div><div class="line">pip install notebook</div><div class="line">pip install lxml</div><div class="line">pip install nltk</div><div class="line">pip install jieba</div><div class="line">pip install snownlp</div><div class="line">pip install requests</div><div class="line">pip install xlrd</div><div class="line">...</div><div class="line">...</div></pre></td></tr></table></figure>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn" target="_blank" rel="external">http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-learn</a><br><a href="https://www.douban.com/note/302711300/" target="_blank" rel="external">https://www.douban.com/note/302711300/</a></p>
+        <h3 id="正态分布"><a href="#正态分布" class="headerlink" title="正态分布"></a>正态分布</h3><p>正态分布（Normal Distribution），也称“常态分布”，又名高斯分布（Gaussian Distribution）。正态分布式一个在各个领域内都非常重要的概率分布，在统计学的许多方面有重大的影响力。正态曲线呈钟型，两头低、中间高，左右对称。<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%B8%89%E7%BB%B4%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.jpg" alt="三维正态分布|center"></p>
+<p>若随机变量$X$服从一个数学期望为$μ$、方差为$σ^2$的正态分布，记为$N(μ,σ^2)$。其概率密度函数为正态分布的期望$μ$决定了其位置，方差$σ^2$决定了分布的幅度。当$μ=0,σ^2=1$时是标准正态分布。</p>
+<hr>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>正态分布具有两个参数$μ$和$σ^2$的连续随机变量的分布，参数$μ$是服从正态分布的随机变量的均值，参数$σ^2$是随机变量的方差。服从正态分布的随机变量的概率规律为与$μ$越近的值的概率越大，离$μ$越远的值的概率越小。$σ^2$越小，分布越集中在$μ$附近，$σ^2$越大，分布月分散。</p>
+<p>正态分布的密度函数的特点是：关于$μ$对称，在$μ$处达到最大值，在正负无穷处取值为0，在$μ±σ$的位置处有拐点。<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%BA%8C%E7%BB%B4%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.jpg" alt="二维正态分布|center"></p>
+<hr>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>集中性：正态分布的高峰位于均值$μ$所在的位置；<br>对称性：正态分布曲线以均值$μ$为中心左右对称，曲线两端永远不与横轴相交；<br>均匀变动性：在均值$μ$处开始，分别向左右两侧逐渐均匀下降；<br>概率特性：横轴与正态曲线之间的面积恒等于1。正态曲线下，横轴区间$(μ-σ，μ+σ)$内的面积为68.268949%，横轴区间$(μ-1.96σ，μ+1.96σ)$内的面积为95.449974%，横轴区间$(μ-2.58σ，μ+2.58σ)$内的面积为99.730020%。<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E9%9D%A2%E7%A7%AF%E6%A6%82%E7%8E%87.jpg" alt="正态分布面积概率|center"></p>
+<hr>
+<h3 id="概率密度函数"><a href="#概率密度函数" class="headerlink" title="概率密度函数"></a>概率密度函数</h3><p>正态分布的概率密度函数为：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E6%A6%82%E7%8E%87%E5%AF%86%E5%BA%A6%E5%87%BD%E6%95%B0.jpg" alt="正态分布概率密度函数|center"></p>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="http://www.baike.com/wiki/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83" target="_blank" rel="external">http://www.baike.com/wiki/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83</a></p>
 
       
     </div>
@@ -426,7 +411,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
       
         <div class="post-tags">
           
-            <a href="/tags/Python-numpy-scipy-scikit-learn/" rel="tag"># Python,numpy,scipy,scikit-learn</a>
+            <a href="/tags/正态分布-概率-高斯分布-数学术语/" rel="tag"># 正态分布,概率,高斯分布,数学术语</a>
           
         </div>
       
@@ -439,8 +424,8 @@ Install numpy+mkl before other packages that depend on it.</code></p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/21/Hexo-GitHub搭建部署个人博客/" rel="next" title="Hexo-GitHub搭建部署个人博客">
-                <i class="fa fa-chevron-left"></i> Hexo-GitHub搭建部署个人博客
+              <a href="/2017/06/19/数据需求-活跃用户统计/" rel="next" title="[数据需求] 活跃用户统计">
+                <i class="fa fa-chevron-left"></i> [数据需求] 活跃用户统计
               </a>
             
           </div>
@@ -448,10 +433,6 @@ Install numpy+mkl before other packages that depend on it.</code></p>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/31/JSON概述以及Python操作JSON数据/" rel="prev" title="JSON概述以及Python操作JSON数据">
-                JSON概述以及Python操作JSON数据 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -580,7 +561,7 @@ Install numpy+mkl before other packages that depend on it.</code></p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说在前面的话"><span class="nav-number">2.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装python-36"><span class="nav-number">3.</span> <span class="nav-text">安装Python 3.6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-numpymkl"><span class="nav-number">4.</span> <span class="nav-text">安装 numpy+mkl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装scipy"><span class="nav-number">5.</span> <span class="nav-text">安装Scipy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装scikit-learn"><span class="nav-number">6.</span> <span class="nav-text">安装Scikit-learn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单示例"><span class="nav-number">7.</span> <span class="nav-text">简单示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#正态分布"><span class="nav-number">1.</span> <span class="nav-text">正态分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征"><span class="nav-number">3.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概率密度函数"><span class="nav-number">4.</span> <span class="nav-text">概率密度函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资源"><span class="nav-number">5.</span> <span class="nav-text">参考资源</span></a></li></ol></div>
             
 
           </div>

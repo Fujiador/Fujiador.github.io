@@ -270,6 +270,201 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/26/《Python算法教程》读书笔记-（三）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/26/《Python算法教程》读书笔记-（三）/" itemprop="url">
+                  《Python算法教程》读书笔记 - （三）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T22:18:00+08:00">
+                2017-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇博客重点是<strong>图与树</strong>的实现。</p>
+<hr>
+<h3 id="图与树"><a href="#图与树" class="headerlink" title="图与树"></a>图与树</h3><p>算法中最强大的框架之一 — 图结构(graph)，通常，如果可以讲问题诠释成一个图问题的话，至少该问题已经接近解决方案了；如果可以用树结构(tree)来诠释的话，基本已经拥有了一个真正的解决方案！足以说明树结构和图结构的重要性！</p>
+<p>图结构可以表现几乎所有类型的结构与系统，例如交通网络、通信网络、细胞核交互、社交关系等等，并可通过添加权重值、距离值等额外数据来增强其表现能力。而树结构只是图结构的一种特殊情况。有很多的机构形式，如XML文档或者目录层次结构等等，实际上也都是用树结构来表现的。</p>
+<p>以下是一些图术语：</p>
+<blockquote>
+<ol>
+<li>图$G=(V,E)$通常由一组节点$V$及节点间的边$E$共同组成。如果这些边是带有方向的，则称其为有向图；</li>
+<li>节点之间是通过边来实现彼此相连的。这些边其实就是节点$v$与其邻居之间的关系。与节点$v$相邻的节点，称为节点$v$的邻居。<strong>一个节点的度数就是连接其边的个数。</strong></li>
+<li>图$G=(V,E)$的子图结构将由$V$的子集与$E$的子集共同组成。在$G$中没一条路径(path)是一个子图结构，本质上都是一些由多个节点串联而成的边线序列。环路(cycle)的定义与路径基本相同，只不过它最后一条边所连接末节点同时是它的首节点。</li>
+<li>如果将图$G$中的每条边与某种权值联系在一起，就成为一种加权图。在加权图中，一条路径或环路的长度等于各条边上的权值之和；而对于非加权图而言，就直接等于该图的边数了。</li>
+<li>森林(forest)可以被认为是一个无环路图，而这样的连通图就是一棵树。实质上，森林就是由一棵或多棵树构成的。</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="图数据结构"><a href="#图数据结构" class="headerlink" title="图数据结构"></a>图数据结构</h3><p>上面目前介绍关于图的一些基本概念，接下来核心知识即学会用某种数据结构来表示图。</p>
+<p>用抽象属于来说，倾向于采用一种被称为邻近函数$N(v)$(neighborhood function)的实现方式。在这，会涉及一个容器N[v]，主要用于存储v节点的邻近节点。常见图数据结构主要放在<strong>邻接列表和邻接矩阵</strong>这两种著名的表现形式上，它们的可用性和普及率都很高。</p>
+<p><strong>小插曲：黑盒子专栏之 dict 和 set</strong></p>
+<blockquote>
+<p>散列(hashing)在算法中及其常见，在Python语言中，标准散列机制是由hash函数提供的，如下调用一个对象的<code>__hash__</code>方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; hash(<span class="number">42</span>)</div><div class="line"><span class="number">42</span></div><div class="line">&gt; hash(<span class="string">"Hello,World!"</span>)</div><div class="line"><span class="number">1564194085</span></div></pre></td></tr></table></figure></p>
+<p>该机制常用于字典类型(dict)的实现，dict就是通常所说的散列表。同样，集合类型(set)也是通过这种机制实现的。记住最重要的一点，<strong>散列值的构成基本上是在常数级时间内完成的</strong>。这意味着在对dict和set中的元素进行访问时所消耗的时间都是常数级别的，对于构建更为复杂的结构与算法是非常有用的！</p>
+</blockquote>
+<p>后续详细的学习下hash方法和<code>hashlib</code>模块。</p>
+<hr>
+<h3 id="邻接列表与其类似结构"><a href="#邻接列表与其类似结构" class="headerlink" title="邻接列表与其类似结构"></a>邻接列表与其类似结构</h3><p>对于图结构而言，最直观的实现方式之一就是使用邻接列表。即要针对每个结点设置一个邻居列表（也可以使set等其他容器或迭代器类型）。</p>
+<p>接下来实现一个最简单的：假设有n个结点，编号分别为$0,1,…,n-1$，然后每个邻接(邻居)列表就都指示一个数字列表，可以讲它们编入一个大小为n的主列表，并用节点编号对其进行索引。由于这些列表内的顺序是任意的，所以实际上我们是使用集合来实现邻接集(adjacency sets)。</p>
+<p>以下图为例具体说明图结构的各种表示法：</p>
+<p>首先，完成对节点的编号工作$(a=0,b=1,c=2,d=3,e=4,f=5,g=6,h=7)$。该图可以先用一种简单明了的方式来表示，如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 简单明了的邻接集表示法</span></div><div class="line">a, b, c, d, e, f, g, h = range(<span class="number">8</span>)</div><div class="line">N = [</div><div class="line">	&#123;b, c, d, e, f&#125;,  <span class="comment"># a</span></div><div class="line">	&#123;c, e&#125;,           <span class="comment"># b</span></div><div class="line">	&#123;d&#125;,              <span class="comment"># c</span></div><div class="line">	&#123;e&#125;,              <span class="comment"># d</span></div><div class="line">	&#123;f&#125;,              <span class="comment"># e</span></div><div class="line">	&#123;c, g, h&#125;,        <span class="comment"># f</span></div><div class="line">	&#123;f, h&#125;,           <span class="comment"># g</span></div><div class="line">	&#123;f, g&#125;            <span class="comment"># h</span></div><div class="line">]</div><div class="line"><span class="comment">## 结果,在Ipython中结果如下，在Python解释器中是类似set([1,2,3,4,5])。</span></div><div class="line">&gt; [&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;, &#123;<span class="number">2</span>, <span class="number">4</span>&#125;, &#123;<span class="number">3</span>&#125;, &#123;<span class="number">4</span>&#125;, &#123;<span class="number">5</span>&#125;, &#123;<span class="number">2</span>, <span class="number">6</span>, <span class="number">7</span>&#125;, &#123;<span class="number">5</span>, <span class="number">7</span>&#125;, &#123;<span class="number">5</span>, <span class="number">6</span>&#125;]</div></pre></td></tr></table></figure></p>
+<p>变量N作用相当于之前提到的N函数。在图论中，$N(v)$代表的是v节点的邻居节点集。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; N[a]    <span class="comment"># a节点的邻居节点集</span></div><div class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</div><div class="line">&gt; b <span class="keyword">in</span> N[a]   <span class="comment"># 判断b节点是否是a节点的邻居节点</span></div><div class="line"><span class="keyword">True</span></div></pre></td></tr></table></figure></p>
+<p>在某些情况下，另一种表示方法的开销会更小一些，即用真正的邻接列表来代替上面的邻接集。如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 简单明了的邻接列表示法</span></div><div class="line">a, b, c, d, e, f, g, h = range(<span class="number">8</span>)</div><div class="line">N = [</div><div class="line">	[b, c, d, e, f],  <span class="comment"># a</span></div><div class="line">	[c, e],           <span class="comment"># b</span></div><div class="line">	[d],              <span class="comment"># c</span></div><div class="line">	[e],              <span class="comment"># d</span></div><div class="line">	[f],              <span class="comment"># e</span></div><div class="line">	[c, g, h],        <span class="comment"># f</span></div><div class="line">	[f, h],           <span class="comment"># g</span></div><div class="line">	[f, g]            <span class="comment"># h</span></div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>这种表示法可能存在着一个争议，因为它实际上是一组邻接数组的结合，而并非传统意义上的邻接列表。</p>
+<p>在Python中，list类型的背后实际上是一个<strong>动态数组</strong>。</p>
+<p>在执行与图有关的工作时，要遵从一个主题思想，即一个图的最佳表示方法应该取决于我们用它来做什么！例如，邻接列表(或数组)可以让我们在维持低成本的情况下，对$N(v)$中所有节点v进行有效遍历。然而，在检查u和v是否互为邻居时的成本就是$\theta(N(v))$。这时如果改图的结构很密集(如果它的边很多的话)，很可能会带来一些问题，此时邻接集或许是个更好的选择。</p>
+<p>还有另外一种表示方法，就是用dict类型来替代这里的set或list。在dict类型中，每个邻居几点都会有一个键值对，用于表示与其邻居节点（或<strong>出边</strong>）之间的关联性，如边的权重。如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 加权邻接字典</span></div><div class="line">a, b, c, d, e, f, g, h = range(<span class="number">8</span>)</div><div class="line">N = [</div><div class="line">	&#123;b:<span class="number">2</span>, c:<span class="number">1</span>, d:<span class="number">3</span>, e:<span class="number">9</span>, f:<span class="number">4</span>&#125;,  <span class="comment"># a</span></div><div class="line">	&#123;c:<span class="number">4</span>, e:<span class="number">4</span>&#125;,           <span class="comment"># b</span></div><div class="line">	&#123;d:<span class="number">8</span>&#125;,              <span class="comment"># c</span></div><div class="line">	&#123;e:<span class="number">7</span>&#125;,              <span class="comment"># d</span></div><div class="line">	&#123;f:<span class="number">5</span>&#125;,              <span class="comment"># e</span></div><div class="line">	&#123;c:<span class="number">2</span>, g:<span class="number">2</span>, h:<span class="number">2</span>&#125;,        <span class="comment"># f</span></div><div class="line">	&#123;f:<span class="number">1</span>, h:<span class="number">6</span>&#125;,           <span class="comment"># g</span></div><div class="line">	&#123;f:<span class="number">9</span>, g:<span class="number">8</span>&#125;            <span class="comment"># h</span></div><div class="line">]</div><div class="line">&gt;&gt;&gt;b <span class="keyword">in</span> N[a]    <span class="comment"># Neighborhood membership  邻节点成员关系</span></div><div class="line">&gt;<span class="keyword">True</span></div><div class="line">&gt;&gt;&gt;len(N[f])    <span class="comment"># Degree   节点的度</span></div><div class="line">&gt;<span class="number">3</span></div><div class="line">&gt;&gt;&gt;N[a][b]      <span class="comment"># Edge weight for (a,b) 节点a到节点b的权重</span></div><div class="line">&gt;<span class="number">2</span></div></pre></td></tr></table></figure></p>
+<p>目前为止，用来存储邻接结构（可能是list、set、dict）的主要容器其实都是列表类型，它们都以节点编号为索引值。对灵活性而言，使用dict类型来作为主要存储结构会是一种更好的选择（因为它允许我们使用任意可散列的对象来充当节点标签）。用dict存储邻接集的具体示例如下所示，在这里是用字符来表示相关节点的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 邻接集的字典表示法</span></div><div class="line">N = &#123;</div><div class="line">	<span class="string">'a'</span>:set(<span class="string">'bcdef'</span>),        <span class="comment"># a</span></div><div class="line">	<span class="string">'b'</span>:set(<span class="string">'ce'</span>),           <span class="comment"># b</span></div><div class="line">	<span class="string">'c'</span>:set(<span class="string">'d'</span>),            <span class="comment"># c</span></div><div class="line">	<span class="string">'d'</span>:set(<span class="string">'e'</span>),            <span class="comment"># d</span></div><div class="line">	<span class="string">'e'</span>:set(<span class="string">'f'</span>),            <span class="comment"># e</span></div><div class="line">	<span class="string">'f'</span>:set(<span class="string">'cgh'</span>),          <span class="comment"># f</span></div><div class="line">	<span class="string">'g'</span>:set(<span class="string">'fh'</span>),           <span class="comment"># g</span></div><div class="line">	<span class="string">'h'</span>:set(<span class="string">'fg'</span>)            <span class="comment"># h</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图的另一种常见表示法就是邻接矩阵了！这种表示的主要不同之处在于，它不再列出每个节点的所有邻居节点，而是会将每个节点可能的邻居位置排成一排（也就是一个数组，用于对应图中每个节点），然后用某种值（True或False）来表示相关节点是否为当前节点的邻居。</p>
+<p>其最简单的形式也可以用嵌套list来实现，如下所示，其中，节点编号依然是从0到$V-1$，并且为了让矩阵具有更好的可读性，会用1和0来填充真值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 用嵌套list实现的邻接矩阵</span></div><div class="line">a, b, c, d, e, f, g, h = range(<span class="number">8</span>)</div><div class="line"></div><div class="line">N = [</div><div class="line">	[<span class="number">0</span>，<span class="number">1</span>，<span class="number">1</span>，<span class="number">1</span>，<span class="number">1</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>],    <span class="comment"># a</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>],    <span class="comment"># b</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>],    <span class="comment"># c</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>],    <span class="comment"># d</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>],    <span class="comment"># e</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">1</span>],    <span class="comment"># f</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">0</span>，<span class="number">1</span>],    <span class="comment"># g</span></div><div class="line">	[<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">0</span>，<span class="number">1</span>，<span class="number">1</span>，<span class="number">0</span>],    <span class="comment"># h</span></div><div class="line">]</div><div class="line">&gt;&gt;&gt;N[a][b]    <span class="comment"># Neighborhood membership</span></div><div class="line">&gt;<span class="number">1</span></div><div class="line">&gt;&gt;&gt;sum(N[f])    <span class="comment"># Degree</span></div><div class="line">&gt;<span class="number">3</span></div></pre></td></tr></table></figure></p>
+<p>在使用方式上与邻接列表或邻接集略有不同。邻居关系检查是要检查矩阵单元N[a][b]是否为真。相关节点的邻居数度，用sum函数求得。</p>
+<p>在邻接矩阵中，有一些实用的特性。</p>
+<blockquote>
+<p>首先，只要不允许出现自循环状态，其对角线上的值应该全为假。<br>而且，通过向现有表示法中加入双向边元素的方式来实现一个无向图，这就意味着无向图的邻接矩阵应该是一个对称矩阵。</p>
+</blockquote>
+<p>将邻接矩阵扩展成对边进行加权处理，也非常简单：在原来存储真值的地方直接存储对应的权值即可。</p>
+<p>例如：对于边$(u,v)$来说，只需要将N[u][v]处的True替换成$\omega(u,v)$的权值即可。出于某些实践因素的考虑，通常会将一些实际不存在的边的权值设置为无穷大。（这可以确保它们不会被纳入考虑的范围，也就是说，在考虑<strong>最短路径</strong>时，我们只要根据实际存在的那些边来寻找合适路径）。</p>
+<p>也可以设置为一个非法的权值，如None、-1。但许多情况下，更实用的做法是设置一个非常大的值。通常对于整型加权值来说，用<code>sys.maxint</code>即可。在对浮点型的设计中，有一个可以代表无穷大的值：inf。该值在python中没有直接可用的名称，但我们可以通过<code>float(&#39;inf&#39;)</code>表达式来获取它。</p>
+<p>如下所示，演示了如何用嵌套list来实现一个加权矩阵。要注意的是，该矩阵对角线上的值依然应该全为0，因为即使在没有自循环存在的情况下，相关权值也往往会被解释称为某种距离形式，从理解上来说，任一节点到自身的距离都应该始终是0。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#对不存在的边赋予无限大权值的加权矩阵</span></div><div class="line">a, b, c, d, e, f, g, h = range(<span class="number">8</span>)</div><div class="line">inf = float(<span class="string">'inf'</span>)</div><div class="line">W = [</div><div class="line">    [<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">9</span>,<span class="number">4</span>,inf,inf], <span class="comment">#a</span></div><div class="line">    [inf,<span class="number">0</span>,<span class="number">4</span>,inf,<span class="number">3</span>,inf,inf,inf],  <span class="comment">#b</span></div><div class="line">    [inf,inf,<span class="number">0</span>,<span class="number">8</span>,inf,inf,inf,inf], <span class="comment">#c</span></div><div class="line">    [inf,inf,inf,<span class="number">0</span>,<span class="number">7</span>,inf,inf,inf], <span class="comment">#d</span></div><div class="line">    [inf,inf,inf,inf,<span class="number">0</span>,<span class="number">5</span>,inf,inf], <span class="comment">#e</span></div><div class="line">    [inf,inf,<span class="number">2</span>,inf,inf,<span class="number">0</span>,<span class="number">2</span>,<span class="number">2</span>], <span class="comment">#f</span></div><div class="line">    [inf,inf,inf,inf,inf,<span class="number">1</span>,<span class="number">0</span>,<span class="number">6</span>], <span class="comment">#g</span></div><div class="line">    [inf,inf,inf,inf,inf,<span class="number">9</span>,<span class="number">8</span>,<span class="number">0</span>] <span class="comment">#h</span></div><div class="line">]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>W[a][b] &lt; inf <span class="comment">#Neighborhood membership</span></div><div class="line">&gt; <span class="keyword">True</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>W[c][e] &lt; inf <span class="comment"># Neighborhood membership</span></div><div class="line">&gt; <span class="keyword">False</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>sum(<span class="number">1</span> <span class="keyword">for</span> w <span class="keyword">in</span> W[a] <span class="keyword">if</span> w &lt; inf) - <span class="number">1</span>  <span class="comment"># Degree</span></div><div class="line">&gt; <span class="number">5</span>    <span class="comment"># -1 是因为节点与其自身不算做边</span></div></pre></td></tr></table></figure></p>
+<p>如上成员检测、查找某个特定节点的度(degree)。尽管这个表达结构在度的计算上的操作复杂度是$\theta(n)$，但它很适合于相关成员与度的查找计算操作，并且这些操作在常数时间内完成。</p>
+<p><strong>小插曲</strong></p>
+<blockquote>
+<p>Numpy库提供大量与多维数组有关的功能。就Numpy中的数组类型而言，对于实现邻接矩阵或加权矩阵是非常不错的。<br>例如，当需要一个基于list的、面向n个结点的空加权（或邻接）矩阵时，通常这样实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>N= [[<span class="number">0</span>] * <span class="number">10</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</div><div class="line"><span class="comment"># 而在Numpy中，通过zeros函数实现：</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>N = np.zeros([<span class="number">10</span>,<span class="number">10</span>])</div><div class="line"><span class="comment"># 结果</span></div><div class="line">array([[ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</div><div class="line">       [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>]])</div></pre></td></tr></table></figure></p>
+<p>如果处理的是相对稀疏的图，即矩阵中只有一小部分有值，可通过更为特殊的一种稀疏矩阵的形式来节省内存开销。可以再Scipy中的scipy.sparse模块找到。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/26/数据需求-填充Excel-Cell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1927,208 +2122,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/04/XlsxWriter-Python操作Excel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/04/XlsxWriter-Python操作Excel/" itemprop="url">
-                  XlsxWriter  Python操作Excel
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-04T19:22:30+08:00">
-                2017-04-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="xlsxwriter"><a href="#XlsxWriter" class="headerlink" title="XlsxWriter"></a>XlsxWriter</h3><p><code>xlsxwriter</code>是创建excel文件的python模块，适用2007 + 版本，支持的功能：</p>
-<ul>
-<li>完全兼容Excel格式文件[compatible Excel files]</li>
-<li>格式化[full formatting]</li>
-<li>单元格合并[merged cells]</li>
-<li>命名[defined names]</li>
-<li>图表[charts]</li>
-<li>自动筛选[autofilters]</li>
-<li>数据验证和下拉列表[data validation and drop down list]</li>
-<li>条件格式[conditional formattingt]</li>
-<li>worksheet PNG/JPEG images</li>
-<li>Rich multi-format strings</li>
-<li>cell comments</li>
-<li>textboxes</li>
-<li>Pandas接口</li>
-<li>内存优化模式写入大文件[memory optimization mode for writing large files]</li>
-</ul>
-<hr>
-<h4 id="xlsxwriter简介"><a href="#XlsxWriter简介" class="headerlink" title="XlsxWriter简介"></a>XlsxWriter简介</h4><p><code>xlsxwriter</code>在写Excel文件方面的优缺点：</p>
-<ul>
-<li>优点：高度兼容excel并友好支持excel特性；可配置以使用较小的内存进行快速写入较大的文件。</li>
-<li>缺点：无法读取或修改已存在的excel文件。</li>
-</ul>
-<hr>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># windows</span></div><div class="line">$ pip install xlsxwriter</div><div class="line"><span class="comment"># ubuntu</span></div><div class="line">$ sudo pip install xlsxwriter</div><div class="line"><span class="comment"># tarball</span></div><div class="line">$ tar -zxvf XlsxWriter-1.2.3.tar.gz</div><div class="line">$ <span class="built_in">cd</span> XlsxWriter-1.2.3</div><div class="line">$ sudo python setup.py install</div><div class="line"><span class="comment"># downloaded from GitHub</span></div><div class="line">$ curl -O -L http://github.com/jmcnamara/XlsxWriter/archive/master.tar.gz</div><div class="line">$ tar zxvf master.tar.gz</div><div class="line">$ <span class="built_in">cd</span> XlsxWriter-master/</div><div class="line">$ sudo python setup.py install</div><div class="line"><span class="comment"># git clone</span></div><div class="line">$ git <span class="built_in">clone</span> https://github.com/jmcnamara/XlsxWriter.git</div><div class="line">$ <span class="built_in">cd</span> XlsxWriter</div><div class="line">$ sudo python setup.py install</div></pre></td></tr></table></figure>
-<hr>
-<h4 id="两大核心对象workbook-amp-worksheet"><a href="#两大核心对象：WorkBook-amp-WorkSheet" class="headerlink" title="两大核心对象：WorkBook &amp; WorkSheet"></a>两大核心对象：<code>WorkBook &amp; WorkSheet</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line">workbook = xlsxwriter.Workbook(wk_name)</div><div class="line">worksheet = workbook.add_worksheet(wh_name)</div><div class="line">worksheet.write(row, col, some_datas, some_format)</div><div class="line">workbook.close()</div></pre></td></tr></table></figure>
-<p>强调：只能创建新的excel文件，无法读取或修改已存在文件；写入数据是在worksheet对象中操作的，并且在worksheet中A1的索引是(0,0)。</p>
-<hr>
-<h4 id="三大核心方法文件创建-amp-数据写入-amp-格式化"><a href="#三大核心方法：文件创建-amp-数据写入-amp-格式化" class="headerlink" title="三大核心方法：文件创建 &amp; 数据写入 &amp; 格式化"></a>三大核心方法：文件创建 &amp; 数据写入 &amp; 格式化</h4><p>数据写入主要通过<code>worksheet.write(row,col,token,[format])</code>方法，格式化主要通过<code>workbook.add_format()</code>方法。</p>
-<hr>
-<h4 id="workbook类"><a href="#Workbook类：" class="headerlink" title="Workbook类："></a><a href="https://xlsxwriter.readthedocs.io/workbook.html" target="_blank" rel="external">Workbook类</a>：</h4><p><code>The Workbook class is the main class</code><br><strong>Constructor构造函数</strong>：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Workbook(filename[,options])</div><div class="line"># create a new xlsxwriter Workbook object,return a Workbook object</div><div class="line"></div><div class="line"># options参数</div><div class="line">constant_memory: </div><div class="line">-&gt; reduce the amount of data stored in memory so that large files can be written efficiently</div><div class="line">workbook = xlsxwriter.Workbook(filename,&#123;'constant_memory':True&#125;)</div><div class="line"></div><div class="line">default_date_format:</div><div class="line">-&gt; specify a default date format string </div><div class="line">workbook = xlsxwriter.Workbook(filename,&#123;'default_date_format':'yyyy-mm-dd'&#125;)</div></pre></td></tr></table></figure></p>
-<p><strong>With上下文管理器</strong>：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> xlsxwriter.Workbook(<span class="string">'hello_world.xlsx'</span>) <span class="keyword">as</span> workbook:</div><div class="line">	worksheet = workbook.add_worksheet(<span class="string">'First_sheet'</span>)</div><div class="line">	worksheet.write(row, col, data, formats)</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>workbook.add_worksheet()</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">add_worksheet([sheet_name])</div><div class="line"><span class="comment"># add a new worksheet to a workbook,return a worksheet object</span></div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>workbook.add_format()</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">add_format([properties])</div><div class="line"><span class="comment"># create a new format object to formats cells in worksheets</span></div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>workbook.add_chart()</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">add_chart(options)</div><div class="line"><span class="comment"># create a chart object that can be added to a worksheet</span></div><div class="line">chart = workbook.add_chart(&#123;<span class="string">'type'</span>:<span class="string">'column'</span>,<span class="string">'subtype'</span>:<span class="string">'xxx'</span>&#125;)</div><div class="line"><span class="comment"># 可选择type参数：area|bar|column|doughnut|line|pie|radar|scatter|stock</span></div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>workbook.close()</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">close()</div><div class="line"><span class="comment"># close the WorkBook object and write the XLSX file.the workbook clsoe() method writes all data to the xlsx file and close it.</span></div><div class="line"><span class="comment"># 注意对close()方法的说明</span></div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>其他一些设置属性的方法，具体参考<a href="https://xlsxwriter.readthedocs.io/workbook.html" target="_blank" rel="external">官网</a></strong></p>
-<hr>
-<h4 id="worksheet类"><a href="#Worksheet类：" class="headerlink" title="Worksheet类："></a><a href="https://xlsxwriter.readthedocs.io/worksheet.html" target="_blank" rel="external">Worksheet类</a>：</h4><p><code>represents an Excel worksheet.handles operations such as writing data to celss or formating worksheet layout</code><br><code>a worksheet object isn&#39;t instantiated directly.instead a new worksheet is created by calling the add_worksheet() method from a Workbook() object</code></p>
-<hr>
-<p><strong>worksheet.write()</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">write(row,col,*args)</div><div class="line"><span class="comment"># write generic data to a worksheet cell.</span></div><div class="line">write_string()</div><div class="line">write_number()</div><div class="line">write_blank()</div><div class="line">write_formula()</div><div class="line">write_datetime()</div><div class="line">write_boolean()</div><div class="line">write_url()</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>write_row() &amp; write_column()</strong></p>
-<hr>
-<p><strong>set_row() &amp; set_column()</strong><br>调整行高、列宽。</p>
-<hr>
-<p><em>**worksheet.insert_image()</em><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">insert_image(row,col,image[,options])</div><div class="line"><span class="comment"># insert an image in a worksheet cell</span></div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>其他一些操作方法，具体参考<a href="https://xlsxwriter.readthedocs.io/worksheet.html" target="_blank" rel="external">官网</a></strong></p>
-<hr>
-<h3 id="操作excel示例"><a href="#操作Excel示例" class="headerlink" title="操作Excel示例"></a>操作Excel示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- encoding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line"></div><div class="line"><span class="keyword">import</span> regist_request_deal_of_daily <span class="keyword">as</span> report_d</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_workbook</span><span class="params">(query_date, sheet_name)</span>:</span></div><div class="line">    query_date = query_date.strftime(<span class="string">"%Y%m%d"</span>)</div><div class="line">    workbook = xlsxwriter.Workbook(<span class="string">u"注册调用付费概览%s.xlsx"</span> % query_date)</div><div class="line">    worksheet = workbook.add_worksheet(sheet_name)</div><div class="line">    <span class="keyword">return</span> workbook,worksheet</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">format_styles</span><span class="params">(type, workbook)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line">    type = 1 : 标题格式</div><div class="line">    type = 2 ：单元格格式</div><div class="line">    '''</div><div class="line">    title_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>,<span class="string">'bg_color'</span>:<span class="string">'#B0C4DE'</span>,<span class="string">'font_size'</span>:<span class="number">10</span>,<span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">    cell_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>,<span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">    <span class="keyword">if</span> type == <span class="number">1</span>:</div><div class="line">        <span class="keyword">return</span> title_formats</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">return</span> cell_formats</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_title</span><span class="params">(worksheet,title_lists,row=<span class="number">0</span>,col=<span class="number">0</span>,title_format=None)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">for</span> title <span class="keyword">in</span> title_lists:</div><div class="line">            <span class="keyword">if</span> title:</div><div class="line">                worksheet.write(row,col+title_lists.index(title),title,title_format)</div><div class="line">                <span class="keyword">print</span> <span class="string">" The title '%s' has been writed successful!"</span> % title</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">break</span></div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">return</span> e</div><div class="line">    <span class="keyword">return</span> <span class="string">"Done Successful!"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_data</span><span class="params">(worksheet,data,row=<span class="number">1</span>,col=<span class="number">0</span>,cell_format=None)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line">    根据具体写入数据的特点进行封装</div><div class="line">    '''</div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">adjust_cell_width</span><span class="params">(worksheet,columns_list,width)</span>:</span></div><div class="line">    <span class="keyword">for</span> columns <span class="keyword">in</span> columns_list:</div><div class="line">        worksheet.set_column(columns,width)</div><div class="line">    <span class="keyword">return</span> <span class="string">'The columns adjusts done!'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    time_start = time.time()</div><div class="line">    start_date = datetime.datetime(<span class="number">2017</span>,<span class="number">4</span>,<span class="number">1</span>)</div><div class="line">    now = datetime.datetime.now()</div><div class="line">    today = datetime.datetime(now.year,now.month,now.day)</div><div class="line"></div><div class="line">    workbook,worksheet = create_workbook(today,<span class="string">u"日新增用户、请求量、付费数据"</span>)</div><div class="line">    title_formats = format_styles(<span class="number">1</span>,workbook)</div><div class="line">    cell_formats = format_styles(<span class="number">2</span>,workbook)</div><div class="line"></div><div class="line">    row = <span class="number">2</span>; col = <span class="number">0</span></div><div class="line"></div><div class="line">    adjust_cell_width(worksheet,[<span class="string">'A:A'</span>],<span class="number">12</span>)</div><div class="line"></div><div class="line">    worksheet.write(<span class="string">"A1"</span>,<span class="string">u"日新增用户数据"</span>,title_formats )</div><div class="line">    title_lists = [<span class="string">u"日期"</span>,<span class="string">u"注册用户"</span>,<span class="string">u"注册机器人"</span>,<span class="string">u"新增机器人"</span>]</div><div class="line">    write_title(worksheet,title_lists,row=<span class="number">1</span>,col=<span class="number">0</span>,title_format=title_formats)</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">while</span> start_date &lt; today:</div><div class="line">        end_date = start_date + datetime.timedelta(days=<span class="number">1</span>)</div><div class="line">        account_count = report_d.get_Regist_Summary(<span class="number">1</span>,start_date,end_date)</div><div class="line">        apikey_count = report_d.get_Regist_Summary(<span class="number">2</span>, start_date, end_date)</div><div class="line">        new_apikey_count = report_d.get_New_Regist_Summary(start_date, end_date)</div><div class="line"></div><div class="line">        worksheet.write(row, col, start_date.strftime(<span class="string">"%Y-%m-%d"</span>),title_formats )</div><div class="line">        worksheet.write(row, col+<span class="number">1</span>, account_count ,cell_formats)</div><div class="line">        worksheet.write(row, col+<span class="number">2</span>, apikey_count ,cell_formats)</div><div class="line">        worksheet.write(row, col+<span class="number">3</span>, new_apikey_count ,cell_formats)</div><div class="line">        row += <span class="number">1</span></div><div class="line">        start_date += datetime.timedelta(days=<span class="number">1</span>)</div><div class="line"></div><div class="line">    time_end = time.time()</div><div class="line">    workbook.close()</div><div class="line">    <span class="keyword">print</span> <span class="string">"The process runs completed! It takes %.2f seconds !"</span> % (time_end - time_start)</div></pre></td></tr></table></figure>
-<p>示例结果：<br><img src="http://on58f12qv.bkt.clouddn.com/1491302069%281%29.png" alt="@Excel写入结果展示|center|280x0"></p>
-<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://xlsxwriter.readthedocs.io/index.html" target="_blank" rel="external">https://xlsxwriter.readthedocs.io/index.html</a><br><a href="http://www.w3chtml.com/html/ref/color.html" target="_blank" rel="external">http://www.w3chtml.com/html/ref/color.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2178,7 +2171,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2200,7 +2193,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
