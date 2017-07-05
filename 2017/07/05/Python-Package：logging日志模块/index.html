@@ -1,0 +1,786 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,logging,日志," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="logging 模块logging模块是Python的日志工具，该模块定义的函数和类为应用程序提供了一个灵活的事件日志系统功能。logging模块提供了许多的功能和极强的使用灵活性。通常在一个成熟的产品中，都会有一个单独的日志模块供整个系统使用，我们也应该在编程的过程中保持正确的方式来记录日志信息。
+logging模块定义了下列四大基本类：
+
+Loggers 提供针对应用程序代码直接使用的API接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Package：logging日志模块">
+<meta property="og:url" content="https://fujiador.github.io/2017/07/05/Python-Package：logging日志模块/index.html">
+<meta property="og:site_name" content="Fujia's Blog">
+<meta property="og:description" content="logging 模块logging模块是Python的日志工具，该模块定义的函数和类为应用程序提供了一个灵活的事件日志系统功能。logging模块提供了许多的功能和极强的使用灵活性。通常在一个成熟的产品中，都会有一个单独的日志模块供整个系统使用，我们也应该在编程的过程中保持正确的方式来记录日志信息。
+logging模块定义了下列四大基本类：
+
+Loggers 提供针对应用程序代码直接使用的API接">
+<meta property="og:updated_time" content="2017-07-05T13:52:56.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python Package：logging日志模块">
+<meta name="twitter:description" content="logging 模块logging模块是Python的日志工具，该模块定义的函数和类为应用程序提供了一个灵活的事件日志系统功能。logging模块提供了许多的功能和极强的使用灵活性。通常在一个成熟的产品中，都会有一个单独的日志模块供整个系统使用，我们也应该在编程的过程中保持正确的方式来记录日志信息。
+logging模块定义了下列四大基本类：
+
+Loggers 提供针对应用程序代码直接使用的API接">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fujiador.github.io/2017/07/05/Python-Package：logging日志模块/"/>
+
+
+
+
+
+  <title> Python Package：logging日志模块 | Fujia's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fujia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">点滴技术的印记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/07/05/Python-Package：logging日志模块/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python Package：logging日志模块
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-05T21:49:54+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="logging-模块"><a href="#logging-模块" class="headerlink" title="logging 模块"></a>logging 模块</h3><p><code>logging</code>模块是Python的日志工具，该模块定义的函数和类为应用程序提供了一个灵活的事件日志系统功能。<code>logging</code>模块提供了许多的功能和极强的使用灵活性。通常在一个成熟的产品中，都会有一个单独的日志模块供整个系统使用，我们也应该在编程的过程中保持正确的方式来记录日志信息。</p>
+<p><code>logging</code>模块定义了下列四大基本类：</p>
+<ol>
+<li><code>Loggers</code> 提供针对应用程序代码直接使用的API接口。</li>
+<li><code>Handlers</code> 发送日志记录到正确的应用目标。</li>
+<li><code>Filters</code> 提供力度更细的工具用于决定输出哪些日志记录。</li>
+<li><code>Formaters</code> 自定义最终输出的日志记录的格式。</li>
+</ol>
+<h4 id="logger-对象"><a href="#Logger-对象" class="headerlink" title="Logger 对象"></a>Logger 对象</h4><p>特别注意永远不要直接初始化<code>Loggers</code>，而应该通过模块级别的函数<code>logging.getLogger(name)</code>来得到Logger对象。</p>
+<ol>
+<li><code>logging.getLogger([name])</code>  返回一个logger实例，没指定name时返回root logger。只要name相同，返回的logger实例都是同一个而且只有一个。这意味着无需把logger实例在各个模块中传递即能通过name得到同一个logger实例。</li>
+<li><code>logger.setLevel(lvl)</code> 为指定logger设置日志级别。</li>
+<li><code>logger.addHandler(hdlr)</code> 通过handler对象可以把日志写到不同的位置。例如StreamHandler把日志输出到控制台，FileHandler输出文件，SMTPHandler输出到EMAIL邮件等等。Python提供多种类型的handler，详细参考官方文档。</li>
+<li><code>logging.basicConfig([**kwargs])</code> 模块级别的函数来进行相关日志的配置。</li>
+</ol>
+<p>基础的用法如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line"><span class="comment"># 创建一个logger</span></div><div class="line">logger = logging.getLogger(<span class="string">'my_logger'</span>)</div><div class="line">logger.setLevel(logging.DEBUG) <span class="comment"># 设置日志级别</span></div><div class="line"><span class="comment"># 创建一个Handler,用于写入日志文件</span></div><div class="line">file_handler = logging.FileHandler(<span class="string">'my_log.txt'</span>)</div><div class="line">file_handler.setLevel(logging.DEBUG) </div><div class="line"><span class="comment"># 创建一个Handler,用于输出到控制台屏幕</span></div><div class="line">console_handler = logging.StreamHandler()</div><div class="line">console_handler.setLevel(logging.DEBUG)</div><div class="line"><span class="comment"># 自定义handler的输出格式</span></div><div class="line">formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</div><div class="line">file_handler.setFormatter(formatter)</div><div class="line">console_handler.setFormatter(formatter)</div><div class="line"><span class="comment"># 为logger添加handler</span></div><div class="line">logger.addHandler(file_handler)</div><div class="line">logger.addHandler(console_handler)</div><div class="line">logging.debug(<span class="string">'This is debug log records.'</span>)</div><div class="line">logging.info(<span class="string">'This is info log records.'</span>)</div><div class="line">logging.warning(<span class="string">'This is warning reocrds.'</span>)</div></pre></td></tr></table></figure></p>
+<h4 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h4><p>|CRITICAL|50| &gt; |ERROR|40| &gt; |WARNING|30| &gt; |INFO|20| &gt; |DEBUG|10| &gt; |NOTEST|0|</p>
+<h4 id="如何正确的设置日志级别"><a href="#如何正确的设置日志级别" class="headerlink" title="如何正确的设置日志级别"></a>如何正确的设置日志级别</h4><p>在合适的场景使用合适的日志输出级别，这是我们使用<code>logging</code>模块的最高原则。因为日志的输出需要消耗性能，不能讲所有情况的日志都设置为DEBUG级别或其他级别，过多的日志也不便于进行分析和找出异常问题所在及其原因。</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 使用 DEBUG 日志级别</span></div><div class="line"><span class="comment"># 在开发调试阶段,通常使用debug日志级别,例如想要查看程序处理过程中的变量跟踪变化情况</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">processing</span><span class="params">(iterable_items)</span>:</span></div><div class="line">    <span class="keyword">for</span> i,item <span class="keyword">in</span> enumerate(iterable_items):</div><div class="line">        <span class="comment"># process code block</span></div><div class="line">        logger.debug(<span class="string">'&#123;0&#125; iteration, item=&#123;1&#125;'</span>.format(i, item))</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 使用 INFO 日志级别</span></div><div class="line"><span class="comment"># 在程序开发中,输出常规过程信息,通常使用info日志级别,例如查看程序处理过程中执行到哪一部分等info信息</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_process</span><span class="params">()</span>:</span></div><div class="line">    logger.info(<span class="string">'Starting the process at &#123;0&#125;.'</span>.format(date_time)</div><div class="line">    process.start()</div><div class="line">    logger.info(<span class="string">'The process has been started at &#123;0&#125;!'</span>.format(date_time))</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 使用 WARNING 级别</span></div><div class="line"><span class="comment"># 在一些重要的场景下输出warning日志级别,例如用户登录输入账号、密码错误时,输出WARNING级别日志,观察和分析日志以确认用户操作是否异常、蓄意暴力破解等等</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">authenticate</span><span class="params">(user_name, password, ip_address)</span>:</span></div><div class="line">    <span class="keyword">if</span> user_name != USER_NAME <span class="keyword">and</span> password != PASSWORD：</div><div class="line">        logger.warn(<span class="string">'Login attempt to &#123;0&#125; from IP &#123;1&#125;'</span>.format(user_name, ip_address))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">False</span></div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 使用 ERROR 级别</span></div><div class="line"><span class="comment"># 程序出现可预期的错误时,抛出一个错误日志.例如数据库连接失败,IO出错等</span></div><div class="line"></div><div class="line"><span class="comment"># 使用 CRITICAL 级别</span></div><div class="line"><span class="comment"># 在极个别特殊情况下使用,例如磁盘满,内存不够,CPU使用率爆满等等</span></div></pre></td></tr></table></figure>
+<hr>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p>1、示例代码将日志记录同时输出到文件和屏幕。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line"><span class="comment"># logging日志基础配置</span></div><div class="line">logging.basicConfig(level=logging.DEBUG,</div><div class="line">                format=<span class="string">'%(asctime)s  %(filename)s [line:%(lineno)d]  %(levelname)s  %(message)s'</span>,</div><div class="line">                datefmt=<span class="string">'%a, %d %b %Y %H:%M:%S'</span>,</div><div class="line">                filename=os.path.join(os.path.dirname(__file__),<span class="string">'myapp.log'</span>),</div><div class="line">                filemode=<span class="string">'w'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 设置日志记录输出到屏幕</span></div><div class="line">console = logging.StreamHandler()</div><div class="line">console.setLevel(logging.INFO)  <span class="comment"># 日志级别</span></div><div class="line">formatter = logging.Formatter(<span class="string">'%(name)-12s: %(levelname)-8s %(message)s'</span>)</div><div class="line">console.setFormatter(formatter)</div><div class="line">logging.getLogger().addHandler(console)</div><div class="line"></div><div class="line">logging.debug(<span class="string">'This is debug log records.'</span>)</div><div class="line">logging.info(<span class="string">'This is info log records.'</span>)</div><div class="line">logging.warning(<span class="string">'This is warning reocrds.'</span>)</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 屏幕输出</span></div><div class="line">root        : INFO     This <span class="keyword">is</span> info message</div><div class="line">root        : WARNING  This <span class="keyword">is</span> warning message</div><div class="line"><span class="comment"># 日志文件输出</span></div><div class="line">Wed, <span class="number">05</span> Jul <span class="number">2017</span> <span class="number">14</span>:<span class="number">41</span>:<span class="number">42</span>  logging_Exc.py [line:<span class="number">20</span>]  DEBUG  This <span class="keyword">is</span> debug message</div><div class="line">Wed, <span class="number">05</span> Jul <span class="number">2017</span> <span class="number">14</span>:<span class="number">41</span>:<span class="number">42</span>  logging_Exc.py [line:<span class="number">21</span>]  INFO  This <span class="keyword">is</span> info message</div><div class="line">Wed, <span class="number">05</span> Jul <span class="number">2017</span> <span class="number">14</span>:<span class="number">41</span>:<span class="number">42</span>  logging_Exc.py [line:<span class="number">22</span>]  WARNING  This <span class="keyword">is</span> warning message</div></pre></td></tr></table></figure>
+<p>2、重构示例<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> logging.handlers</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span><span class="params">()</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, tag=<span class="string">""</span>, filename=<span class="string">"my_test.log"</span>, loglevel=<span class="number">1</span>, toConsole=True, toFile=True)</span>:</span></div><div class="line">        self.logger = logging.getLogger(tag)</div><div class="line"></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.logger.handlers:</div><div class="line">            format_dict = &#123;</div><div class="line">               <span class="number">1</span> : logging.Formatter(<span class="string">'[%(asctime)s][%(filename)s,%(funcName)s:%(lineno)s][%(name)s]: %(message)s'</span>),</div><div class="line">               <span class="number">2</span> : logging.Formatter(<span class="string">'[%(asctime)s][%(filename)s,%(funcName)s:%(lineno)s][%(name)s]: %(message)s'</span>),</div><div class="line">               <span class="number">3</span> : logging.Formatter(<span class="string">'[%(asctime)s][%(filename)s,%(funcName)s:%(lineno)s][%(name)s]: %(message)s'</span>),</div><div class="line">               <span class="number">4</span> : logging.Formatter(<span class="string">'[%(asctime)s][%(filename)s,%(funcName)s:%(lineno)s][%(name)s]: %(message)s'</span>),</div><div class="line">               <span class="number">5</span> : logging.Formatter(<span class="string">'[%(asctime)s][%(filename)s,%(funcName)s:%(lineno)s][%(name)s]: %(message)s'</span>)</div><div class="line">            &#125;</div><div class="line">            formatter = format_dict[int(loglevel)]</div><div class="line">            self.logger.setLevel(logging.DEBUG)</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                <span class="keyword">if</span> toFile:</div><div class="line">                    fh = logging.FileHandler(filename)</div><div class="line">                    fh.setLevel(logging.DEBUG)</div><div class="line">                    fh.setFormatter(formatter)</div><div class="line">                    self.logger.addHandler(fh)</div><div class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">                <span class="keyword">print</span> e</div><div class="line">                </div><div class="line">            <span class="keyword">if</span> toConsole:</div><div class="line">                ch = logging.StreamHandler()</div><div class="line">                ch.setLevel(logging.DEBUG)</div><div class="line">                ch.setFormatter(formatter)</div><div class="line">                self.logger.addHandler(ch)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getlogger</span><span class="params">(self)</span>:</span>  </div><div class="line">        <span class="keyword">return</span> self.logger</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></div><div class="line">    Logger(tag=<span class="string">"_mytest"</span>).getlogger().debug(<span class="string">"This is a debug log record."</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    Logger(tag=<span class="string">"_mytest"</span>).getlogger().debug(<span class="string">"This is a debug log record."</span>)</div><div class="line">    func()</div></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://docs.python.org/2/library/logging.html" target="_blank" rel="external">logging Python 2.7官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-logging-日志/" rel="tag"># Python,logging,日志</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/机器学习：线性回归/" rel="next" title="机器学习：线性回归">
+                <i class="fa fa-chevron-left"></i> 机器学习：线性回归
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/05/Python-Package：Threading多线程和Multiprocessing多进程/" rel="prev" title="Python Package：Threading多线程和Multiprocessing多进程">
+                Python Package：Threading多线程和Multiprocessing多进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Fujia" />
+          <p class="site-author-name" itemprop="name">Fujia</p>
+           
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头,更何况记性还不好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#logging-模块"><span class="nav-number">1.</span> <span class="nav-text">logging 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#logger-对象"><span class="nav-number">1.1.</span> <span class="nav-text">Logger 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别"><span class="nav-number">1.2.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何正确的设置日志级别"><span class="nav-number">1.3.</span> <span class="nav-text">如何正确的设置日志级别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例代码"><span class="nav-number">2.</span> <span class="nav-text">示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资源"><span class="nav-number">3.</span> <span class="nav-text">参考资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fujia</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

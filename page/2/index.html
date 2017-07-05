@@ -270,6 +270,368 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/16/数据需求-转换Excel数据形式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/16/数据需求-转换Excel数据形式/" itemprop="url">
+                  [数据需求] 转换Excel数据形式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-16T21:58:13+08:00">
+                2017-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h3><p>这个数据需求来自Q群水友：期望将Excel内各行的文本数据，转化为表格形式的数据以方便统计。</p>
+<p>常规的Excel函数或多次分列、VBA、可以进行处理，现在用Python来解决实现这一需求。</p>
+<p>需求数据示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E9%9C%80%E6%B1%82.png" alt="数据需求|center"></p>
+<p>数据格式比较规律，分别以”,”分隔为一组数据tuple，tuple内部以不定长空格进行分隔字段fields。</p>
+<p>处理转化为结果示例如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C.png" alt="需求结果|center"></p>
+<hr>
+<h3 id="python实现"><a href="#Python实现" class="headerlink" title="Python实现"></a>Python实现</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>python version：2.7.10<br>系统：windows</p>
+<h4 id="第三方package"><a href="#第三方Package" class="headerlink" title="第三方Package"></a>第三方Package</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pip install xlsxwriter</div><div class="line">pip install pandas</div></pre></td></tr></table></figure>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="string">""" Transform the Excel Data.</span></div><div class="line">"""</div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_Data</span><span class="params">(file_in, sheetname=<span class="number">0</span>)</span>:</span></div><div class="line">	df = pd.read_excel(file_in, sheetname=sheetname)</div><div class="line">	data = []</div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> df[df.columns[<span class="number">1</span>]]:</div><div class="line">		data.append(line)</div><div class="line">	<span class="keyword">return</span> data</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_workbook</span><span class="params">(workbook_name, sheet_name)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        workbook = xlsxwriter.Workbook((workbook_name + <span class="string">".xlsx"</span>))</div><div class="line">        worksheet = workbook.add_worksheet(sheet_name)</div><div class="line">        <span class="keyword">print</span> <span class="string">"the %s excel workbook has been created successfully!"</span> % (workbook_name + <span class="string">".xlsx"</span>)</div><div class="line">        <span class="keyword">return</span> workbook,worksheet</div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">print</span> e</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_title</span><span class="params">(worksheet, title_lists, row=<span class="number">1</span>, col=<span class="number">0</span>, title_format=None)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">for</span> i,title <span class="keyword">in</span> enumerate(title_lists):</div><div class="line">            <span class="keyword">if</span> title:</div><div class="line">                worksheet.write(row, col+i, title, title_format)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">break</span></div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">return</span> e</div><div class="line">    <span class="keyword">print</span> <span class="string">"Done Successful!"</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">format_style</span><span class="params">(workbook)</span>:</span></div><div class="line">    <span class="keyword">if</span> workbook:</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            title_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>, <span class="string">'bg_color'</span>:<span class="string">'#B0C4DE'</span>, <span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">            cell_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">            date_formats = workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>, <span class="string">'num_format'</span>: <span class="string">'yyyy-mm-dd'</span>&#125;)</div><div class="line">            <span class="keyword">return</span> title_formats,cell_formats,date_formats</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">"the workbook object is invalid, please check the workbook object!"</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">"please check and input the correct workbook object!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_data</span><span class="params">(worksheet,data,row=<span class="number">2</span>,col=<span class="number">0</span>)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        i = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> data:</div><div class="line">            j = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> tp <span class="keyword">in</span> line.split(<span class="string">','</span>):</div><div class="line">                name,count,amount = tp.split()</div><div class="line">                worksheet.write(row+i,col+<span class="number">0</span> + j*<span class="number">3</span>,name)</div><div class="line">                worksheet.write(row+i,col+<span class="number">1</span> + j*<span class="number">3</span>,count)</div><div class="line">                worksheet.write(row+i,col+<span class="number">2</span> + j*<span class="number">3</span> ,amount)</div><div class="line">                j +=<span class="number">1</span></div><div class="line">            i += <span class="number">1</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"The data has been write into excel worksheet object successfully!"</span></div><div class="line">    <span class="keyword">except</span> Exception,e:</div><div class="line">        <span class="keyword">print</span> <span class="string">"please check the data's content!"</span></div><div class="line">    <span class="keyword">return</span> None3</div><div class="line">   </div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    file_in = <span class="string">r'test.xlsx'</span></div><div class="line">    title_lists = [<span class="string">u'姓名'</span>,<span class="string">u'数量'</span>,<span class="string">u'金额'</span>] * <span class="number">3</span></div><div class="line">	data = get_data(file_in)</div><div class="line"></div><div class="line">	workbook,worksheet = create_workbook( <span class="string">'out'</span>, <span class="string">'sheet1'</span>)</div><div class="line">	title_formats,cell_formats,_ = format_style(workbook)</div><div class="line">	write_title(worksheet, title_lists, row=<span class="number">1</span>, col=<span class="number">1</span>, title_format=title_formats)</div><div class="line">	write_data(worksheet,data,row=<span class="number">2</span>,col=<span class="number">1</span>, cell_format=cell_formats)</div><div class="line">	workbook.close()</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ul>
+<li>1.代码重构</li>
+<li>2.通用性</li>
+</ul>
+<h3 id="代码重构"><a href="#代码重构" class="headerlink" title="代码重构"></a>代码重构</h3><h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><p><img src="http://on58f12qv.bkt.clouddn.com/Excel_Temp%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png" alt="代码结构|center"></p>
+<p>‘data’ 文件夹存放输入和输出数据文件。<br>‘Excel_Object’ 存放Excel类及实例结构和操作方法。<br>‘main’ 处理数据的主函数。<br>‘transform’ 代码重构前函数式、流水操作式代码。</p>
+<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">###  Excel_Object.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> xlsxwriter</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Excel_Operator</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, workbook_name, worksheet_name)</span>:</span></div><div class="line">        self.workbook_name = workbook_name</div><div class="line">        self.worksheet_name = worksheet_name</div><div class="line">        self.workbook = xlsxwriter.Workbook(self.workbook_name + <span class="string">".xlsx"</span>)</div><div class="line">        self.worksheet = self.workbook.add_worksheet(self.worksheet_name)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format_style</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> self.workbook:</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                title_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>, <span class="string">'bg_color'</span>:<span class="string">'#B0C4DE'</span>, <span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">                cell_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>&#125;)</div><div class="line">                date_formats = self.workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">False</span>,<span class="string">'font_size'</span>:<span class="number">10</span>, <span class="string">'font_name'</span>:<span class="string">'Microsoft yahei'</span>, <span class="string">'num_format'</span>: <span class="string">'yyyy-mm-dd'</span>&#125;)</div><div class="line">                <span class="keyword">return</span> title_formats,cell_formats,date_formats</div><div class="line">            <span class="keyword">except</span> Exception,e:</div><div class="line">                <span class="keyword">print</span> <span class="string">"the workbook object is invalid, please check the workbook object."</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"please check and input the correct workbook object!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_title</span><span class="params">(self, title_lists, row=<span class="number">0</span>, col=<span class="number">0</span>, title_format=None)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i, title <span class="keyword">in</span> enumerate(title_lists):</div><div class="line">                <span class="keyword">if</span> title:</div><div class="line">                    self.worksheet.write(row, col+i, title, title_format)</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">break</span></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> e</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"The titles has been write into excel worksheet object successfully!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_data</span><span class="params">(self, data, row=<span class="number">0</span>, col=<span class="number">0</span>, cell_format=None)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            i = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> data:</div><div class="line">                j = <span class="number">0</span></div><div class="line">                <span class="keyword">for</span> tp <span class="keyword">in</span> line.split(<span class="string">','</span>):</div><div class="line">                    name, count, amount = tp.split()</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">0</span> + j*<span class="number">3</span>,name, cell_format)</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">1</span> + j*<span class="number">3</span>,count, cell_format)</div><div class="line">                    self.worksheet.write(row+i,col+<span class="number">2</span> + j*<span class="number">3</span> ,amount, cell_format)</div><div class="line">                    j += <span class="number">1</span></div><div class="line">                i += <span class="number">1</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"The data has been write into excel worksheet object successfully!"</span></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">print</span> <span class="string">"please check the data's content!"</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        self.workbook.close()</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### main.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">from</span> Excel_Object <span class="keyword">import</span> Excel_Operator</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span><span class="params">(file_in, sheetname=<span class="number">0</span>)</span>:</span></div><div class="line">    df = pd.read_excel(file_in, sheetname)</div><div class="line">    data = []</div><div class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> df[df.columns[<span class="number">1</span>]]:</div><div class="line">        data.append(line)</div><div class="line">    <span class="keyword">return</span> data</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(data, title_lists)</span>:</span></div><div class="line">    Excel_obj = Excel_Operator(<span class="string">'./data/out'</span>, <span class="string">'sheet1'</span>)</div><div class="line"></div><div class="line">    title_formats,cell_formats,_ = Excel_obj.format_style()</div><div class="line"></div><div class="line">    Excel_obj.write_title( title_lists, row=<span class="number">1</span>, col=<span class="number">1</span>, title_format=title_formats)</div><div class="line">    Excel_obj.write_data(data,row=<span class="number">2</span>,col=<span class="number">1</span>, cell_format=cell_formats)</div><div class="line">    Excel_obj.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line"></div><div class="line">    title_lists = [<span class="string">u'姓名'</span>,<span class="string">u'数量'</span>,<span class="string">u'金额'</span>] * <span class="number">3</span></div><div class="line">    data = get_data(<span class="string">'./data/test.xlsx'</span>)</div><div class="line"></div><div class="line">    main(data, title_lists)</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="to-do"><a href="#To-DO" class="headerlink" title="To-DO"></a>To-DO</h3><ul>
+<li><ol>
+<li>功能代码通用化</li>
+</ol>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/14/Python项目：IP地址信息可视化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/14/Python项目：IP地址信息可视化/" itemprop="url">
+                  Python项目：IP地址信息可视化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-14T21:33:21+08:00">
+                2017-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h3><p>无论对于任何的互联网企业，“用户”是企业最最核心的资源。因此在用户经营管理的工作中，对“用户”的分析，是不可或缺的一个环节。</p>
+<p>分析的角度非常多，其中包括“用户地域分布信息”的分析。针对用户地域信息分布的数据，不仅仅是进行单纯的统计，更是在后续的决策、推广、拓展中起到非常重要的指导作用。</p>
+<p>通常，可以通过接入API服务（例如高德、谷歌地图等），或者购买第三方IP查询服务（例如常见的IP查询功能网址），以及当前市面上“纯真IP数据库”，或者使用免费API查询IP信息（通常有使用次数限制）。</p>
+<p>现在，我们以“节约成本”为前提，以“数据尽量准确”为目的，通过使用“纯真IP数据库”实现用户IP地址位置信息查询的项目。</p>
+<hr>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>MySQL 5.7 </li>
+<li>Python 2.7.10</li>
+<li><a href="http://www.cz88.net/" target="_blank" rel="external">纯真IP数据库</a></li>
+</ul>
+<p>感谢CZ88提供的查询IP服务，并将其开发为一款小巧便捷的插件。我们这个项目的目的是自动化更新IP地址信息。接下来，开始详细项目内容。</p>
+<hr>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>结合纯真IP数据库提供的数据信息，以及IP的基础知识，总体的思路就是：首先，将IP地址转化为数字字段，并将其与IP库内的IP地址段进行比较，以初步确定IP地址信息；然后，对IP数据进行数据库的读写操作、更新数据；最后，将IP地址信息进行统计并借助Echart进行可视化。</p>
+<hr>
+<h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><p><img src="http://on58f12qv.bkt.clouddn.com/IP_Store%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png" alt="代码结构|center|300*0"></p>
+<ol>
+<li><p>Data 数据准备<br>“qqwry.dat”  是纯真数据库setup之后在安装目录下的IP库文件，是本项目的核心数据。<br>“ip_data.txt” 是需要处理的IP数据，是本项目的需求数据。<br>“ip_data_address.txt”是更新address信息后的ip_data数据。</p>
+</li>
+<li><p>Utils 工具准备<br>“mysql.config” 是数据库相关的连接信息。<br>“mysql_utils” 是操作MySQL数据库相关类和方法。<br>“load_ip_data” 是需求数据导入MySQL数据相关的方法。<br>“update_ip_address” 是更新MySQL数据相关的方法。<br>“IP_Locator” 是本项目的核心代码，读取纯真IP库、转换IP数据、查询IP地址信息。<br>“ChinaMap_JS” 是Echart官网Map地图生成相关代码。<br>“china_map_summary” 是处理IP地址信息相关代码。</p>
+</li>
+<li><p>纯真IP库<br>纯真IP库即“qqwry.dat”是十六进制的内容，其内容结构是：</p>
+</li>
+</ol>
+<ul>
+<li>start_ip , end_ip , address_info<br>如下截图所示：<br><img src="http://on58f12qv.bkt.clouddn.com/%E7%BA%AF%E7%9C%9FIP%E5%BA%93.png" alt="纯真IP库内容|center"></li>
+</ul>
+<hr>
+<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">; MySQL数据库配置文件</div><div class="line">[platform_database]</div><div class="line">outer_host = 127.0.0.1</div><div class="line">inner_host = localhost</div><div class="line">user = user</div><div class="line">password = password</div><div class="line">db = database</div><div class="line">charset = utf8</div><div class="line">port = 3308</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"><span class="string">""" MySQL数据库相关的工具包,包含配置信息管理、数据库连接、数据查询、数据更新、数据写入功能.</span></div><div class="line">"""</div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> sys,os</div><div class="line"></div><div class="line">__all__ = [<span class="string">'MySQL_Config'</span>, <span class="string">'connect'</span>, <span class="string">'select'</span>, <span class="string">'insert'</span>,<span class="string">'update'</span>]</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySQL_Utils</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cfg_path, section)</span>:</span></div><div class="line">		self.cfg_path = cfg_path</div><div class="line">		self.section = section</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">MySQL_Config</span><span class="params">(self)</span>:</span></div><div class="line">		config_info = []</div><div class="line">		conf = ConfigParser.ConfigParser()</div><div class="line">		conf.read(self.cfg_path)</div><div class="line">		options = conf.options(self.section)</div><div class="line"></div><div class="line">		<span class="keyword">if</span> sys.platform.find(<span class="string">"win"</span>) &gt;= <span class="number">0</span>:</div><div class="line">			options.pop(options.index(<span class="string">"inner_host"</span>))</div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			options.pop(options.index(<span class="string">"outer_host"</span>))</div><div class="line"></div><div class="line">		<span class="keyword">for</span> option <span class="keyword">in</span> options:</div><div class="line">			config_info.append(conf.get(self.section, option))</div><div class="line">		<span class="keyword">return</span> config_info</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></div><div class="line">		host, user, passwd, db, charset, port = self.MySQL_Config()</div><div class="line">		self.conn = MySQLdb.connect(host=host, user=user, passwd=passwd,</div><div class="line">		                                db=db, charset=charset, port=int(port))</div><div class="line">		self.cur = self.conn.cursor()</div><div class="line">		<span class="keyword">return</span> self.conn, self.cur</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self, select_sql)</span>:</span></div><div class="line">		<span class="keyword">if</span> select_sql:</div><div class="line">			conn, cur = self.connect()</div><div class="line">			<span class="keyword">try</span>:</div><div class="line">				cur.execute(select_sql)</div><div class="line">				data = cur.fetchall()</div><div class="line">				conn.close()</div><div class="line">				<span class="keyword">return</span> data</div><div class="line">			<span class="keyword">except</span> Exception,e:</div><div class="line">				<span class="keyword">print</span> e</div><div class="line">				<span class="keyword">return</span> (<span class="string">''</span>,)</div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">print</span> <span class="string">"Please input the correct select_sql!"</span></div><div class="line">			<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, insert_sql)</span>:</span></div><div class="line">		<span class="keyword">if</span> insert_sql:</div><div class="line">			conn, cur = self.connect()</div><div class="line">			<span class="keyword">try</span>:</div><div class="line">				cur.execute(insert_sql)</div><div class="line">				conn.commit()</div><div class="line">				conn.close()</div><div class="line">				<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">			<span class="keyword">except</span> Exception,e:</div><div class="line">				conn.rollback()</div><div class="line">				conn.close()</div><div class="line">				<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">print</span> <span class="string">"Please input the correct insert_sql!"</span></div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self,update_sql)</span>:</span></div><div class="line">		<span class="keyword">if</span> update_sql:</div><div class="line">			conn, cur = self.connect()</div><div class="line">			<span class="keyword">try</span>:</div><div class="line">				cur.execute(update_sql)</div><div class="line">				conn.commit()</div><div class="line">				conn.close()</div><div class="line">				<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">			<span class="keyword">except</span> Exception,e:</div><div class="line">				conn.rollback()</div><div class="line">				conn.close()</div><div class="line">				<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">print</span> <span class="string">"Please input the correct update_sql!"</span></div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line"></div><div class="line">	cfg_path = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + <span class="string">'mysql.config'</span></div><div class="line">	section = <span class="string">'platform_database'</span></div><div class="line"></div><div class="line">	cfg = MySQL_Utils(cfg_path, section)</div><div class="line">	<span class="keyword">print</span> cfg.connect()</div><div class="line">	cfg.insert(<span class="string">"insert into customers_ip_info(ip) values ('111.200.54.38');"</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### load_ip_data.py </span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"><span class="string">""" 将ip_data.txt数据入库到Database的customers_ip_info.</span></div><div class="line">"""</div><div class="line"><span class="keyword">from</span> IP_Store.utils.mysql_utils <span class="keyword">import</span> MySQL_Utils</div><div class="line"><span class="keyword">import</span> codecs,os,time</div><div class="line"></div><div class="line">CFG_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + <span class="string">'mysql.config'</span></div><div class="line">SECTION = <span class="string">'platform_database'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysql_instance</span><span class="params">(cfg_path, section)</span>:</span></div><div class="line">	cfg = MySQL_Utils(cfg_path, section)</div><div class="line">	<span class="keyword">return</span> cfg</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sql_insert</span><span class="params">(table, ip)</span>:</span></div><div class="line">	<span class="keyword">if</span> table <span class="keyword">and</span> ip:</div><div class="line">		sql = <span class="string">'''INSERT INTO &#123;0&#125;(ip) VALUES ('&#123;1&#125;'); '''</span>.format(table, ip)</div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		<span class="keyword">pass</span></div><div class="line">	<span class="keyword">return</span> sql</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	time_start = time.time()</div><div class="line"></div><div class="line">	cfg = mysql_instance(CFG_PATH, SECTION)</div><div class="line"></div><div class="line">	<span class="keyword">with</span> codecs.open(<span class="string">'../data/ip_data.txt'</span>, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">		<span class="keyword">for</span> line <span class="keyword">in</span> file:</div><div class="line">			id, ip = line.strip().split(<span class="string">'\t'</span>)</div><div class="line">			insert_sql = sql_insert(<span class="string">'customers_ip_info'</span>, ip)</div><div class="line">			cfg.insert(insert_sql)</div><div class="line"></div><div class="line">	time_end = time.time()</div><div class="line">	<span class="keyword">print</span> <span class="string">"The process has been completed! It takes &#123;0:.4&#125; seconds!"</span>.format(time_end - time_start)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### update_ip_address.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"><span class="string">""" 更新数据库内ip所对应的地址信息address.</span></div><div class="line">"""</div><div class="line"><span class="keyword">from</span> IP_Store.utils.mysql_utils <span class="keyword">import</span> MySQL_Utils</div><div class="line"><span class="keyword">import</span> codecs,os,time</div><div class="line"><span class="keyword">from</span> IP_Store.IP_Locator <span class="keyword">import</span> IPLocator</div><div class="line"></div><div class="line"></div><div class="line">CFG_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + <span class="string">'mysql.config'</span></div><div class="line">SECTION = <span class="string">'platform_database'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysql_instance</span><span class="params">(cfg_path, section)</span>:</span></div><div class="line">	cfg = MySQL_Utils(cfg_path, section)</div><div class="line">	<span class="keyword">return</span> cfg</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sql</span><span class="params">(table, ip, address)</span>:</span></div><div class="line">	<span class="keyword">if</span> table <span class="keyword">and</span> ip:</div><div class="line">		sql = <span class="string">'''UPDATE &#123;0&#125; SET address='&#123;1&#125;' WHERE ip='&#123;2&#125;'; '''</span>.format(table, address, ip)</div><div class="line">		<span class="keyword">print</span> sql</div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		<span class="keyword">pass</span></div><div class="line">	<span class="keyword">return</span> sql</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	TABLE = <span class="string">'customers_ip_info'</span></div><div class="line">	time_start = time.time()</div><div class="line"></div><div class="line">	cfg = mysql_instance(CFG_PATH, SECTION)</div><div class="line">	IPL = IPLocator( <span class="string">r"D:/Pycharm/Git_Project/IP_Store/data/qqwry.dat"</span> )</div><div class="line"></div><div class="line">	sql_select = <span class="string">'''SELECT ip FROM &#123;0&#125; WHERE address IS  NULL '''</span>.format(TABLE)</div><div class="line">	<span class="keyword">for</span> ip <span class="keyword">in</span> cfg.select(sql_select):</div><div class="line">		ip = ip[<span class="number">0</span>]</div><div class="line">		address = IPL.getIpAddr(IPL.str2ip(ip))</div><div class="line">		sql_update = sql(TABLE, ip, address)</div><div class="line">		cfg.update(sql_update)</div><div class="line"></div><div class="line">	time_end = time.time()</div><div class="line">	<span class="keyword">print</span> <span class="string">"The process has been completed! It takes &#123;0:.4&#125; seconds!"</span>.format(time_end - time_start)</div></pre></td></tr></table></figure>
+<hr>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### IP_Locator, 代码来源网络，有很多版本，选择较为清晰的版本  </span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="string">""" IP_Locator: query the IP location in the QQWry.dat</span></div><div class="line">"""</div><div class="line"><span class="keyword">import</span> socket,string,struct,sys</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">IPLocator</span> :</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">( self, ipdbFile )</span>:</span></div><div class="line">        self.ipdb = open( ipdbFile, <span class="string">"rb"</span> )</div><div class="line">        str = self.ipdb.read( <span class="number">8</span> )</div><div class="line">        (self.firstIndex,self.lastIndex) = struct.unpack(<span class="string">'II'</span>,str)</div><div class="line">        self.indexCount = (self.lastIndex - self.firstIndex)/<span class="number">7</span>+<span class="number">1</span></div><div class="line">        <span class="keyword">print</span> self.getVersion(),<span class="string">" 纪录总数: %d 条 "</span>%(self.indexCount)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getVersion</span><span class="params">(self)</span>:</span></div><div class="line">        s = self.getIpAddr(<span class="number">0xffffff00L</span>)</div><div class="line">        <span class="keyword">return</span> s</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getAreaAddr</span><span class="params">(self,offset=<span class="number">0</span>)</span>:</span></div><div class="line">        <span class="keyword">if</span> offset :</div><div class="line">            self.ipdb.seek( offset )</div><div class="line">        str = self.ipdb.read( <span class="number">1</span> )</div><div class="line">        (byte,) = struct.unpack(<span class="string">'B'</span>,str)</div><div class="line">        <span class="keyword">if</span> byte == <span class="number">0x01</span> <span class="keyword">or</span> byte == <span class="number">0x02</span>:</div><div class="line">            p = self.getLong3()</div><div class="line">            <span class="keyword">if</span> p:</div><div class="line">                <span class="keyword">return</span> self.getString( p )</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">return</span> <span class="string">""</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.ipdb.seek(<span class="number">-1</span>,<span class="number">1</span>)</div><div class="line">            <span class="keyword">return</span> self.getString( offset )</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getAddr</span><span class="params">(self,offset,ip=<span class="number">0</span>)</span>:</span></div><div class="line">        self.ipdb.seek( offset + <span class="number">4</span>)</div><div class="line">        countryAddr = <span class="string">""</span></div><div class="line">        areaAddr = <span class="string">""</span></div><div class="line">        str = self.ipdb.read( <span class="number">1</span> )</div><div class="line">        (byte,) = struct.unpack(<span class="string">'B'</span>,str)</div><div class="line">        <span class="keyword">if</span> byte == <span class="number">0x01</span>:</div><div class="line">            countryOffset = self.getLong3()</div><div class="line">            self.ipdb.seek( countryOffset )</div><div class="line">            str = self.ipdb.read( <span class="number">1</span> )</div><div class="line">            (b,) = struct.unpack(<span class="string">'B'</span>,str)</div><div class="line">            <span class="keyword">if</span> b == <span class="number">0x02</span>:</div><div class="line">                countryAddr = self.getString( self.getLong3() )</div><div class="line">                self.ipdb.seek( countryOffset + <span class="number">4</span> )</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                countryAddr = self.getString( countryOffset )</div><div class="line">            areaAddr = self.getAreaAddr()</div><div class="line">        <span class="keyword">elif</span> byte == <span class="number">0x02</span>:</div><div class="line">            countryAddr = self.getString( self.getLong3() )</div><div class="line">            areaAddr = self.getAreaAddr( offset + <span class="number">8</span> )</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            countryAddr = self.getString( offset + <span class="number">4</span> )</div><div class="line">            areaAddr = self.getAreaAddr()</div><div class="line">        <span class="keyword">return</span> countryAddr + <span class="string">" "</span> + areaAddr</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dump</span><span class="params">(self, first ,last )</span>:</span></div><div class="line">        <span class="keyword">if</span> last &gt; self.indexCount :</div><div class="line">            last = self.indexCount</div><div class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> range(first,last):</div><div class="line">            offset = self.firstIndex + index * <span class="number">7</span></div><div class="line">            self.ipdb.seek( offset )</div><div class="line">            buf = self.ipdb.read( <span class="number">7</span> )</div><div class="line">            (ip,of1,of2) = struct.unpack(<span class="string">"IHB"</span>,buf)</div><div class="line">            address = self.getAddr( of1 + (of2 &lt;&lt; <span class="number">16</span>) )</div><div class="line">            <span class="comment">#把GBK转为utf-8</span></div><div class="line">            address = unicode(address,<span class="string">'gbk'</span>).encode(<span class="string">"utf-8"</span>)</div><div class="line">            <span class="keyword">print</span> <span class="string">"%d\t%s\t%s"</span> %(index, self.ip2str(ip), \</div><div class="line">                address )</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setIpRange</span><span class="params">(self,index)</span>:</span></div><div class="line">        offset = self.firstIndex + index * <span class="number">7</span></div><div class="line">        self.ipdb.seek( offset )</div><div class="line">        buf = self.ipdb.read( <span class="number">7</span> )</div><div class="line">        (self.curStartIp,of1,of2) = struct.unpack(<span class="string">"IHB"</span>,buf)</div><div class="line">        self.curEndIpOffset = of1 + (of2 &lt;&lt; <span class="number">16</span>)</div><div class="line">        self.ipdb.seek( self.curEndIpOffset )</div><div class="line">        buf = self.ipdb.read( <span class="number">4</span> )</div><div class="line">        (self.curEndIp,) = struct.unpack(<span class="string">"I"</span>,buf)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getIpAddr</span><span class="params">(self,ip)</span>:</span></div><div class="line">        L = <span class="number">0</span></div><div class="line">        R = self.indexCount - <span class="number">1</span></div><div class="line">        <span class="keyword">while</span> L &lt; R<span class="number">-1</span>:</div><div class="line">            M = (L + R) / <span class="number">2</span></div><div class="line">            self.setIpRange(M)</div><div class="line">            <span class="keyword">if</span> ip == self.curStartIp:</div><div class="line">                L = M</div><div class="line">                <span class="keyword">break</span></div><div class="line">            <span class="keyword">if</span> ip &gt; self.curStartIp:</div><div class="line">                L = M</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                R = M</div><div class="line">        self.setIpRange( L )</div><div class="line">        <span class="comment">#version information,255.255.255.X,urgy but useful</span></div><div class="line">        <span class="keyword">if</span> ip&amp;<span class="number">0xffffff00L</span> == <span class="number">0xffffff00L</span>:</div><div class="line">            self.setIpRange( R )</div><div class="line">        <span class="keyword">if</span> self.curStartIp &lt;= ip &lt;= self.curEndIp:</div><div class="line">            address = self.getAddr( self.curEndIpOffset )</div><div class="line">            <span class="comment">#把GBK转为utf-8</span></div><div class="line">            address = unicode(address,<span class="string">'gbk'</span>).encode(<span class="string">"utf-8"</span>)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            address = <span class="string">"未找到该IP的地址"</span></div><div class="line">        <span class="keyword">return</span> address</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getIpRange</span><span class="params">(self,ip)</span>:</span></div><div class="line">        self.getIpAddr(ip)</div><div class="line">        range = self.ip2str(self.curStartIp) + <span class="string">' - '</span> \</div><div class="line">            + self.ip2str(self.curEndIp)</div><div class="line">        <span class="keyword">return</span> range</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getString</span><span class="params">(self,offset = <span class="number">0</span>)</span>:</span></div><div class="line">        <span class="keyword">if</span> offset :</div><div class="line">            self.ipdb.seek( offset )</div><div class="line">        str = <span class="string">""</span></div><div class="line">        ch = self.ipdb.read( <span class="number">1</span> )</div><div class="line">        (byte,) = struct.unpack(<span class="string">'B'</span>,ch)</div><div class="line">        <span class="keyword">while</span> byte != <span class="number">0</span>:</div><div class="line">            str = str + ch</div><div class="line">            ch = self.ipdb.read( <span class="number">1</span> )</div><div class="line">            (byte,) = struct.unpack(<span class="string">'B'</span>,ch)</div><div class="line">        <span class="keyword">return</span> str</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ip2str</span><span class="params">(self,ip)</span>:</span></div><div class="line">        <span class="keyword">return</span> str(ip&gt;&gt;<span class="number">24</span>)+<span class="string">'.'</span>+str((ip&gt;&gt;<span class="number">16</span>)&amp;<span class="number">0xffL</span>)+<span class="string">'.'</span> \</div><div class="line">            +str((ip&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xffL</span>)+<span class="string">'.'</span>+str(ip&amp;<span class="number">0xffL</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">str2ip</span><span class="params">(self,s)</span>:</span></div><div class="line">        (ip,) = struct.unpack(<span class="string">'I'</span>,socket.inet_aton(s))</div><div class="line">        <span class="keyword">return</span> ((ip&gt;&gt;<span class="number">24</span>)&amp;<span class="number">0xffL</span>)|((ip&amp;<span class="number">0xffL</span>)&lt;&lt;<span class="number">24</span>) \</div><div class="line">            |((ip&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xff00L</span>)|((ip&amp;<span class="number">0xff00L</span>)&lt;&lt;<span class="number">8</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getLong3</span><span class="params">(self,offset = <span class="number">0</span>)</span>:</span></div><div class="line">        <span class="keyword">if</span> offset :</div><div class="line">            self.ipdb.seek( offset )</div><div class="line">        str = self.ipdb.read(<span class="number">3</span>)</div><div class="line">        (a,b) = struct.unpack(<span class="string">'HB'</span>,str)</div><div class="line">        <span class="keyword">return</span> (b &lt;&lt; <span class="number">16</span>) + a</div><div class="line"><span class="comment">#Demo</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    IPL = IPLocator( <span class="string">r"D:/Pycharm/Git_Project/IP_Store/data/qqwry.dat"</span> )</div><div class="line">    ip = <span class="string">""</span></div><div class="line">    <span class="comment"># if len(sys.argv) != 2:</span></div><div class="line">    <span class="comment">#     print 'Usage: python IPLocator.py &lt;IP&gt;'</span></div><div class="line">    <span class="comment">#     return</span></div><div class="line">    <span class="comment"># else:</span></div><div class="line">    <span class="comment">#     ip = sys.argv[1]</span></div><div class="line">    ip = <span class="string">"106.120.5.48"</span></div><div class="line">    address = IPL.getIpAddr( IPL.str2ip(ip) )</div><div class="line">    range = IPL.getIpRange( IPL.str2ip(ip) )</div><div class="line">    <span class="keyword">print</span> <span class="string">"此IP %s 属于 %s\n所在网段: %s"</span> % (ip,address, range)</div><div class="line">    <span class="keyword">print</span> address</div><div class="line">    <span class="keyword">print</span> range</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span> :</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### ChinaMap_JS.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'Fujia'</span></div><div class="line"><span class="string">""" http://echarts.baidu.com/demo.html#map-china-dataRange</span></div><div class="line">"""</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChinaMap</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">	CONTENT_Start = <span class="string">'''option = &#123;</span></div><div class="line">    title: &#123;</div><div class="line">        text: '平台注册用户分布',</div><div class="line">        subtext: '',</div><div class="line">        left: 'left'</div><div class="line">    &#125;,</div><div class="line">    tooltip: &#123;</div><div class="line">        trigger: 'item',</div><div class="line">        formatter: '&#123;b&#125;'</div><div class="line">    &#125;,</div><div class="line">    visualMap: &#123;</div><div class="line">        seriesIndex: 0,</div><div class="line">        min: 0,</div><div class="line">        max: 15000,</div><div class="line">        left: 'left',</div><div class="line">        top: 'bottom',</div><div class="line">        text: ['高','低'],           // 文本，默认为数值文本</div><div class="line">        calculable: true</div><div class="line">    &#125;,</div><div class="line">    grid: &#123;</div><div class="line">        height: 200,</div><div class="line">        width: 8,</div><div class="line">        right: 80,</div><div class="line">        bottom: 10</div><div class="line">    &#125;,</div><div class="line">    xAxis: &#123;</div><div class="line">        type: 'category',</div><div class="line">        data: [],</div><div class="line">        splitNumber: 1,</div><div class="line">        show: true</div><div class="line">    &#125;,</div><div class="line">    yAxis: &#123;</div><div class="line">        position: 'right',</div><div class="line">        min: 0,</div><div class="line">        max: 20,</div><div class="line">        splitNumber: 20,</div><div class="line">        inverse: true,</div><div class="line">        axisLabel: &#123;</div><div class="line">            show: true</div><div class="line">        &#125;,</div><div class="line">        axisLine: &#123;</div><div class="line">            show: true</div><div class="line">        &#125;,</div><div class="line">        splitLine: &#123;</div><div class="line">            show: false</div><div class="line">        &#125;,</div><div class="line">        axisTick: &#123;</div><div class="line">            show: true</div><div class="line">        &#125;,</div><div class="line">        data: []</div><div class="line">    &#125;,</div><div class="line">    series: [</div><div class="line">        &#123;</div><div class="line">            zlevel: 1,</div><div class="line">            name: '中国',</div><div class="line">            type: 'map',</div><div class="line">            mapType: 'china',</div><div class="line">            selectedMode : 'multiple',</div><div class="line">            roam: true,</div><div class="line">            left: 0,</div><div class="line">            right: '15%',</div><div class="line">            label: &#123;</div><div class="line">                normal: &#123;</div><div class="line">                    show: true</div><div class="line">                &#125;,</div><div class="line">                emphasis: &#123;</div><div class="line">                    show: true</div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            data:[ '''</div><div class="line"></div><div class="line">	CONTENT_End = <span class="string">''']</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            zlevel: 2,</div><div class="line">            name: '地图指示',</div><div class="line">            type: 'bar',</div><div class="line">            barWidth: 5,</div><div class="line">            itemStyle: &#123;</div><div class="line">                normal: &#123;</div><div class="line">                    color: undefined,</div><div class="line">                    shadowColor: 'rgba(0, 0, 0, 0.1)',</div><div class="line">                    shadowBlur: 10</div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            data: [20]</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line"> * 根据值获取线性渐变颜色</div><div class="line"> * @param  &#123;String&#125; start 起始颜色</div><div class="line"> * @param  &#123;String&#125; end   结束颜色</div><div class="line"> * @param  &#123;Number&#125; max   最多分成多少分</div><div class="line"> * @param  &#123;Number&#125; val   渐变取值</div><div class="line"> * @return &#123;String&#125;       颜色</div><div class="line"> */</div><div class="line">function getGradientColor (start, end, max, val) &#123;</div><div class="line">    var rgb = /#((?:[0-9]|[a-fA-F])&#123;2&#125;)((?:[0-9]|[a-fA-F])&#123;2&#125;)((?:[0-9]|[a-fA-F])&#123;2&#125;)/;</div><div class="line">    var sM = start.match(rgb);</div><div class="line">    var eM = end.match(rgb);</div><div class="line">    var err = '';</div><div class="line">    max = max || 1</div><div class="line">    val = val || 0</div><div class="line">    if (sM === null) &#123;</div><div class="line">        err = 'start';</div><div class="line">    &#125;</div><div class="line">    if (eM === null) &#123;</div><div class="line">        err = 'end';</div><div class="line">    &#125;</div><div class="line">    if (err.length &gt; 0) &#123;</div><div class="line">        throw new Error('Invalid ' + err + ' color format, required hex color');</div><div class="line">    &#125;</div><div class="line">    var sR = parseInt(sM[1], 16),</div><div class="line">        sG = parseInt(sM[2], 16),</div><div class="line">        sB = parseInt(sM[3], 16);</div><div class="line">    var eR = parseInt(eM[1], 16),</div><div class="line">        eG = parseInt(eM[2], 16),</div><div class="line">        eB = parseInt(eM[3], 16);</div><div class="line">    var p = val / max;</div><div class="line">    var gR = Math.round(sR + (eR - sR) * p).toString(16),</div><div class="line">        gG = Math.round(sG + (eG - sG) * p).toString(16),</div><div class="line">        gB = Math.round(sB + (eB - sB) * p).toString(16);</div><div class="line">    return '#' + gR + gG + gB;</div><div class="line">&#125;</div><div class="line"></div><div class="line">setTimeout(function() &#123;</div><div class="line">    var TOPN = 25</div><div class="line"></div><div class="line">    var option = myChart.getOption()</div><div class="line">    // 修改top</div><div class="line">    option.grid[0].height = TOPN * 20</div><div class="line">    option.yAxis[0].max = TOPN</div><div class="line">    option.yAxis[0].splitNumber = TOPN</div><div class="line">    option.series[1].data[0] = TOPN</div><div class="line">    // 排序</div><div class="line">    var data = option.series[0].data.sort(function(a, b) &#123;</div><div class="line">        return b.value - a.value</div><div class="line">    &#125;)</div><div class="line"></div><div class="line">    var maxValue = data[0].value,</div><div class="line">        minValue = data.length &gt; TOPN ? data[TOPN - 1].value : data[data.length - 1].value</div><div class="line"></div><div class="line">    var s = option.visualMap[0].controller.inRange.color[0],</div><div class="line">        e = option.visualMap[0].controller.inRange.color.slice(-1)[0]</div><div class="line">    var sColor = getGradientColor(s, e, maxValue, minValue)</div><div class="line">    var eColor = getGradientColor(s, e, maxValue, maxValue)</div><div class="line"></div><div class="line">    option.series[1].itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [&#123;</div><div class="line">        offset: 1,</div><div class="line">        color: sColor</div><div class="line">    &#125;, &#123;</div><div class="line">        offset: 0,</div><div class="line">        color: eColor</div><div class="line">    &#125;])</div><div class="line"></div><div class="line">    // yAxis</div><div class="line">    var newYAxisArr = []</div><div class="line">    echarts.util.each(data, function(item, i) &#123;</div><div class="line">        if (i &gt;= TOPN) &#123;</div><div class="line">            return false</div><div class="line">        &#125;</div><div class="line">        var c = getGradientColor(sColor, eColor, maxValue, item.value)</div><div class="line">        newYAxisArr.push(&#123;</div><div class="line">            value: item.name,</div><div class="line">            textStyle: &#123;</div><div class="line">                color: c</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">    option.yAxis[0].data = newYAxisArr</div><div class="line">    option.yAxis[0].axisLabel.formatter = (function(data) &#123;</div><div class="line">        return function(value, i) &#123;</div><div class="line">            if (!value) return ''</div><div class="line">            return value + ' ' + data[i].value</div><div class="line">        &#125;</div><div class="line">    &#125;)(data)</div><div class="line">    myChart.setOption(option)</div><div class="line">&#125;, 0);</div><div class="line"></div><div class="line">'''</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	JS_Scripts = ChinaMap()</div><div class="line">	summary_string = <span class="string">'''</span></div><div class="line">		&#123;name:'安徽',value:2712&#125;,</div><div class="line">		&#123;name:'澳门',value:21&#125;,</div><div class="line">		&#123;name:'北京',value:5351&#125;,</div><div class="line">		&#123;name:'福建',value:3494&#125;,</div><div class="line">		&#123;name:'甘肃',value:697&#125;,</div><div class="line">		&#123;name:'广东',value:13418&#125;,</div><div class="line">		&#123;name:'广西',value:2072&#125;,</div><div class="line">		&#123;name:'贵州',value:1067&#125;,</div><div class="line">		&#123;name:'海南',value:376&#125;,</div><div class="line">		&#123;name:'河北',value:3318&#125;,</div><div class="line">		&#123;name:'河南',value:5552&#125;,</div><div class="line">		&#123;name:'黑龙江',value:1117&#125;,</div><div class="line">		&#123;name:'湖北',value:3286&#125;,</div><div class="line">		&#123;name:'湖南',value:2885&#125;,</div><div class="line">		&#123;name:'吉林',value:873&#125;,</div><div class="line">		&#123;name:'江苏',value:5330&#125;,</div><div class="line">		&#123;name:'江西',value:2255&#125;,</div><div class="line">		&#123;name:'辽宁',value:1718&#125;,</div><div class="line">		&#123;name:'内蒙古',value:739&#125;,</div><div class="line">		&#123;name:'宁夏',value:217&#125;,</div><div class="line">		&#123;name:'青海',value:105&#125;,</div><div class="line">		&#123;name:'山东',value:5476&#125;,</div><div class="line">		&#123;name:'山西',value:1756&#125;,</div><div class="line">		&#123;name:'陕西',value:2033&#125;,</div><div class="line">		&#123;name:'上海',value:3173&#125;,</div><div class="line">		&#123;name:'四川',value:4121&#125;,</div><div class="line">		&#123;name:'台湾',value:94&#125;,</div><div class="line">		&#123;name:'天津',value:945&#125;,</div><div class="line">		&#123;name:'西藏',value:43&#125;,</div><div class="line">		&#123;name:'香港',value:122&#125;,</div><div class="line">		&#123;name:'新疆',value:575&#125;,</div><div class="line">		&#123;name:'云南',value:1045&#125;,</div><div class="line">		&#123;name:'浙江',value:5311&#125;,</div><div class="line">		&#123;name:'重庆',value:1744&#125;</div><div class="line">	'''</div><div class="line">	JS_CODE = JS_Scripts.CONTENT_Start + summary_string.encode(<span class="string">'utf-8'</span>) + JS_Scripts.CONTENT_End</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### china_map_summary.py</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'Fujia'</span></div><div class="line"></div><div class="line"><span class="string">""" 统计IP地址信息,绘制China Map分布图.</span></div><div class="line">link : http://echarts.baidu.com/demo.html#map-china-dataRange</div><div class="line">"""</div><div class="line"></div><div class="line"><span class="keyword">import</span> time,os</div><div class="line"><span class="keyword">from</span> IP_Store.utils.mysql_utils <span class="keyword">import</span> MySQL_Utils</div><div class="line"><span class="keyword">from</span> IP_Store.ChinaMap_JS <span class="keyword">import</span> ChinaMap</div><div class="line"></div><div class="line">CFG_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + <span class="string">'utils/mysql.config'</span></div><div class="line">SECTION = <span class="string">'platform_database'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysql_instance</span><span class="params">(cfg_path, section)</span>:</span></div><div class="line">	cfg = MySQL_Utils(cfg_path, section)</div><div class="line">	<span class="keyword">return</span> cfg</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">data</span><span class="params">()</span>:</span></div><div class="line">	cfg = mysql_instance(CFG_PATH, SECTION)</div><div class="line">	sql_select = <span class="string">'''SELECT left(address,2),count(*)</span></div><div class="line">					FROM &#123;0&#125;</div><div class="line">					WHERE address IS NOT NULL</div><div class="line">					AND LEFT(address,2) REGEXP '(北京)|(天津)|(上海)|(重庆)|(河北)|(河南)|(云南)|(辽宁)|(黑龙)|(湖南)|(安徽)|(山东)|(新疆)|(江苏)|(浙江)|(江西)|(湖北)|(广西)|(甘肃)|(山西)|(内蒙)|(陕西)|(吉林)|(福建)|(贵州)|(广东)|(青海)|(西藏)|(四川)|(宁夏)|(海南)|(台湾)|(香港)|(澳门)'</div><div class="line">					GROUP BY LEFT(address,2) '''.format(TABLE)</div><div class="line">	<span class="keyword">return</span> cfg.select(sql_select)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	TABLE = <span class="string">'customers_ip_info'</span></div><div class="line">	time_start = time.time()</div><div class="line"></div><div class="line">	summary_string = <span class="string">'\n'</span></div><div class="line"></div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> data():</div><div class="line">		province, count = line</div><div class="line">		<span class="keyword">if</span> province == <span class="string">u'黑龙'</span>:</div><div class="line">			summary_string += <span class="string">"&#123;name:'"</span> + <span class="string">u"黑龙江"</span> +<span class="string">"',value:"</span> + str(count) + <span class="string">"&#125;,\n"</span></div><div class="line">		<span class="keyword">elif</span> province == <span class="string">u'内蒙'</span>:</div><div class="line">			summary_string += <span class="string">"&#123;name:'"</span> + <span class="string">u"内蒙古"</span> +<span class="string">"',value:"</span> + str(count) + <span class="string">"&#125;,\n"</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			summary_string += <span class="string">"&#123;name:'"</span> + province +<span class="string">"',value:"</span> + str(count) + <span class="string">"&#125;,\n"</span></div><div class="line"></div><div class="line">	JS_Scripts = ChinaMap()</div><div class="line">	JS_CODE = JS_Scripts.CONTENT_Start + summary_string.encode(<span class="string">'utf-8'</span>) + JS_Scripts.CONTENT_End</div><div class="line"></div><div class="line">	<span class="keyword">print</span> JS_CODE</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h4><p>将“JS_CODE”结果直接粘贴到<a href="http://echarts.baidu.com/demo.html#map-china-dataRange" target="_blank" rel="external">Echart ChinaMap</a>中生成可视化图像即可。 可视化效果如</p>
+<p><img src="http://on58f12qv.bkt.clouddn.com/%E5%9C%B0%E5%9B%BE%E5%88%86%E5%B8%83%E5%8F%AF%E8%A7%86%E5%8C%96.png" alt="注册地图可视化"></p>
+<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ul>
+<li><ol>
+<li>代码重构，减少冗余</li>
+</ol>
+</li>
+<li><ol>
+<li>数据库连接池，提高读写数据库效率</li>
+</ol>
+</li>
+<li><ol>
+<li>地图可视化自动化，或嵌入网页微框架</li>
+</ol>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/27/《Python算法教程》读书笔记-（四）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1686,374 +2048,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/09/ConfigParser-Python解析配置文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/09/ConfigParser-Python解析配置文件/" itemprop="url">
-                  ConfigParser  Python解析配置文件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T20:05:43+08:00">
-                2017-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>ConfigParser</code>，如其名即配置文件解析模块(Configuration file parser module)。注意，在Python 3.x中，对应功能的模块被重命名为<code>configparse</code>。</p>
-<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><hr>
-<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>ini是Initialization File的缩写(windows环境)，cfg是Configuration File的缩写(Linux或UNIX环境)，均指初始化文件，使操作系统或程序进行初始化或进行参数设置。</p>
-<p>为什么要用配置文件呢？从我个人当前工作中遇到的问题(例如读取很多个数据库)看，如果程序没有配置文件，对外是相对封闭的，如果程序(如数据库)的参数进行了修改，必须要修改程序代码以及重新编译才可。这样效率差且容易出错。此时使用配置文件，将参数的修改集中在内，程序调用配置文件内对应功能或模块的参数即可，以达到统一管理参数的作用。</p>
-<blockquote>
-<p>注：还有其他类型的配置文件，当前主要考虑Windows .ini文件和Ubuntu .cfg文件。实际配置文件就是常规的text文件，只是其遵循一定的文件语法格式。<br>以下统称为配置文件。</p>
-</blockquote>
-<hr>
-<h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p><strong>格式很简单，三大基本要素：paramters、sections和comments</strong></p>
-<p>配置文件是由section和参数 name &amp; value 组成。</p>
-<ul>
-<li>[section]：直观的理解就是节或部分，某些参数形成的块</li>
-<li>name = value：对应的[section]下的参数</li>
-</ul>
-<p>同一配置文件内可以存在多个<code>[sections]</code>以便提供项目使用。</p>
-<p><strong>parameters</strong><br>最基本的元素就是parameters，每个parameter都有一个name和value，name和value由 ‘=’ 隔开，例如<em>name = value</em>。<br><strong>sections</strong><br>所有parameters都是以sections为单位结合在一起。section名称独占一行，例如<em>[section name]</em>，且由方括号包围。在section申明后的所有parameters都是属于该section。section没有显式的结束标志符，下一个<strong>新</strong> section开始即上一个<strong>老</strong> section的结束。<br><strong>comments</strong><br>注释以<code>;</code>标记开始，所有的注释语句不管多次都是独占一行直到结束，即在分号和行结束符之间的所有内容均被忽略，例如<em>; comments text</em><br><strong>如下示例：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">; last modified at 2017-4-7 01:19:25 by Dor</div><div class="line">[DataBase_MySQL_business]</div><div class="line">server = 127.0.0.1</div><div class="line">user = user_name</div><div class="line">passwd = pass_word</div><div class="line">port = 3306</div><div class="line">charset = <span class="string">'gbk'</span></div><div class="line"></div><div class="line">; last modified at 2017-4-7 01:19:25 by Dor</div><div class="line">[DataBase_MySQL_log]</div><div class="line">server = 127.0.0.1</div><div class="line">user = user_name</div><div class="line">passwd = pass_word</div><div class="line">port = 3306</div><div class="line">charset = <span class="string">'gbk'</span></div></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="configparser模块"><a href="#ConfigParser模块" class="headerlink" title="ConfigParser模块"></a>ConfigParser模块</h3><p>常用到的主要是三大类：<code>ConfigParser.RawConfigParser()</code>,<code>ConfigParser.ConfigParser()</code>,<code>ConfigParser.SafeConfigParser()</code>,其他主要是一些Error异常类。</p>
-<ul>
-<li><code>[defaults[, dict_type[, allow_no_value]]]</code>：When defaults is given, it is initialized into the dictionary of intrinsic defaults. When dict_type is given, it will be used to create the dictionary objects for the list of sections, for the options within a section, and for the default values. When allow_no_value is true (default: False), options without values are accepted; the value presented for these is None。</li>
-</ul>
-<hr>
-<h4 id="rawconfigparser"><a href="#RawConfigParser" class="headerlink" title="RawConfigParser"></a>RawConfigParser</h4><p>RawConfigParser实例包含以下方法：</p>
-<blockquote>
-<p><code>.defaults()</code>：返回包含默认的实例字典类型，OrderedDict()<br><code>.sections()</code>：返回配置文件内的section列表<br><code>.add_section(section)</code>：为配置文件实例增加section名<br><code>.has_section(section)</code>：判断section名是否存在<br><code>.options(section)</code>：返回对应section的属性名列表<br><code>.has_option(section, option)</code>：判断属性名是否存在section节内<br><code>.read(filenames)</code>：读取和解析文件名列表，返回成功解析的文件名列表<br><code>.readfp(fp[,filename])</code>：读取和解析文件或类文件fp对象，并制定文件名<br><code>.get(section,option)</code>：获取section下对应option属性值<br><code>.getint(section,option)</code><br><code>.getfloat(section,option)</code><br><code>.getboolean(section,option)</code>：以上三个方法都是将section下option的属性值格式化<br><code>.items(section)</code>：返回对应section下的(name,value)对列表<br><code>.set(section,option,value)</code>：添加或修改section下对应option的属性值<br><code>.write(fileobject)</code>：将指定配置写入对应文件对象，可由read()解析<br><code>.remove_option(section,option)</code>：删除section下对应的option内容<br><code>.remove_section(section)</code>：删除对应的section内容</p>
-</blockquote>
-<h4 id="configparser"><a href="#ConfigParser" class="headerlink" title="ConfigParser"></a>ConfigParser</h4><p>ConfigParser在RawConfigParser基础上扩展了一些方法，增加了一些可选参数。</p>
-<blockquote>
-<p><code>.get(section, option[, raw[, vars]])</code>：获取section下对应option的属性值。如果提供vars参数(必须是字典类型)，option属性值在会在vars参数中查找。如果raw=0，即不使用raw mode模式，在属性值中的“%”进行对应的替换，如果raw=1，即使用raw mode模式，输出原始的option值，不进行对应的替换。<br><code>.items(section[,raw[,vars]])</code>：返回对应section下的(name,value)对列表，其参数与get方法中参数的意义一致。</p>
-</blockquote>
-<p>示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJiaDor'</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> io</div><div class="line"></div><div class="line">config = ConfigParser.RawConfigParser()</div><div class="line"><span class="comment"># 1. write configuration section into file</span></div><div class="line">config.add_section(<span class="string">'Section1'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'an_int'</span>,<span class="string">'15'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'a_bool'</span>,<span class="string">'true'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'a_float'</span>,<span class="string">'3.1415'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'baz'</span>,<span class="string">'fun'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'bar'</span>,<span class="string">'Python'</span>)</div><div class="line">config.set(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="string">'%(bar)s is %(baz)s!'</span>)  <span class="comment"># 注意这里option属性值的形式,是格式化字符串的形式</span></div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'example.cfg'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> config_file:</div><div class="line">    config.write(config_file)</div><div class="line"></div><div class="line"><span class="comment"># 2. read configuration form section</span></div><div class="line">config = ConfigParser.RawConfigParser()</div><div class="line">config.read(<span class="string">'example.cfg'</span>)</div><div class="line">a_float = config.getfloat(<span class="string">'Section1'</span>,<span class="string">'a_float'</span>)</div><div class="line">an_int = config.getint(<span class="string">'Section1'</span>,<span class="string">'an_int'</span>)</div><div class="line"><span class="keyword">print</span> a_float + an_int</div><div class="line"></div><div class="line"><span class="comment"># notice that the next output does not interpolate '%(bar)s is %(baz)s!'</span></div><div class="line"><span class="comment"># this is because we are using a RawConfigParser().</span></div><div class="line"><span class="keyword">if</span> config.getboolean(<span class="string">'Section1'</span>,<span class="string">'a_bool'</span>):</div><div class="line">    <span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div><div class="line"></div><div class="line"><span class="comment"># 对比说明ConfigParser.get(section,option[,raw[,vars])</span></div><div class="line">config = ConfigParser.ConfigParser()</div><div class="line">config.read(<span class="string">'example.cfg'</span>)</div><div class="line"></div><div class="line"><span class="comment"># set the third optional argument of get to 1 if you wish to use raw mode</span></div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">0</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>Python <span class="keyword">is</span> fun!</div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">1</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div><div class="line"></div><div class="line"><span class="comment"># the optional fourth argument is a dict with members that will take precedence in interpolation</span></div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">0</span>,&#123;<span class="string">'bar'</span>:<span class="string">'Documentation'</span>,<span class="string">'baz'</span>:<span class="string">'evil'</span>&#125;)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>Documentation <span class="keyword">is</span> evil!</div><div class="line"><span class="keyword">print</span> config.get(<span class="string">'Section1'</span>,<span class="string">'foo'</span>,<span class="number">1</span>,&#123;<span class="string">'bar'</span>:<span class="string">'Documentation'</span>,<span class="string">'baz'</span>:<span class="string">'evil'</span>&#125;)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>%(bar)s <span class="keyword">is</span> %(baz)s!</div></pre></td></tr></table></figure></p>
-<h4 id="safeconfigparser"><a href="#SafeConfigParser" class="headerlink" title="SafeConfigParser"></a>SafeConfigParser</h4><p>SafeConfigParser类同样是ConfigParser类的扩展。</p>
-<blockquote>
-<p><code>.set(section,option,value)</code>：如果给定的section存在，则将option属性值修改为value，value必须为string类型，否则报错。</p>
-</blockquote>
-<hr>
-<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="comment"># ConfigParser类最核心的方法</span></div><div class="line"></div><div class="line">config = ConfigParser.ConfigParser()  <span class="comment"># create ConfigParser instance</span></div><div class="line">config.sections()   <span class="comment"># return the sections list of the config file</span></div><div class="line">config.options(section)   <span class="comment"># return the options list of the section config</span></div><div class="line">config.get(section,option)   <span class="comment"># return the option's value</span></div><div class="line">config.add_section(section_name)   <span class="comment"># add a sction </span></div><div class="line">config.set(section,option,value)   <span class="comment"># add the option ,value pairs</span></div><div class="line">config.read(filename)   <span class="comment"># read the config file</span></div><div class="line">config.write(object_file)    <span class="comment"># write the config information into file or file_like object</span></div></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_Config</span><span class="params">(file_name,section,*args)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.add_section(section)</div><div class="line">	host,user,passwd,db,charset,port = args</div><div class="line">	config.set(section,<span class="string">'host'</span>,host)</div><div class="line">	config.set(section,<span class="string">'user'</span>,user)</div><div class="line">	config.set(section,<span class="string">'passwd'</span>,passwd)</div><div class="line">	config.set(section,<span class="string">'db'</span>,db)</div><div class="line">	config.set(section,<span class="string">'charset'</span>,charset)</div><div class="line">	config.set(section,<span class="string">'port'</span>,port)</div><div class="line"></div><div class="line">	<span class="keyword">with</span> open(file_name,<span class="string">'a+'</span>) <span class="keyword">as</span> config_file:</div><div class="line">		config.write(config_file)</div><div class="line">	<span class="keyword">return</span> <span class="string">'The config information has been writed successfully!'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_Config</span><span class="params">(file_name,section,**kwargs)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.read(file_name)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">for</span> option,value <span class="keyword">in</span> kwargs.items():</div><div class="line">			config.set(section,option,value)</div><div class="line">		<span class="keyword">with</span> open(file_name,<span class="string">'wb'</span>) <span class="keyword">as</span> config_file:	</div><div class="line">			config.write(config_file)</div><div class="line">		<span class="keyword">return</span> <span class="string">"The config file has been updated successfully!"</span></div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> <span class="string">"The config file updated failed.the Error is '%s'"</span> % e</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	file_name = <span class="string">'mysql.config'</span></div><div class="line">	section = <span class="string">'mysql_boss'</span></div><div class="line">	<span class="keyword">print</span> write_Config(file_name,section,<span class="string">'127.0.0.1'</span>,<span class="string">'user'</span>,<span class="string">'passwd'</span>,<span class="string">'report'</span>,<span class="string">'gbk'</span>,<span class="string">'3306'</span>)</div><div class="line">	<span class="keyword">print</span> update_Config(file_name,section,host=<span class="string">'127.0.0.0'</span>)		</div><div class="line"> </div><div class="line"><span class="meta">&gt;&gt;&gt; </span>The config information has been writed successfully!</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>The config file has been updated successfully!</div></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*- </span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_Config_Infor</span><span class="params">(config_file_path, section)</span>:</span></div><div class="line">	config = ConfigParser.ConfigParser()</div><div class="line">	config.read(config_file_path)</div><div class="line"></div><div class="line">	option_result = OrderedDict()</div><div class="line">	<span class="keyword">for</span> option <span class="keyword">in</span> config.options(section):</div><div class="line">		option_result[option] = config.get(section,option)</div><div class="line">	<span class="keyword">return</span> option_result</div></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> io</div><div class="line"></div><div class="line"><span class="comment"># opt_move函数，实现在sections之间移动option的功能</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">opt_move</span><span class="params">(config, section1, section2, option)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        config.set(section2, option, config.get(section1, option, <span class="number">1</span>))</div><div class="line">    <span class="keyword">except</span> ConfigParser.NoSectionError:</div><div class="line">        config.add_section(section2)</div><div class="line">        opt_move(config, section1, section2, option)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        config.remove_option(section1, option)</div></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mysql.config</span></div><div class="line">[Frist_mysql]</div><div class="line">outer_host = <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">inner_host = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">user = reader</div><div class="line">passwd = passwd</div><div class="line">db = text</div><div class="line">charset = gbk</div><div class="line">port = <span class="number">3306</span></div><div class="line"></div><div class="line">[Second_mysql]</div><div class="line">outer_host = <span class="number">192.168</span><span class="number">.0</span><span class="number">.2</span></div><div class="line">inner_host = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">user = reader</div><div class="line">passwd = passwd</div><div class="line">db = text</div><div class="line">charset = gbk</div><div class="line">port = <span class="number">3306</span></div></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> ConfigParser</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MysqlUtil</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, filepath, section)</span>:</span></div><div class="line">        self.filepath = filepath</div><div class="line">        self.section = section</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getMysqlConfig</span><span class="params">(self)</span>:</span></div><div class="line">        result = []</div><div class="line">        conf = ConfigParser.ConfigParser()</div><div class="line">        conf.read(self.filepath)</div><div class="line">        options = conf.options(self.section)</div><div class="line">        <span class="keyword">if</span> sys.platform.find(<span class="string">"win"</span>) &gt;= <span class="number">0</span>:</div><div class="line">            options.pop(options.index(<span class="string">"inner_host"</span>))</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            options.pop(options.index(<span class="string">"outer_host"</span>))</div><div class="line">        <span class="keyword">for</span> option <span class="keyword">in</span> options:</div><div class="line">            result.append(conf.get(self.section, option))</div><div class="line">        <span class="keyword">return</span> result</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></div><div class="line">        host, user, passwd, db, charset, port = self.getMysqlConfig()</div><div class="line">        port = int(port)</div><div class="line">        self.conn = MySQLdb.connect(host=host, user=user,</div><div class="line">                               passwd=passwd, db=db, charset=charset, port=port)</div><div class="line">        self.cur = self.conn.cursor()</div><div class="line">        <span class="keyword">return</span> self.conn, self.cur</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self, str_sql)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> str_sql:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        conn, cur = self.connect()</div><div class="line">        cur.execute(str_sql)</div><div class="line">        out = cur.fetchall()</div><div class="line">        <span class="keyword">return</span> out</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, str_sql)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> str_sql:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        conn, cur = self.connect()</div><div class="line">        cur.execute(str_sql)</div><div class="line">        conn.commit()</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.conn:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        self.conn.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    mysqlutil_instance = MysqlUtil(<span class="string">'./mysql.config'</span>,<span class="string">'section_name'</span>)</div><div class="line">    select_sql = <span class="string">'''select * from table_name limit 5'''</span></div><div class="line">    mysql_connect.select(sql)</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://docs.python.org/2.7/library/configparser.html#configparser-objects" target="_blank" rel="external">https://docs.python.org/2.7/library/configparser.html#configparser-objects</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/04/06/数据结构：树、二叉树、二叉树搜索-一/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/06/数据结构：树、二叉树、二叉树搜索-一/" itemprop="url">
-                  数据结构：树、二叉树、二叉树搜索(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-06T22:31:46+08:00">
-                2017-04-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><hr>
-<h3 id="树的特征和定义"><a href="#树的特征和定义" class="headerlink" title="树的特征和定义"></a>树的特征和定义</h3><p>树(Tree)是元素的集合。先以较直观的方式介绍树，如下图的数据结构是一个树：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%A0%91-%E7%BB%93%E6%9E%84.png" alt="数据结构-树|center|260x0"></p>
-<p>树有多个<strong>节点(Node)</strong>，用来存储元素。某些节点之间存在一定的关系，用连线表示，连线称为<strong>边(edge)</strong>。边的上端节点称为<strong>父节点</strong>，下端节点称为<strong>子节点</strong>。树像一个不断分叉的树根。</p>
-<p>每个节点可以有多个<strong>子节点(children)</strong>，而该节点是相应子节点的<strong>父节点(parent)</strong>。比如，3、5是6的子节点，6是3、5的父节点；1、8、7是3的子节点，3是1、8、7的父节点。树有一个没有父节点的节点，称为<strong>根结点(root)</strong>，如图中的6。没有子节点的节点称为<strong>叶结点(leaf)</strong>，比如图中的1、8、9、5节点。从图中还可以看到，上面的树总共有4个层次，6位于第一层，9位于第四层。树中节点的最大层次被称为<strong>深度</strong>，也就是说，该树的<strong>深度(depth)</strong>为4。</p>
-<p>如果从节点3开始向下看，那么我们看到的是一个以节点3位根节点的树，其中三角形代表一颗树：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%A0%91-%E5%AD%90%E6%A0%91.png" alt="子树|center|300x0"></p>
-<p>再进一步，如果我们定义孤立的一个节点也是一颗树的话，原来的树就可以表示为根节点和子树(subtree)的关系：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%A0%B9%E8%8A%82%E7%82%B9+%E5%AD%90%E6%A0%91.png" alt="根节点+子树|center|160x0"></p>
-<p>上述观察实际上给了我们一种严格的定义树的方法：</p>
-<ol>
-<li>树是元素的集合</li>
-<li>该集合可以为空。这时树种没有元素，称树为空树(empty tree)</li>
-<li>如果该集合不为空，那么该集合有一个根节点，以及0个或多个子树。根节点与它的子树的根节点用一个边相连</li>
-</ol>
-<p>上面的第三点，是以递归的方式来定义树，也就是在定义树的过程中使用了树自身(子树)。由于树的递归特征，许多相关的操作也可以方便的使用递归实现。</p>
-<hr>
-<h3 id="树的实现"><a href="#树的实现" class="headerlink" title="树的实现"></a>树的实现</h3><p>树的示意图已经给出了树的一种内存实现方式：每个节点存储元素和多个指向子节点的指针。然而，子节点数目是不确定的。一个父节点可能有大量的子节点，而另一个父节点可能只有一个子节点，而树的增删节点操作会让子节点的数目发生进一步的变化。这种不确定性就可能带来大量的内存相关操作，并且容易造成内存的浪费。</p>
-<p>一种经典的实现方式如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%A0%91%E7%9A%84%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0.png" alt="树的内存实现|center|260x0"></p>
-<p>拥有同一父节点的两个节点互为<strong>兄弟节点(siblling)</strong>。上图的实现方式中，每个节点包含有一个指针指向第一个子节点，并有另一个指针指向它的下一个兄弟节点。这样，我们就可以用同一的、确定的结构来表示每个节点。</p>
-<p>计算机的文件系统是树的结构，比如Linux文件系统。在UNIX的文件系统中，每个文件（文件夹同样是一种文件）都可以看做是一个节点。非文件夹的文件被存储在叶结点。文件夹中有指向父节点和子节点的指针（在UNIX中，文件夹还包含一个指向自身的指针）。</p>
-<hr>
-<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><p><strong>二叉树(binary)</strong>是一种特殊的树。二叉树的每个节点最多只能有2个子节点。<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%BA%8C%E5%8F%89%E6%A0%91.png" alt="二叉树|center|260x0"></p>
-<p>由于二叉树的子节点数目确定，所以可以直接采用上图方式在内存中实现。每个节点有一个左子节点(left children)和右子节点(right children)。左子节点是左子树的根节点，右子节点是右子树的根节点。</p>
-<hr>
-<h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><p>如果给二叉树加一个额外的条件，就可以得到一种称为二叉搜索树(binary search tree)的特殊二叉树。二叉搜索树要求：每个节点都不比它左子树的任意元素小，而且不比它的右子树的任意元素大。<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树|center|260x0"></p>
-<p>二叉搜索树可以方便的实现搜索算法。在搜索元素x的时候，我们可以将x和根节点比较：</p>
-<ol>
-<li>如果x等于根节点，那么找到x，停止搜索（终止条件）</li>
-<li>如果x小于根节点，那么搜索左子树</li>
-<li>如果x大于根节点，那么搜索右子树<br>二叉搜索树所需要进行的操作次数最多与树的深度相等。n个节点的二叉搜索树的深度最多为n，最少为log(n)。</li>
-</ol>
-<p>删除节点相对比较复杂。删除节点后，有时需要进行一定的调整，以恢复二叉搜索树的性质（每个节点都不比它左子树的任意元素小，而且不比它的右子树的任意元素大）。</p>
-<ul>
-<li>叶节点可以直接删除</li>
-<li>删除非叶结点时，比如下图中的节点8.可以删除左子树中最大的元素，用其他的节点来补充元素8产生的空缺。但该元素可能也不是叶结点，所以它所产生的空缺需要其他元素补充。如下过程：<br><img src="http://on58f12qv.bkt.clouddn.com/%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9.png" alt="删除节点|center|260x0"><br><img src="http://on58f12qv.bkt.clouddn.com/%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9%E5%90%8E%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="删除节点后的二叉搜索树|center|280x0"></li>
-</ul>
-<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p><strong>[转载]</strong> <a href="http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html" target="_blank" rel="external">http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2103,7 +2097,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2125,7 +2119,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
