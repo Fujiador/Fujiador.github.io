@@ -270,6 +270,188 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/07/06/机器学习：岭回归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/06/机器学习：岭回归/" itemprop="url">
+                  机器学习：岭回归
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-06T23:05:54+08:00">
+                2017-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p><img src="http://on58f12qv.bkt.clouddn.com/%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0.PNG" alt="问题描述|center"></p>
+<hr>
+<h3 id="岭回归"><a href="#岭回归" class="headerlink" title="岭回归"></a>岭回归</h3><p><img src="http://on58f12qv.bkt.clouddn.com/%E5%B2%AD%E5%9B%9E%E5%BD%92.PNG" alt="岭回归|center"></p>
+<hr>
+<h3 id="sklearn-中的岭回归"><a href="#sklearn-中的岭回归" class="headerlink" title="sklearn 中的岭回归"></a>sklearn 中的岭回归</h3><h4 id="1-绘制岭系数作为正则化函数"><a href="#1、绘制岭系数作为正则化函数" class="headerlink" title="1、绘制岭系数作为正则化函数"></a><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html#sphx-glr-auto-examples-linear-model-plot-ridge-path-py" target="_blank" rel="external">1、绘制岭系数作为正则化函数</a></h4><p>主要目的是通过绘制岭系数作为正则化函数，来展示共线性对估计器系数的影响。</p>
+<p>下例使用岭回归估计器，每个颜色代表一个不同特征的系数向量，并且以正则化函数形式来展示。</p>
+<p>本利还展现出岭回归应用于高病态矩阵的有效性。对于高病态矩阵，目标变量的轻微变化可能导致计算权重系数的巨大差异。在这种情况下，设定一定程度的正则化（$\alpha$）可以有效的减少这种变化。</p>
+<p>当$\alpha$非常大时，正则化效应主导平方损失函数，权重系数趋于零。在岭迹的末端，由于$\alpha$趋于零，解决方案趋向于OLS，所以系数呈现出较大的振荡。</p>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><h4 id="1-ridge-coefficients-as-a-function-of-the-regularization"><a href="#1、Ridge-coefficients-as-a-function-of-the-regularization" class="headerlink" title="1、Ridge coefficients as a function of the regularization"></a>1、Ridge coefficients as a function of the regularization</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</div><div class="line"></div><div class="line"><span class="comment"># 构建训练数据集, X是一个10X10的希尔伯特矩阵Hilbert Matrix。HilbertMatrix是元素A（i,j）=1/(i+j-1),i,j分别为行表和列表。是一种数学变换矩阵，具有正定、且高度病态（即任何一个元素发生一点变动整个矩阵的行列式的值和逆矩阵都会发生巨大变化）的特点，病态程度和阶数有关。</span></div><div class="line">X = <span class="number">1.</span> / (np.arange(<span class="number">1</span>,<span class="number">11</span>) + np.arange(<span class="number">0</span>,<span class="number">10</span>)[:, np.newaxis])</div><div class="line">y = np.ones(<span class="number">10</span>)</div><div class="line"></div><div class="line"><span class="comment"># 计算岭迹 compute path</span></div><div class="line">n_alphas = <span class="number">200</span></div><div class="line">alphas = np.logspace(<span class="number">-10</span>, <span class="number">-2</span>, n_alphas)</div><div class="line"></div><div class="line"><span class="comment"># 实例化岭回归对象</span></div><div class="line">clf = linear_model.Ridge(fit_intercept=<span class="keyword">False</span>)</div><div class="line">coefs = []</div><div class="line"><span class="keyword">for</span> a <span class="keyword">in</span> alphas:</div><div class="line">    clf.set_params(alpha=a)</div><div class="line">    clf.fit(X, y)</div><div class="line">    coefs.append(clf.coef_)</div><div class="line"></div><div class="line"><span class="comment"># 图形展示,plt.gca() get_current_axis plt.gcf() get_current_figure</span></div><div class="line">ax.plot(alphas, coefs)</div><div class="line">ax.set_xscale(<span class="string">'log'</span>)</div><div class="line">ax.set_xlim(ax.get_xlim()[::<span class="number">-1</span>])</div><div class="line">plt.xlabel(<span class="string">'alpha'</span>)</div><div class="line">plt.ylabel(<span class="string">'weights'</span>)</div><div class="line">plt.title(<span class="string">'Ridge coefficients as a function of the regularization'</span>)</div><div class="line">plt.axis(<span class="string">'tight'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="http://on58f12qv.bkt.clouddn.com/%E5%B2%AD%E5%9B%9E%E5%BD%92-%E5%B2%AD%E8%BF%B9%E5%9B%BE.png" alt="岭回归-岭迹图|center"><br><strong>现在还不是很理解岭迹图的实际含义及其作用，先MARK下之后再来消化这个生饭。</strong></p>
+<p>初步认识下数据集X，具象下病态矩阵的模样。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;np.arange(0,10)</div><div class="line">array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</div><div class="line">&gt;&gt;&gt;np.arange(0,10)[:,np.newaxis] </div><div class="line">array([[0],</div><div class="line">       [1],</div><div class="line">       [2],</div><div class="line">       [3],</div><div class="line">       [4],</div><div class="line">       [5],</div><div class="line">       [6],</div><div class="line">       [7],</div><div class="line">       [8],</div><div class="line">       [9]])</div><div class="line">&gt;&gt;&gt;np.arange(1,11) + np.arange(0,10)[:,np.newaxis] </div><div class="line">array([[ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10],</div><div class="line">       [ 2,  3,  4,  5,  6,  7,  8,  9, 10, 11],</div><div class="line">       [ 3,  4,  5,  6,  7,  8,  9, 10, 11, 12],</div><div class="line">       [ 4,  5,  6,  7,  8,  9, 10, 11, 12, 13],</div><div class="line">       [ 5,  6,  7,  8,  9, 10, 11, 12, 13, 14],</div><div class="line">       [ 6,  7,  8,  9, 10, 11, 12, 13, 14, 15],</div><div class="line">       [ 7,  8,  9, 10, 11, 12, 13, 14, 15, 16],</div><div class="line">       [ 8,  9, 10, 11, 12, 13, 14, 15, 16, 17],</div><div class="line">       [ 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],</div><div class="line">       [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]])</div></pre></td></tr></table></figure></p>
+<h4 id="2-classification-of-text-documents-using-sparse-features"><a href="#2、Classification-of-text-documents-using-sparse-features" class="headerlink" title="2、Classification of text documents using sparse features"></a>2、Classification of text documents using sparse features</h4><p>对稀疏特征的文本文档进行分类。下例展示如何应用Scikit-Learn通过使用“bag-of-words”方法对文档主题进行分类。<br>官方示例，对比了多种训练方法分别对比了训练时间、测试时间、准确率等数据。</p>
+<p><img src="http://on58f12qv.bkt.clouddn.com/Text_Classification.png" alt="文档分类训练|center"></p>
+<p>因这个示例中涉及到的知识点非常多，目前个人还没有完全掌握，详细的代码请参考<br><a href="http://scikit-learn.org/stable/auto_examples/text/document_classification_20newsgroups.html#sphx-glr-auto-examples-text-document-classification-20newsgroups-py" target="_blank" rel="external">文档分类训练|center</a>。</p>
+<h3 id="交通流量预测实例"><a href="#交通流量预测实例" class="headerlink" title="交通流量预测实例"></a><a href="http://blog.csdn.net/jinbaosite/article/details/73951882#html" target="_blank" rel="external">交通流量预测实例</a></h3><h4 id="1-数据介绍"><a href="#1、数据介绍" class="headerlink" title="1、数据介绍"></a>1、数据介绍</h4><p>数据是某路口的交通流量监测数据，记录全年小时级别的车流量信息。</p>
+<h4 id="2-目的"><a href="#2、目的" class="headerlink" title="2、目的"></a>2、目的</h4><p>根据已有的数据创建多项式拟合函数，使用岭回归模型对车流量的信息进行多项式回归拟合。<br>主要用到<code>sklearn.linear_model.Ridge</code>和<code>sklearn.preprocessing.Polynomial</code></p>
+<h4 id="3-数据说明"><a href="#3、数据说明" class="headerlink" title="3、数据说明"></a>3、数据说明</h4><p>数据特征维度如下：</p>
+<blockquote>
+<p>ID：某路口的编号<br>HR：每日中的第几个小时，范围0-23<br>WEEK_DAY：每周中的第几日，范围0-6<br>DAY_OF_YEAR：每年中的第几日，范围1-365<br>WEEK_OF_YEAR：每年中的第几周，范围1-53<br>TRAFFIC_COUNT：路口交通流量统计</p>
+</blockquote>
+<p><img src="http://on58f12qv.bkt.clouddn.com/%E4%BA%A4%E9%80%9A%E6%B5%81%E9%87%8F%E9%A2%84%E6%B5%8B%E6%95%B0%E6%8D%AE.png" alt="交通流量预测数据|center"></p>
+<h4 id="4-基础数据统计"><a href="#4、基础数据统计" class="headerlink" title="4、基础数据统计"></a>4、基础数据统计</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_Data</span><span class="params">(file_name, sep=<span class="string">','</span>, encoding=<span class="string">'utf-8'</span>)</span>:</span></div><div class="line">    file_path = os.path.join(os.path.dirname(__file__), file_name)</div><div class="line">    <span class="keyword">if</span> os.path.exists(file_path):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            data_df = pd.read_csv(file_path, sep=sep, encoding=encoding)</div><div class="line">            <span class="keyword">return</span> data_df</div><div class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">            print(<span class="string">"The process has wrong. Error information:&#123;0&#125;"</span>.format(e))</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        print(<span class="string">"file_path doesn't exists. Please check the file_name or file_path."</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">basicInfo</span><span class="params">(data_frame)</span>:</span></div><div class="line">    <span class="keyword">if</span> data_frame <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        print(<span class="string">"please check the input dataFrame."</span>)</div><div class="line">    print(<span class="string">"Show the data information as following:"</span>)</div><div class="line">    print(<span class="string">"="</span> * <span class="number">80</span> + <span class="string">'\nhead'</span>)</div><div class="line">    print(data_frame.head(<span class="number">5</span>))</div><div class="line">    print(<span class="string">"_"</span> * <span class="number">80</span> + <span class="string">'\ntail'</span>)</div><div class="line">    print(data_frame.tail(<span class="number">5</span>))</div><div class="line"></div><div class="line">    print(<span class="string">"_"</span> * <span class="number">80</span> + <span class="string">'\nindex'</span>)</div><div class="line">    print(data_frame.index)</div><div class="line">    print((<span class="string">"_"</span> * <span class="number">80</span> + <span class="string">'\ncolumns'</span>))</div><div class="line">    print(data_frame.columns)</div><div class="line">    print(<span class="string">"="</span> * <span class="number">80</span>)</div><div class="line"></div><div class="line">    print(<span class="string">'\n'</span>)</div><div class="line">    print(<span class="string">"="</span> * <span class="number">80</span> + <span class="string">'\nSummary Information:\n'</span>)</div><div class="line">    print(data_frame[<span class="string">'TRAFFIC_COUNT'</span>].describe())</div><div class="line">    print(<span class="string">"="</span> * <span class="number">80</span>)</div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">summaryInfo_perHour</span><span class="params">(data_frame)</span>:</span></div><div class="line">    <span class="keyword">if</span> data_frame <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        print(<span class="string">"please check the input dataFrame."</span>)</div><div class="line">    totFlow_per_hour = data_frame[[<span class="string">'HR'</span>, <span class="string">'TRAFFIC_COUNT'</span>]].groupby(<span class="string">'HR'</span>).sum()</div><div class="line">    avgFlow_per_hour = data_frame[[<span class="string">'HR'</span>, <span class="string">'TRAFFIC_COUNT'</span>]].groupby(<span class="string">'HR'</span>).mean()</div><div class="line">    <span class="comment"># display the data relationship</span></div><div class="line">    plt.figure()</div><div class="line">    plt.subplot(<span class="number">121</span>)</div><div class="line">    plt.plot(totFlow_per_hour.index, totFlow_per_hour[<span class="string">'TRAFFIC_COUNT'</span>],<span class="string">'--'</span>)</div><div class="line">    plt.xlabel(<span class="string">"Hour"</span>)</div><div class="line">    plt.ylabel(<span class="string">"Tot_Traffic_flow"</span>)</div><div class="line">    plt.title(<span class="string">"Traffic Flow SumData Trend per Hour"</span>)</div><div class="line">    plt.subplot(<span class="number">122</span>)</div><div class="line">    plt.plot(avgFlow_per_hour.index, avgFlow_per_hour[<span class="string">'TRAFFIC_COUNT'</span>],<span class="string">'o'</span>)</div><div class="line">    plt.xlabel(<span class="string">"Hour"</span>)</div><div class="line">    plt.ylabel(<span class="string">"avg_Traffic_flow"</span>)</div><div class="line">    plt.title(<span class="string">"Traffic Flow AvgData Trend per Hour"</span>)</div><div class="line">    plt.savefig(<span class="string">"Traffic_Flow_AvgData_Trend_per_Hour.png"</span>)</div><div class="line">    plt.show()</div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">summaryInfo_perDay</span><span class="params">(data_frame)</span>:</span></div><div class="line">    <span class="keyword">if</span> data_frame <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        print(<span class="string">"please check the input dataFrame."</span>)</div><div class="line">    totFlow_per_day = data_frame[[<span class="string">'DAY_OF_YEAR'</span>, <span class="string">'TRAFFIC_COUNT'</span>]].groupby(<span class="string">'DAY_OF_YEAR'</span>).sum()</div><div class="line">    <span class="comment"># display the data relationship</span></div><div class="line">    plt.figure()</div><div class="line">    plt.plot(totFlow_per_day.index, totFlow_per_day[<span class="string">'TRAFFIC_COUNT'</span>])</div><div class="line">    plt.xlabel(<span class="string">"day"</span>)</div><div class="line">    plt.ylabel(<span class="string">"Traffic Flow veryday"</span>)</div><div class="line">    plt.title(<span class="string">"Traffic Flow Data Trend every day"</span>)</div><div class="line">    plt.savefig(<span class="string">"Traffic_Flow_Data_Trend_every_day.png"</span>)</div><div class="line">    plt.show()</div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    data_frame = load_Data(<span class="string">'traffic_flow_rawdata.csv'</span>)</div><div class="line">    <span class="comment"># 基础统计信息</span></div><div class="line">    basicInfo(data_frame)</div><div class="line">    <span class="comment"># 展示每小时流量变化趋势</span></div><div class="line">    summaryInfo_perHour(data_frame)</div><div class="line">    <span class="comment"># 展示每天流量变化趋势</span></div><div class="line">    summaryInfo_perDay(data_frame)</div></pre></td></tr></table></figure>
+<p>在基础分析过程中，发现原始数据是有一些问题的，但因为数据源并不是个人一手统计，所以暂时使用。<br><img src="http://on58f12qv.bkt.clouddn.com/Traffic_Flow_AvgData_Trend_per_Hour.png" alt="按照每日小时时段汇总车流量趋势数据|center|600X0"></p>
+<p>从每日各小时车流量的数据分布中发现，这份数据不并非是典型的早高峰、晚高峰的态势，可能跟具体的路口车流量的特点有紧密关系。</p>
+<p><img src="http://on58f12qv.bkt.clouddn.com/Traffic_Flow_Data_Trend_every_day.png" alt="按照每天汇总车流量趋势数据|center"></p>
+<p>从每天车流量的数据分布中发现，数据有比较明显的周期性流量特点，并且后半部分数据明显量级增加。</p>
+<p>其中存在较多的异常值，因原始数据源的准确性问题，暂时不做异常值方面的分析和处理。</p>
+<h4 id="5-岭回归拟合预测"><a href="#5、岭回归拟合预测" class="headerlink" title="5、岭回归拟合预测"></a>5、岭回归拟合预测</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> warnings</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Ridge</div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> cross_validation</div><div class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> PolynomialFeatures</div><div class="line"></div><div class="line">warnings.filterwarnings(<span class="string">"ignore"</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_Data</span><span class="params">(file_name)</span>:</span></div><div class="line">    file_path = os.path.join(os.path.dirname(__file__), file_name)</div><div class="line">    <span class="keyword">if</span> os.path.exists(file_path):</div><div class="line">        data = np.genfromtxt(file_path)</div><div class="line">        X, y = data[:, :<span class="number">5</span>], data[:, <span class="number">5</span>]</div><div class="line">        <span class="keyword">return</span> X, y</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>,<span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">pre_process</span><span class="params">(X, y, pf_i)</span>:</span></div><div class="line">    poly = PolynomialFeatures(pf_i)</div><div class="line">    X = poly.fit_transform(X)</div><div class="line">    train_set_X, test_set_X, train_set_y, test_set_y = cross_validation.train_test_split(X, y,</div><div class="line">                                                                    test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</div><div class="line">    <span class="keyword">return</span> X,train_set_X, test_set_X, train_set_y, test_set_y</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">visual_display</span><span class="params">(y, y_pre)</span>:</span></div><div class="line">    start, end = <span class="number">200</span>, <span class="number">300</span></div><div class="line">    time = np.arange(start, end)</div><div class="line">    plt.plot(time, y[start:end], <span class="string">'b'</span>, label=<span class="string">'real traffic flow'</span>)</div><div class="line">    plt.plot(time, y_pre[start:end], <span class="string">'r'</span>, label=<span class="string">'predict traffic flow'</span>)</div><div class="line">    plt.legend(loc=<span class="string">'upper left'</span>)</div><div class="line">    plt.show()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    X, y = load_Data(<span class="string">'rawdata.txt'</span>)</div><div class="line">    fig = plt.figure()</div><div class="line">    pf_i = <span class="number">4</span>  <span class="comment"># 测试最优的Polynomial Feature </span></div><div class="line">    X, train_set_X, test_set_X, train_set_y, test_set_y = pre_process(X, y, pf_i=pf_i)</div><div class="line">    <span class="comment"># 创建估计器,并进行训练</span></div><div class="line">    clf = Ridge(alpha=<span class="number">0.01</span>, fit_intercept=<span class="keyword">True</span>)</div><div class="line">    clf.fit(train_set_X, train_set_y)</div><div class="line">    print(clf.score(test_set_X, test_set_y))</div><div class="line"></div><div class="line">    y_pre = clf.predict(X)</div><div class="line">    visual_display(y, y_pre)</div></pre></td></tr></table></figure>
+<p>首先，当正则化惩罚项$\alpha=1.0$时，依次尝试不同的pf_i值：</p>
+<p><strong>pf_i=1       Score: 0.12212161115</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=1.png" alt="Alt text|center|300x0"></p>
+<p><strong>pf_i=2       Score: 0.528338472962</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=2.png" alt="Alt text|center|300x0"></p>
+<p><strong>pf_i=3       Score: 0.664089383716</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=3.png" alt="Alt text|center|300x0"></p>
+<p><strong>pf_i=4       Score: 0.744530809564</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=4.png" alt="Alt text|center|300x0"></p>
+<p><strong>pf_i=5       Score: -2.91583570786</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=5.png" alt="Alt text|center|300x0"></p>
+<p><strong>pf_i=6       Score: 0.211225114567</strong><br><img src="http://on58f12qv.bkt.clouddn.com/ridge_regression_info_pfi=6.png" alt="Alt text|center|300x0"></p>
+<p>从结果来看，选择pf_i=4时，岭回归拟合的结果稍微过得去。其中有数据源准确度的问题、异常值存在等问题未进行处理。</p>
+<p>其次，当pf_i值固定为4时，调整$\alpha$从[100,10,1.0,0.1,0.01,0.001,0.0001]，其中除了当$\alpha=0.1$时拟合结果明显变差之外，其他$\alpha$值均无明显的变化。</p>
+<hr>
+<h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><p>岭回归算法部分，还有一些不够彻底理解的内容。从实验操作的结果来看，也不能够彻底理解参数在变化过程中对结果的影响。</p>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="http://blog.csdn.net/jinbaosite/article/details/73951882#html" target="_blank" rel="external">交通流量实例</a><br><a href="http://scikit-learn.org/stable/modules/linear_model.html#ordinary-least-squares" target="_blank" rel="external">Ridge Regression</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/07/05/Python-Package：Threading多线程和Multiprocessing多进程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1883,173 +2065,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/22/Python项目：小说汉字统计/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/22/Python项目：小说汉字统计/" itemprop="url">
-                  Python项目：小说汉字统计
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T22:26:17+08:00">
-                2017-05-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h3><p>这个练手代码实际不能称为“项目”的，因为实在是太简单，并且没有实质的干货内容。这篇博客仅仅是做一个小小的记录，在过程的一些坑做一个小备忘。：)</p>
-<hr>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>Python 2.7.10</li>
-<li>文本素材：随便一本小说即可(注意文本数据的编码UTF-8)</li>
-</ul>
-<hr>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>大的方向即：获取文件的内容，并高效的拆分单个汉字，简单统计各个汉字在小说文件中出现的次数（没有什么实质意义）。将统计结果排序，并且查看在小说文件中最长见的Top-N汉字，并将统计结果数据保存。</p>
-<hr>
-<h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/ - <span class="comment"># 根目录</span></div><div class="line">  -	./data</div><div class="line">  - main.py</div></pre></td></tr></table></figure>
-<hr>
-<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># main.py 代码</span></div><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Characters_Summary</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="keyword">global</span> stop_characters</div><div class="line">	</div><div class="line">	stop_characters = [<span class="string">''</span>,<span class="string">'\t'</span>,<span class="string">'\n'</span>,<span class="string">'.'</span>,<span class="string">','</span>,<span class="string">'?'</span>,<span class="string">'!'</span>,<span class="string">'('</span>,<span class="string">')'</span>,<span class="string">':'</span>,<span class="string">'&#123;'</span>,<span class="string">'&#125;'</span>,<span class="string">';'</span>,<span class="string">'/'</span>,<span class="string">'['</span>,<span class="string">']'</span>,<span class="string">'．'</span>,<span class="string">'＋'</span>,<span class="string">'—'</span>,<span class="string">''</span>,<span class="string">'\r\n'</span>,<span class="string">'"'</span>,<span class="string">'*'</span>,<span class="string">'-'</span>,<span class="string">u'。'</span>,<span class="string">u'，'</span>,<span class="string">u'？'</span>,<span class="string">u'！'</span>,<span class="string">u'（'</span>,<span class="string">u'）'</span>,<span class="string">u'：'</span>,<span class="string">u'；'</span>,<span class="string">u'《'</span>,<span class="string">u'》'</span>,<span class="string">u'’'</span>,<span class="string">u'‘'</span>,<span class="string">u''</span>,<span class="string">u'【'</span>,<span class="string">u'】'</span>,<span class="string">u'、'</span>,<span class="string">u'￥'</span>,<span class="string">u'“'</span>,<span class="string">u'…'</span>,<span class="string">u'”'</span>,<span class="string">u'*'</span>,<span class="string">u'-'</span>,<span class="string">u''</span>]</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, file_in_path)</span>:</span></div><div class="line">		self.stop_characters = stop_characters</div><div class="line">		self.file_in_path = file_in_path</div><div class="line">		self.characters_dict = self.main()</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self)</span>:</span></div><div class="line">		characters_dict = Counter()</div><div class="line">		<span class="keyword">try</span>:</div><div class="line">			<span class="keyword">with</span> codecs.open(self.file_in_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">				<span class="keyword">for</span> line <span class="keyword">in</span> file:</div><div class="line">					line = line.strip()</div><div class="line">					<span class="keyword">if</span> <span class="keyword">not</span> line:</div><div class="line">						<span class="keyword">continue</span></div><div class="line">					<span class="keyword">else</span>:</div><div class="line">						<span class="keyword">for</span> idx,character <span class="keyword">in</span> enumerate(line):</div><div class="line">							<span class="keyword">if</span> character <span class="keyword">not</span> <span class="keyword">in</span> self.stop_characters <span class="keyword">and</span> <span class="keyword">not</span> re.search(<span class="string">r'[0-9]|[A-Z]'</span>,character,re.S):</div><div class="line">								characters_dict[character] += <span class="number">1</span></div><div class="line">			<span class="keyword">return</span> characters_dict</div><div class="line">		<span class="keyword">except</span> Exception,e:</div><div class="line">			<span class="keyword">print</span> <span class="string">'Error Information :'</span>,e</div><div class="line">			<span class="keyword">return</span> dict()</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">sort_</span><span class="params">(self)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			characters_dict_sorted = sorted(self.characters_dict.iteritems(), key=<span class="keyword">lambda</span> d:d[<span class="number">1</span>], reverse=<span class="keyword">True</span>)</div><div class="line">			<span class="keyword">return</span> characters_dict_sorted</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">most_comm</span><span class="params">(self, top=None)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">return</span> self.characters_dict.most_common(top)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">save_txt</span><span class="params">(self, file_save_path)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">if</span> isinstance(self.characters_dict, dict):</div><div class="line">				<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">					<span class="keyword">for</span> character, cnt <span class="keyword">in</span> self.characters_dict.iteritems():</div><div class="line">						file.write(character + <span class="string">'\t'</span> + str(cnt) + <span class="string">'\n'</span>)</div><div class="line">			<span class="keyword">elif</span> isinstance(self.characters_dict, list):</div><div class="line">				<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">					<span class="keyword">for</span> tuple_ <span class="keyword">in</span> self.characters_dict:</div><div class="line">						character, cnt = tuple_</div><div class="line">						file.write(character + <span class="string">'\t'</span> + str(cnt) + <span class="string">'\n'</span>)</div><div class="line">			<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">save_json</span><span class="params">(self, file_save_path)</span>:</span></div><div class="line">		<span class="keyword">if</span> <span class="keyword">not</span> self.characters_dict:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">with</span> codecs.open(file_save_path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">				file.write(json.dumps(self.characters_dict))</div><div class="line">			<span class="keyword">return</span> <span class="keyword">True</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	characters = Characters_Summary(<span class="string">'./data/novel.txt'</span>)</div><div class="line"></div><div class="line">	characters.most_comm(top=<span class="number">50</span>)</div><div class="line">	characters.save_txt(<span class="string">'./data/out_txt.txt'</span>)</div><div class="line">	characters.save_json(<span class="string">'./data/out_json.json'</span>)</div></pre></td></tr></table></figure>
-<hr>
-<h4 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h4><ol>
-<li>小说文本数据，推荐使用UTF-8编码，并且注意编辑器所对应的编码设置。在Python2.7中常见的编码解码问题</li>
-<li>停用标点符号的清洗和过滤，配合正则表达式使用</li>
-<li>dict数据结构，通过<code>sorted(dict.iteritems(), key=lambda d:d[1], reverse=True)</code>排序后返回的数据是list类型，因为dict是无序的，若要排序，就需要数据类型可排序</li>
-</ol>
-<h4 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h4><ol>
-<li>Counter()类及其方法的使用，高效便捷！</li>
-</ol>
-<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ol>
-<li>单个汉字统计，没有实质的信息，后续通过分词并在其基础上，进一步探索</li>
-<li>在停用标点符号过滤部分代码，提示一个警告：’UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal<br>if character not in self.stop_characters and not re.search(r’[0-9]|[A-Z]’,character,re.S)’<br>这个警告主要因为停用标点符号中有字符无法将其转换为Unicode，不能正常的判定是否需要过滤操作。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2099,7 +2114,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2121,7 +2136,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
