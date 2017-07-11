@@ -103,7 +103,7 @@
 即不对定义域或值域做任何限制的情况下，求解函数$f(x)$的最小值。例如上图">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%97%A0%E7%BA%A6%E6%9D%9F%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E8%AF%B4%E6%98%8E.png">
 <meta property="og:image" content="http://on58f12qv.bkt.clouddn.com/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
-<meta property="og:updated_time" content="2017-07-11T15:32:04.164Z">
+<meta property="og:updated_time" content="2017-07-11T15:34:06.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习：梯度下降（Gradient Descent）">
 <meta name="twitter:description" content="转载自：刘建平Pinard - 梯度下降（Gradient Descent）小结
@@ -402,7 +402,7 @@
 </ol>
 <h3 id="33-梯度下降的详细算法"><a href="#3-3-梯度下降的详细算法" class="headerlink" title="3.3 梯度下降的详细算法"></a>3.3 梯度下降的详细算法</h3><p>梯度下降法的算法可以有代数法和矩阵法（也称向量法）两种表示。如果对矩阵分析不熟悉，则代数法更加容易理解。不过矩阵法更加的简介，且由于使用了矩阵，实现逻辑更加的一目了然。这里先介绍代数法，后介绍矩阵法。</p>
 <h4 id="331-梯度下降法的代数方式描述"><a href="#3-3-1-梯度下降法的代数方式描述" class="headerlink" title="3.3.1 梯度下降法的代数方式描述"></a>3.3.1 梯度下降法的代数方式描述</h4><ol>
-<li><p>先决条件：确认优化模型的假设函数和损失函数。<br>比如对于线性回归，假设函数表示为$$h_\theta(x_1, x_2, …x_n) = \theta<em>0 + \theta</em>{1}x<em>1 + … + \theta</em>{n}x_{n}$$，其中$\theta_i (i=1,2,…,n)$为模型参数，$x_i (i=1,2,…,n)$为每个样本的n个特征值。这个表示可以简化，我们增加一个特征$x<em>0=1$，这样$h</em>\theta(x_0, x_1, …x<em>n) = \sum\limits</em>{i=0}^{n}\theta<em>{i}x</em>{i}$。<br>同样是线性回归，对于上面的假设函数，损失函数为：<br>$$J(\theta_0, \theta_1…, \theta<em>n) = \frac{1}{2m}\sum\limits</em>{i=0}^{m}(h_\theta(x_0, x_1, …x_n) - y_i)^2$$</p>
+<li><p>先决条件：确认优化模型的假设函数和损失函数。<br>比如对于线性回归，假设函数表示为$h_\theta(x_1, x_2, …x_n) = \theta<em>0 + \theta</em>{1}x<em>1 + … + \theta</em>{n}x_{n}$，其中$\theta_i (i=1,2,…,n)$为模型参数，$x_i (i=1,2,…,n)$为每个样本的n个特征值。这个表示可以简化，我们增加一个特征$x<em>0=1$，这样$h</em>\theta(x_0, x_1, …x<em>n) = \sum\limits</em>{i=0}^{n}\theta<em>{i}x</em>{i}$。<br>同样是线性回归，对于上面的假设函数，损失函数为：<br>$J(\theta_0, \theta_1…, \theta<em>n) = \frac{1}{2m}\sum\limits</em>{i=0}^{m}(h_\theta(x_0, x_1, …x_n) - y_i)^2$</p>
 </li>
 <li><p>算法相关参数初始化：<br>主要是初始化$\theta_0, \theta_1…, \theta_n$，算法终止距离$\varepsilon$以及步长$\alpha$。在没有任何先验知识的时候，我喜欢将所有的$\theta_i$初始化为0，将步长初始化为1。在调优的时候再优化。</p>
 </li>
