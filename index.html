@@ -270,6 +270,221 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/07/11/机器学习：梯度下降（Gradient-Descent）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fujia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fujia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/11/机器学习：梯度下降（Gradient-Descent）/" itemprop="url">
+                  机器学习：梯度下降（Gradient Descent）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-11T23:19:55+08:00">
+                2017-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>转载自：<a href="http://www.cnblogs.com/pinard/p/5970503.html" target="_blank" rel="external">刘建平Pinard - 梯度下降（Gradient Descent）小结</a></p>
+<h2 id="1-梯度"><a href="#1-梯度" class="headerlink" title="1. 梯度"></a>1. 梯度</h2><p>在求解机器学习算法的模型参数，即无约束最优化问题时，梯度下降（Gradient Descent）是最常采用的方法之一，另一种常用的方法是最小二乘法（OLS）。这里就对梯度下降法做一个完整的总结。</p>
+<p><strong>添加 1</strong><br>什么是无约束最优化问题？</p>
+<p><img src="http://on58f12qv.bkt.clouddn.com/%E6%97%A0%E7%BA%A6%E6%9D%9F%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E8%AF%B4%E6%98%8E.png" alt="无约束最优化问题|center"></p>
+<p>即不对定义域或值域做任何限制的情况下，求解函数$f(x)$的最小值。例如上图所示的一元函数图像，上面显示两个最小值点：一个为全局最小值点，另一个为局部最小值点。受限于算法复杂度等问题，目前大部分无约束最优化算法只能保证求局部最小值点。</p>
+<p>这时可能存在疑问：既然只能求局部最小值点，那为什么这类算法还能广泛应用呢？</p>
+<p>这是因为实际应用中，许多情形被抽象的函数形式均为凸函数，而对于凸函数来说局部最小值点即为全局最小值点， 因此只要能求得这类函数的一个最小值点，该点一定为全局最小值点。</p>
+<p>在微积分里，对多元函数的参数求$∂$偏导数，把求得的哥哥参数的偏导数以向量的形式写出来，就是梯度。梯度是一个向量。比如函数$f(x,y)$分别对$x,y$求偏导，求得的梯度向量就为$(\frac{∂f}{∂x}, \frac{∂f}{∂y})^T$，简称为grad f(x,y)或者$\nabla f(x,y)$。对于在点$(x_0,y_0)$的具体梯度向量就是$(\frac{∂f}{∂x_0}, \frac{∂f}{∂y_0})^T$，或者$\nabla f(x_0,y_0)$。如果是3个参数的向量梯度，就是$(\frac{∂f}{∂x}, \frac{∂f}{∂y},\frac{∂f}{∂z})^T$，依次类推。</p>
+<p>那么这个梯度向量求解出来有什么意义呢？从几何意义上讲，梯度就是函数变化增加最快的方向。举例来说，对于函数$f(x,y)$在点$(x_0,y_0)$沿着梯度向量的方向就是$(\frac{∂f}{∂x_0}, \frac{∂f}{∂y_0})^T$函数$f(x,y)$增加最快的方向。或者说，沿着梯度向量的方向，更加容易找到函数的最大值。反过来说，沿着梯度向量的反方向，也就是$-(\frac{∂f}{∂x_0}, \frac{∂f}{∂y_0})^T$的方向，梯度减少的最快，也就是更加容易找到函数的最小值。</p>
+<h2 id="2梯度下降与梯度上升"><a href="#2-梯度下降与梯度上升" class="headerlink" title="2.梯度下降与梯度上升"></a>2.梯度下降与梯度上升</h2><p>在机器学习算法中，在最小化损失函数时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。反过来，如果我们需要求解损失函数的最大值，这时就需要用梯度上升发来迭代了。</p>
+<p>梯度下降法和梯度尚胜法是可以互相转化的。比如我们需要求解损失函数$f(\theta)$最小值，这时我们需要用梯度下降法来迭代求解。但是实际上，我们也可以反过来求解损失函数$-f(\theta)$的最大值，这时梯度上升法就派上用场了。</p>
+<p>下面来详细总结梯度下降法。</p>
+<h2 id="3梯度下降法算法详解"><a href="#3-梯度下降法算法详解" class="headerlink" title="3.梯度下降法算法详解"></a>3.梯度下降法算法详解</h2><h3 id="31-梯度下降的直观解释"><a href="#3-1-梯度下降的直观解释" class="headerlink" title="3.1 梯度下降的直观解释"></a>3.1 梯度下降的直观解释</h3><p>首先来看看梯度下降的一个直观的解释。比如我们在一座大山上的某处位置，由于我们不知道怎么下山，于是决定走一步算一步，也就是在每走到一个位置的时候，求解当前位置的梯度。沿着梯度的负方向走，也就是当前最陡峭的位置向下走一步，然后到达新的位置后继续求解当前新位置的梯度，再向这一步所在位置沿着最陡峭最快下山的位置走一步。这样一步一步的走下去，一直走到觉得问已经到了山脚。当然这样走下去，有可能我们不能走到山脚，而是到了某一个局部的山谷低处。</p>
+<p>从上面的解释可以看出，梯度下降不一定能够找到全局的最优解。有可能是一个局部最优解。当然，如果损失函数是一个凸函数，梯度下降法得到的解就一定是全局最优解。</p>
+<p><img src="http://on58f12qv.bkt.clouddn.com/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="梯度下降法示意图|center"></p>
+<h3 id="32-梯度下降的相关概念"><a href="#3-2-梯度下降的相关概念" class="headerlink" title="3.2 梯度下降的相关概念"></a>3.2 梯度下降的相关概念</h3><p>在详细了解梯度下降的算法之前，我们先看看相关的一些概念。</p>
+<ol>
+<li>步长（learning rate）：步长决定了在梯度下降迭代的过程中，每一步沿梯度负方向前进的长度。用上面下山的例子，步长就是在当前这一步所在未知沿着最陡峭最快下山的位置走的那一步的长度。</li>
+<li>特征（feature）：指的是样本中输入部分，比如样本$(x_0,y_0),(x_1,y_1)$，则样本特征为$x$，样本输出为$y$。</li>
+<li>假设函数（hypothesis function）：在监督学习中，为了拟合输入样本，而使用的假设函数，记为$h_\theta(x)$。比如对于样本$(x_i,y<em>i),i=(1,2,3,…,n)$，可以采用拟合函数如下$h</em>\theta(x)=\theta_0 + \theta_1x$。</li>
+<li>损失函数（loss function）：为了评估模型拟合的好坏，通常用损失函数来度量拟合的程度。损失函数极小化，意味着拟合程度最好，对应的模型参数即为最优参数。在线性回归中，损失函数通常为样本输出和假设函数的差取平方。比如对于样本$(x_i,y_i),i=(1,2,3,…,n)$，采用线性回归，损失函数为：<br>$J(\theta_0, \theta<em>1) = \sum\limits</em>{i=1}^{m}(h_\theta(x_i) - y_i)^2$<br>其中$x_i$表示样本特征的第i个元素，$y<em>i$表示样本输出的第i个元素，$h</em>\theta(x)$为假设函数。</li>
+</ol>
+<h3 id="33-梯度下降的详细算法"><a href="#3-3-梯度下降的详细算法" class="headerlink" title="3.3 梯度下降的详细算法"></a>3.3 梯度下降的详细算法</h3><p>梯度下降法的算法可以有代数法和矩阵法（也称向量法）两种表示。如果对矩阵分析不熟悉，则代数法更加容易理解。不过矩阵法更加的简介，且由于使用了矩阵，实现逻辑更加的一目了然。这里先介绍代数法，后介绍矩阵法。</p>
+<h4 id="331-梯度下降法的代数方式描述"><a href="#3-3-1-梯度下降法的代数方式描述" class="headerlink" title="3.3.1 梯度下降法的代数方式描述"></a>3.3.1 梯度下降法的代数方式描述</h4><ol>
+<li><p>先决条件：确认优化模型的假设函数和损失函数。<br>比如对于线性回归，假设函数表示为$h_\theta(x_1, x_2, …x_n) = \theta<em>0 + \theta</em>{1}x<em>1 + … + \theta</em>{n}x_{n}$，其中$\theta_i (i=1,2,…,n)$为模型参数，$x_i (i=1,2,…,n)$为每个样本的n个特征值。这个表示可以简化，我们增加一个特征$x<em>0=1$，这样$h</em>\theta(x_0, x_1, …x<em>n) = \sum\limits</em>{i=0}^{n}\theta<em>{i}x</em>{i}$。<br>同样是线性回归，对于上面的假设函数，损失函数为：<br>$J(\theta_0, \theta_1…, \theta<em>n) = \frac{1}{2m}\sum\limits</em>{i=0}^{m}(h_\theta(x_0, x_1, …x_n) - y_i)^2$</p>
+</li>
+<li><p>算法相关参数初始化：<br>主要是初始化$\theta_0, \theta_1…, \theta_n$，算法终止距离$\varepsilon$以及步长$\alpha$。在没有任何先验知识的时候，我喜欢将所有的$\theta_i$初始化为0，将步长初始化为1。在调优的时候再优化。</p>
+</li>
+<li><p>算法过程：<br>1) 确定当前位置的损失函数的梯度，对于$\theta_i$其梯度表达式如下：<br>$\frac{\partial}{\partial\theta_i}J(\theta_0, \theta_1…, \theta_n)$<br>2) 用步长乘以损失函数的梯度，得到当前位置下降的距离，即$\alpha\frac{\partial}{\partial\theta_i}J(\theta_0, \theta_1…, \theta_n)$，对应于前面下山的例子中的某一步。<br>3) 确定是否所有的$\theta_i$梯度下降的距离都小于$\varepsilon$，如果小于$\varepsilon$则算法终止，当前所有的$\theta_i (i=1,2,…,n)$即为最终结果。否则进入步骤4。<br>4) 更新所有的$\theta$，对于$\theta<em>i$，其更新表达式如下。更新完毕后继续转入步骤1。<br>$\theta</em>{i}{‘} = \theta_i - \alpha\frac{\partial}{\partial\theta_i}J(\theta_0, \theta_1…, \theta_n)$</p>
+</li>
+</ol>
+<hr>
+<p>下面用线性回归的例子来具体描述梯度下降。假设我们的样本是$(x_1^{(0)}, x_2^{(0)}, …x_n^{(0)}, y_0), (x_1^{(1)}, x_2^{(1)}, …x_n^{(1)},y_1), … (x_1^{(m)}, x_2^{(m)}, …x_n^{(m)}, y_n)$，损失函数如前面先决条件所述：<br>$J(\theta_0, \theta_1…, \theta<em>n) = \frac{1}{2m}\sum\limits</em>{i=0}^{m}(h_\theta(x_0, x_1, …x_n) - y_i)^2$。</p>
+<p>则在实验法过程步骤1中对于$\theta_i$的偏导数计算如下：<br>$\frac{\partial}{\partial\theta_i}J(\theta_0, \theta_1…, \theta<em>n)= \frac{1}{m}\sum\limits</em>{j=0}^{m}(h_\theta(x_0^{j}, x_1^{j}, …x_n^{j}) - y_j)x_i^{j}$，由于样本中没有$x_0$上式中令所有的$x_0^{j}$为1。</p>
+<p>步骤4中的$\theta_i$更新表达式如下：<br>$\theta_i{‘} = \theta<em>i - \alpha\frac{1}{m}\sum\limits</em>{j=0}^{m}(h_\theta(x_0^{j}, x_1^{j}, …x_n^{j}) - y_j)x_i^{j}$</p>
+<p>从这个例子可以看出当前点的梯度方向是由所有的样本决定的，加$\frac{1}{m}$是为了好理解。由于步长也为常数，它们的乘积也为常数，所以这里$\alpha\frac{1}{m}$可以用一个常数表示。</p>
+<p>在下面第4节会详细讲到梯度下降法的变种，它们的主要区别就是对样本的采用方法不同。这里我们采用的是所有样本。</p>
+<h4 id="332-梯度下降法的矩阵方式描述"><a href="#3-3-2-梯度下降法的矩阵方式描述" class="headerlink" title="3.3.2 梯度下降法的矩阵方式描述"></a>3.3.2 梯度下降法的矩阵方式描述</h4><p>这一部分主要讲解梯度下降法的矩阵方式表述，相对于3.3.1的代数法，要求有一定的矩阵分析的基础知识，尤其是矩阵求导的知识。</p>
+<ol>
+<li><p>先决条件：和3.3.1类似，需要确认优化模型的假设函数和损失函数。对于线性回归，假设函数$h_\theta(x_1, x_2, …x_n) = \theta<em>0 + \theta</em>{1}x<em>1 + … + \theta</em>{n}x<em>{n}$的矩阵表达式为：$h</em>\mathbf{\theta}(\mathbf{x}) = \mathbf{X\theta}$。其中，假设函数$h_\mathbf{\theta}(\mathbf{x})$为m x 1的向量，$\theta$为n x 1的向量，里面有n个代数法的模型参数。$X$为m x n维的矩阵。m代表样本的个数，n代表样本的特征维数。<br>损失函数的表达式为：$J(\mathbf\theta) = \frac{1}{2}(\mathbf{X\theta} - \mathbf{Y})^T(\mathbf{X\theta} - \mathbf{Y})$，其中$Y$是样本的输出向量，维度为m x 1。</p>
+</li>
+<li><p>算法相关参数初始化：$\theta$向量可以初始化为默认值，或者调优后的值。算法终止距离$\varepsilon$，<br>步长$\alpha$和3.3.1比没有变化。</p>
+</li>
+<li><p>算法过程<br>1) 确定当前位置的损失函数的梯度，对于$\theta$向量，其梯度表达式如下：<br>$\frac{\partial}{\partial\mathbf\theta}J(\mathbf\theta)$<br>2) 用步长乘以损失函数的梯度，得到当前位置下降的距离，即$\alpha\frac{\partial}{\partial\theta}J(\theta)$对应于前面下山例子中的某一步。<br>3) 确定$\theta$向量里面的每个值，梯度下降的距离都小于$\varepsilon$。如果小于$\varepsilon$则算法终止，当前$\theta$向量即为最终结果。否则进入步骤4。<br>4) 更新$\theta$向量，其更新表达式如下。更新完毕后继续转入步骤1。<br>$\mathbf\theta{‘}= \mathbf\theta - \alpha\frac{\partial}{\partial\theta}J(\mathbf\theta)$</p>
+</li>
+</ol>
+<p>还是用线性回归的例子来描述具体的算法过程。</p>
+<p>损失函数对于$\theta$向量的偏导数计算如下：<br>$\frac{\partial}{\partial\mathbf\theta}J(\mathbf\theta) = \mathbf{X}^T(\mathbf{X\theta} - \mathbf{Y})$</p>
+<p>步骤4中$\theta$向量的更新表达式如下：<br>$\mathbf\theta{‘}= \mathbf\theta - \alpha\mathbf{X}^T(\mathbf{X\theta} - \mathbf{Y})$</p>
+<p>对3.3.1的代数法，可以看到矩阵法要简介很多。这里面用到了矩阵求导链式法则，和两个矩阵求导的公式。</p>
+<p>公式1：$\frac{\partial}{\partial\mathbf{X}}(\mathbf{XX^T}) =2\mathbf{X}$<br>公式2：$\frac{\partial}{\partial\mathbf\theta}(\mathbf{X\theta}) =\mathbf{X^T}$<br>如果需要熟悉矩阵求导建议参考张贤达的《矩阵分析与应用》一书。</p>
+<h3 id="34-梯度下降算法的调优"><a href="#3-4-梯度下降算法的调优" class="headerlink" title="3.4 梯度下降算法的调优"></a>3.4 梯度下降算法的调优</h3><p>在使用梯度下降时，需要进行调优。哪些地方需要调优呢？</p>
+<ol>
+<li><p>算法的步长选择 。在前面的算法描述中，我提到取步长为1，但是实际上取值取决于数据样本，可以多取一些值，从大到小，分别运行算法，看看迭代效果。如果损失函数在变小，说明取值有效，否则要增大步长。前面说了，步长太大，会导致迭代过快，甚至有可能错过最优解。步长太小，迭代速度太慢，很长时间算法都不能结束。所以算法的步长需要多次运行后才能得到一个较为优的值。</p>
+</li>
+<li><p>算法参数的初始值选择。初始值不同，获得的最小值也有可能不同。因此梯度下降求得的只是局部最小值；当然，损失函数是凸函数则一定是全局最优解。由于有局部最优解的风险，需要多次用不同初始值运行算法，通过损失函数的最小值，选择损失函数最小化的初始值。</p>
+</li>
+<li><p>归一化。由于样本不同特征的取值范围不一样，可能导致迭代很慢。为了减少特征取值的影响，可以对特征数据归一化，也就是对每个特征$x_i$，求出它们的期望$\overline{x}$和标准差$std(x)$，然后转化为：<br>$\frac{x - \overline{x}}{std(x)}$</p>
+</li>
+</ol>
+<p>这样特征的新期望为0，新方差为1，迭代次数可以大大加快。</p>
+<h2 id="4-梯度下降法大家族bgdsgdmbgd"><a href="#4-梯度下降法大家族（BGD，SGD，MBGD）" class="headerlink" title="4. 梯度下降法大家族（BGD，SGD，MBGD）"></a>4. 梯度下降法大家族（BGD，SGD，MBGD）</h2><h3 id="41-批量梯度下降法batch-gradient-descent"><a href="#4-1-批量梯度下降法（Batch-Gradient-Descent）" class="headerlink" title="4.1 批量梯度下降法（Batch Gradient Descent）"></a>4.1 批量梯度下降法（Batch Gradient Descent）</h3><p>批量梯度下降法，是梯度下降法最常用的形式，具体做法也就是在更新参数时使用所有的样本来进行更新，这个方法对应于前面3.3.1的现行回归的梯度下降算法。也就是说3.3.1的梯度下降算法就是批量梯度下降法。</p>
+<p>$\theta_i{‘} = \theta<em>i - \alpha\sum\limits</em>{j=0}^{m}(h_\theta(x_0^{j}, x_1^{j}, …x_n^{j}) - y_j)x_i^{j}$</p>
+<p>由于我们有m个样本，这里求梯度的时候就用了所有m个样本的梯度数据。</p>
+<h3 id="42-随机梯度下降法stochastic-gradient-descent"><a href="#4-2-随机梯度下降法（Stochastic-Gradient-Descent）" class="headerlink" title="4.2 随机梯度下降法（Stochastic Gradient Descent）"></a>4.2 随机梯度下降法（Stochastic Gradient Descent）</h3><p>随机梯度下降法，其实和批量梯度下降法原理类似，区别在于求梯度时没有用所有的m个样本的数据，而是仅仅选取一个样本j来求梯度。对应的更新公式是：<br>$\theta_i{‘} = \theta<em>i - \alpha (h</em>\theta(x_0^{j}, x_1^{j}, …x_n^{j}) - y_j)x_i^{j}$</p>
+<p>随机梯度下降法，和4.1的批量梯度下降法是两个极端，一个采用所有数据来梯度下降，一个采用一个样本来梯度下降。自然各自的优缺点都非常突出。对于训练速度来说，随机梯度下降法由于每次仅仅采用一个样本来迭代，训练速度很快，而批量梯度下降法在样本量很大的时候，训练速度不能让人满意。对于准确度来说，随机梯度下降法用于仅仅用一个样本决定梯度方向，导致解很有可能不是最优。对于手链速度来说，由于随机梯度下降法一次迭代一个样本，导致迭代方向变化很大，不可能很快的收敛到局部最优解。</p>
+<p>那么有没有一个中庸的办法能够结合两种方法的有点呢？有，这就是4.3的小批量梯度下降法。</p>
+<h3 id="43-小批量梯度下降法mini-batch-gradient-descent"><a href="#4-3-小批量梯度下降法（Mini-batch-Gradient-Descent）" class="headerlink" title="4.3 小批量梯度下降法（Mini-batch Gradient Descent）"></a>4.3 小批量梯度下降法（Mini-batch Gradient Descent）</h3><p>小批量梯度下降法是批量梯度下降法和随机梯度下降法的折衷，也就是对于m个样本，我们采用x个子样本来迭代，$1&lt;x&lt;m$。一般可以去$x=10$，党仍然根据样本的数据，可以调整这个x的值。对应的更新公式是：</p>
+<p>$\theta_i{‘} = \theta<em>i - \alpha \sum\limits</em>{j=t}^{t+x-1}(h_\theta(x_0^{j}, x_1^{j}, …x_n^{j}) - y_j)x_i^{j}$</p>
+<h2 id="5梯度下降法和其他无约束优化算法的比较"><a href="#5-梯度下降法和其他无约束优化算法的比较" class="headerlink" title="5.梯度下降法和其他无约束优化算法的比较"></a>5.梯度下降法和其他无约束优化算法的比较</h2><p>在机器学习中的无约束优化算法，除了梯度下降以外，还有前面提到的最小二乘法，此外还有牛顿法和拟牛顿法。</p>
+<p>梯度下降法和最小二乘法相比，梯度下降法需要选择步长，而最小二乘法不需要。梯度下降法是迭代求解，最小二乘法是计算解析解。如果样本量不算很大，且存在解析解，最小二乘法比起梯度下降法要有优势，计算速度很快。但是如果样本量很大，用最小二乘法由于需要求一个超级大的逆矩阵，这时就很难或者很慢才能求解析解了，使用迭代的梯度下降法比较有优势。</p>
+<p>梯度下降法和牛顿法/拟牛顿法相比，两者都是迭代求解，不过梯度下降法是梯度求解，而牛顿法和拟牛顿法是用二阶的海森矩阵的逆矩阵或伪逆矩阵求解。相对而言，使用牛顿法/拟牛顿法收敛更快。但是每次迭代的时间比梯度下降法长。</p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p><a href="http://www.cnblogs.com/pinard/default.html?page=10" target="_blank" rel="external">刘建平Pinard 梯度下降（Gradient Descent）小结</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/07/06/机器学习：岭回归/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1871,201 +2086,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://fujiador.github.io/2017/05/30/Python项目：定制化词云/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Fujia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Fujia's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/30/Python项目：定制化词云/" itemprop="url">
-                  Python项目：定制化词云
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-30T22:26:34+08:00">
-                2017-05-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h3><p>“词云”是对常见的文本中出现频率较高的“关键词”或“高频词”予以视觉和展示上的突出，形成层次有序、主题突出的“词云”图形，从而过滤掉大量的无意义信息，并凸显想要展示的信息内容。<br>一幅制作精美的词云图片，可以达到一图胜千言的效果，通常在PPT报告中使用漂亮的词云，关键是可以装X~   :）</p>
-<p>接下来，将使用<code>wordcloud</code>第三方包来制作词云，并且解决中文字符显示的问题，生成定制化个性词云。</p>
-<hr>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>Python 3.6</li>
-</ul>
-<hr>
-<h3 id="第三方packages"><a href="#第三方Packages" class="headerlink" title="第三方Packages"></a>第三方Packages</h3><ul>
-<li>wordcloud</li>
-<li>PIL</li>
-</ul>
-<hr>
-<h4 id="wordcloud安装"><a href="#wordcloud安装" class="headerlink" title="wordcloud安装"></a>wordcloud安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple wordcloud</div></pre></td></tr></table></figure>
-<p>Windows环境下，推荐从<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank" rel="external">非官方Windows第三方库</a>下载安装。<br><img src="http://on58f12qv.bkt.clouddn.com/Unoffical_wordcloud.PNG" alt="wordcloud|center"><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install C:\Users\Desktop\wordcloud-1.3.1-cp36-cp36m-win_amd64.whl</div></pre></td></tr></table></figure></p>
-<p><code>Unofficial Windows Binaries for Python Extension Packages</code>可以高效的在windows环境下安装第三方包，并且避免pip安装过程中莫名其妙的坑。</p>
-<p><strong>wordcloud</strong><a href="https://github.com/amueller/word_cloud" target="_blank" rel="external">GitHub</a>。wordcloud作者是使用Python2+编写，但是Python3+也是兼容的。</p>
-<h3 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h3><p>官方Git展示的简单示例，将《美国宪法》生成词云。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'FuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> os <span class="keyword">import</span> path</div><div class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line">FILE_PATH = path.dirname(__file__)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_text</span><span class="params">(FILE_NAME)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line">	file_path = path.join(FILE_PATH, FILE_NAME)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">with</span> codecs.open(file_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">			text = file.read()</div><div class="line">		<span class="keyword">return</span> text</div><div class="line">	<span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</div><div class="line">		print(<span class="string">"FileNot Found ,&#123;&#125;"</span>.format(e))</div><div class="line">		<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text,)</span>:</span></div><div class="line">	wordcloud = WordCloud(max_font_size=<span class="number">40</span>).generate(text)</div><div class="line"></div><div class="line">	plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>)</div><div class="line">	plt.axis(<span class="string">"off"</span>)</div><div class="line">	plt.show()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	FILE_NAME = <span class="string">'US_constitution.txt'</span></div><div class="line">	text = load_text(FILE_NAME)</div><div class="line"></div><div class="line">	generate_wordcloud(text)</div></pre></td></tr></table></figure></p>
-<p>下图是生成的《美国宪法》默认样式参数的词云图。<br><img src="http://on58f12qv.bkt.clouddn.com/US_constitution.txt.jpeg" alt="美国宪法-词云|center"></p>
-<p><code>wordcloud</code>包的核心是<code>WordCloud</code>类，用于生成和绘制WordCloud对象。<br><strong>参数：</strong></p>
-<ul>
-<li>font_path  要使用的字体的路径（OTF或TTF文件）</li>
-<li>width  画布宽度，默认400</li>
-<li>heifht  画布高度，默认200</li>
-<li>prefer_horizontal </li>
-<li>mask </li>
-<li>scale 缩放，默认1</li>
-<li>min_font_size 使用最小的字体大小，默认4</li>
-<li>font_step 字体的步长大小，morning1</li>
-<li>max_words 最大字数，默认200</li>
-<li>stopwords  禁用词，默认内置的STOPWORDS列表</li>
-<li>background_color 词云图像的北京颜色，默认black</li>
-<li>max_font_size 最大字体的字体大小</li>
-<li>mode 模式，默认RGB，当mode=RGBA时，产生透明背景</li>
-<li>relative_scaling</li>
-<li>color_func callable，default=None。一般使用Image的generate_image方法获取图片的颜色设置</li>
-<li>colormap 色彩映射将每个单词随机绘制颜色</li>
-</ul>
-<p>在上面的代码中，当输入中文格式的文本时，是不能正常显示的中文的。如下图所示：<br><img src="http://on58f12qv.bkt.clouddn.com/%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98.png" alt="中文问题|center"></p>
-<p>因为WordCloud类中font_path参数变量没有找到显示中文的字体。通过WordCloud的参数说明，可以用font_path参数来设置可显示中文的字体。并将对应部分的代码进行如下调整：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text, save_name, font_name=None)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> font_path:</div><div class="line">        wordcloud = WordCloud(max_font_size=<span class="number">40</span>).generate(text) </div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        wordcloud = WordCloud(font_path=path.join(FILE_PATH,font_name),max_font_size=<span class="number">40</span>).generate(text)</div><div class="line"></div><div class="line">    plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>)</div><div class="line">    plt.axis(<span class="string">"off"</span>)</div><div class="line">    plt.savefig(save_name+<span class="string">".jpeg"</span>)</div><div class="line">    plt.show()</div></pre></td></tr></table></figure></p>
-<p>调整之后的词云结果如下：<br><img src="http://on58f12qv.bkt.clouddn.com/%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA.png" alt="解决中文问题|center"></p>
-<hr>
-<h3 id="奇形怪状的词云"><a href="#奇形怪状的词云" class="headerlink" title="奇形怪状的词云"></a>奇形怪状的词云</h3><p>接下来，我们绘制定制图形的词云！git官方的实例，是关于爱丽丝的一个词云。</p>
-<h4 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! -*- coding:utf-8 -*-</span></div><div class="line">__author__ = <span class="string">'MaFuJia'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> codecs</div><div class="line"><span class="keyword">from</span> os <span class="keyword">import</span> path</div><div class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud,STOPWORDS</div><div class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"></div><div class="line">FILE_PATH = path.dirname(__file__)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_text</span><span class="params">(FILE_NAME)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line">	file_path = path.join(FILE_PATH, FILE_NAME)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">with</span> codecs.open(file_path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> file:</div><div class="line">			text = file.read()</div><div class="line">		<span class="keyword">return</span> text</div><div class="line">	<span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</div><div class="line">		print(<span class="string">"FileNot Found ,&#123;&#125;"</span>.format(e))</div><div class="line">		<span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_wordcloud</span><span class="params">(text, save_name, font_name=None, mask_name=None)</span>:</span></div><div class="line">	<span class="keyword">global</span> FILE_PATH</div><div class="line"></div><div class="line">	image_mask = np.array(Image.open(path.join(FILE_PATH,mask_name)))</div><div class="line">	stopwords = set(STOPWORDS)</div><div class="line">	stopwords.add(<span class="string">"said"</span>)</div><div class="line"></div><div class="line">	wordcloud = WordCloud(background_color=<span class="string">'white'</span>, max_words=<span class="number">2000</span>, mask=image_mask,</div><div class="line">	                            stopwords=stopwords,font_path=path.join(FILE_PATH,font_name))</div><div class="line">	wordcloud.generate(text)</div><div class="line"></div><div class="line">	wordcloud.to_file(path.join(FILE_PATH, save_name.split(<span class="string">'.'</span>)[<span class="number">0</span>] + <span class="string">'.png'</span>))</div><div class="line">	plt.imshow(wordcloud, interpolation=<span class="string">'bilinear'</span>, cmap=plt.cm.gray)</div><div class="line">	plt.axis(<span class="string">"off"</span>)</div><div class="line">	plt.savefig(path.join(FILE_PATH, save_name.split(<span class="string">'.'</span>)[<span class="number">0</span>] + <span class="string">'.png'</span>))</div><div class="line">	plt.show()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	FILE_NAME = <span class="string">'alice.txt'</span></div><div class="line">	text = load_text(FILE_NAME)</div><div class="line"></div><div class="line">	generate_wordcloud(text, FILE_NAME, font_name=<span class="string">'simhei.ttf'</span>, mask_name=<span class="string">'alice_mask.png'</span>)</div></pre></td></tr></table></figure>
-<p>效果图如下所示：<br><img src="http://on58f12qv.bkt.clouddn.com/alice.png" alt="alice|center|800*0"></p>
-<p>最核心的一个参数是<code>mask=image_mask</code>，设置一个图片轮廓作为词云的mask，让我们的单词只在这个mask的空间内进行展示。</p>
-<hr>
-<h3 id="to-do"><a href="#To-Do" class="headerlink" title="To-Do"></a>To-Do</h3><ol>
-<li>代码重构</li>
-<li>参数添加，更加通用化</li>
-<li>可否制作成可安装的exe小程序</li>
-</ol>
-<hr>
-<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://github.com/amueller/word_cloud" target="_blank" rel="external">https://github.com/amueller/word_cloud</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2115,7 +2135,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2137,7 +2157,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
